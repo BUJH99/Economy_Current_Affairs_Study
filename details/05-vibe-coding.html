@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI와 함께하는 Vibe Coding 입문</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap">
+    <link rel="stylesheet" href="../assets/css/econ-academy.css">
+</head>
+<body>
+
+
+<div id="app"></div>
+
+<template id="coding-lecture-view-tpl">
+<div class="app-container" style="background: #ffffff; width: 100%;">
+        <nav class="sidebar" id="sidebar">
+            <div @click="$emit('go-home')" class="sidebar-btn-home" style="cursor:pointer; color:var(--color-blue); font-weight:bold; margin-bottom:1rem;">
+                ← 홈으로 돌아가기
+            </div>
+            <div class="sidebar-title">Vibe Coding 🚀</div>
+            <div class="toc-list">
+                 <div v-for="(item, idx) in toc" :key="idx" :class="['toc-item', {'toc-sub': item.isSub}]">
+                     <a @click.prevent="scrollTo(item.id)" :class="{active: activeToc === item.id}">{{ item.text }}</a>
+                 </div>
+            </div>
+        </nav>
+        <main class="main-content">
+            <h1>AI와 함께하는 Vibe Coding 입문</h1>
+            <p style="font-size:1.15rem; color:var(--text-secondary); margin-bottom:3rem;">문법 암기보다 구조 설계와 AI 협업 능력이 더 중요해진 시대. "무엇을 만들지" 정의하고, "어떻게 검증할지" 판단하는 설계자의 관점을 배웁니다.</p>
+
+            <article id="coding-ch1">
+                <h2>Chapter 1. 바이브코딩(Vibe Coding)의 시대</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 바이브코딩은 마법이 아니라, AI와의 협업으로 구현 속도를 끌어올리는 작업 방식입니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-1. 바이브코딩이란?</h3>
+                <div class="callout" style="border-left-color: #db2777; background: #fdf2f8; margin-top:1.5rem;">
+                    <h4 style="color:#db2777;">💡 Vibe Coding의 정의</h4>
+                    <p style="margin:0; color:var(--text-primary);">사람이 문제를 정의하고 구조를 설계하면, AI(Claude, ChatGPT 등)가 코드 초안 작성과 오류 분석을 강하게 지원하는 <strong>자연어 기반 협업 프로그래밍</strong> 방식입니다. 최종 판단과 검증은 여전히 사람의 몫입니다.</p>
+                </div>
+
+                <!-- 사람의 역할 vs AI의 역할 -->
+                <div class="metric-grid" style="margin-top:1.5rem;">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #db2777; box-shadow:0 4px 15px rgba(219,39,119,0.08);">
+                        <div class="metric-label" style="color:#db2777;">👤 사람이 담당하는 영역</div>
+                        <div class="metric-value" style="font-size:1.2rem;">설계 · 판단 · 검증</div>
+                        <p class="metric-desc">요구사항 정의, 전체 구조 설계, 결과물 검증, 배포 여부 판단. AI가 만든 코드가 의도대로 동작하는지 확인하는 것은 사람의 책임입니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #3182f6;">
+                        <div class="metric-label" style="color:#3182f6;">🤖 AI가 지원하는 영역</div>
+                        <div class="metric-value" style="font-size:1.2rem;">초안 · 반복 · 분석</div>
+                        <p class="metric-desc">코드 초안 빠르게 생성, 반복적인 수정 작업 보조, 에러 원인 분석 제안. 단, AI의 답이 항상 정확하지는 않으므로 검토가 필수입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 과거 vs 현재 비교 -->
+                <div class="scenario-box" style="margin-top:2rem;">
+                    <div class="scenario-card" style="border-top:4px solid #94a3b8;">
+                        <div class="scenario-label" style="font-weight:700; color:#64748b;">과거: 전통적 개발 방식</div>
+                        <div class="scenario-val" style="font-size:1rem; font-weight:400;">문법 암기 → 직접 타이핑 → 수동 디버깅</div>
+                        <div class="scenario-change" style="margin-top:8px; font-weight:normal; color:var(--text-secondary); font-size:0.9rem;">API 문서를 직접 찾아가며 한 줄씩 작성. 깊은 전문성이 필요하지만 진입장벽이 높습니다.</div>
+                    </div>
+                    <div class="scenario-arrow">➔</div>
+                    <div class="scenario-card" style="border-top:4px solid #db2777; box-shadow:0 4px 15px rgba(219,39,119,0.08);">
+                        <div class="scenario-label" style="font-weight:700; color:#db2777;">현재: 바이브코딩 방식</div>
+                        <div class="scenario-val" style="font-size:1rem; font-weight:400;">구조 설계 → AI에게 지시 → 결과 검증</div>
+                        <div class="scenario-change" style="margin-top:8px; font-weight:normal; color:var(--text-secondary); font-size:0.9rem;">UX와 서비스 흐름에 집중하며 AI에게 정확한 지시를 내립니다. 전통 개발 역량과 상호보완적입니다.</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-2. 핵심 개념 3가지: 모델 · IDE · 에이전트</h3>
+                <p style="margin-top:1rem;">바이브코딩을 이해하려면 세 가지 층위를 구분해야 합니다.</p>
+                <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #059669;">
+                        <div style="font-size:2rem;">🧠</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">모델 (Model) — 엔진</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">GPT, Claude, Gemini 같은 AI의 두뇌에 해당합니다. 프로그래밍 언어를 이해하고 코드를 생성하는 원천 기술이며, 모델마다 강점이 다릅니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #2563eb;">
+                        <div style="font-size:2rem;">💻</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">IDE / 에디터 — 차량</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">코드를 작성·실행·디버깅하는 '개발자 전용 워드프로세서'입니다. Cursor, Antigravity 같은 AI 결합 에디터는 모델을 탑재해 프로젝트 맥락을 이해하고 파일 단위로 코드를 수정해줍니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #7c3aed;">
+                        <div style="font-size:2rem;">🤖</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">에이전트 (Agent) — 자율주행 모드</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">모델에 '도구 사용 능력'을 부여한 형태입니다. 파일 읽기/쓰기, 터미널 실행, 웹 검색을 스스로 판단해 수행합니다. Claude Code, OpenAI Codex 등이 대표적입니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-3. 대표 AI 코딩 도구</h3>
+                <div style="display:flex; flex-direction:column; align-items:center; background:#f8fafc; padding:2rem 1.5rem; border-radius:12px; border:1px solid #e2e8f0; margin-top:1.5rem; margin-bottom:2rem;">
+                    <div style="display:flex; justify-content:center; gap:1.5rem; width:100%; flex-wrap:wrap;">
+                        <div class="card" style="border-top: 4px solid #059669; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem;">
+                            <h4 style="color: #059669; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:1.5rem;">🧠</span> OpenAI Codex
+                            </h4>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트 (클라우드)</strong></p>
+                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">GitHub Copilot의 핵심 엔진. 코드 생성·수정을 클라우드 샌드박스에서 자율 수행합니다.</p>
+                        </div>
+                        <div class="card" style="border-top: 4px solid #d97757; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem;">
+                            <h4 style="color: #d97757; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:1.5rem;">⌨️</span> Claude Code
+                            </h4>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트 (터미널)</strong></p>
+                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">Anthropic의 코딩 에이전트. 뛰어난 추론력과 넓은 컨텍스트로 복잡한 리팩터링에 강합니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; margin:1.2rem 0;">
+                        <div style="height:20px; border-left:2px dashed #94a3b8;"></div>
+                        <div style="background:#e2e8f0; border-radius:12px; padding:5px 16px; font-size:0.85rem; font-weight:700; color:#475569; border:1px solid #cbd5e1;">▼ 위 모델을 탑재한 에디터 ▼</div>
+                        <div style="height:20px; border-left:2px dashed #94a3b8;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:center; gap:1.5rem; width:100%; flex-wrap:wrap;">
+                        <div class="card" style="border-top: 4px solid #2563eb; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem; box-shadow:0 6px 20px rgba(37,99,235,0.08);">
+                            <h4 style="color: #2563eb; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:1.5rem;">💻</span> Cursor
+                            </h4>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>AI 에디터 [유료]</strong></p>
+                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">현재 가장 인기 있는 AI 에디터. 프로젝트 맥락을 파악하여 여러 파일을 동시에 수정합니다.</p>
+                        </div>
+                        <div class="card" style="border-top: 4px solid #7c3aed; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem; box-shadow:0 6px 20px rgba(124,58,237,0.08);">
+                            <h4 style="color: #7c3aed; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:1.5rem;">🚀</span> Antigravity
+                            </h4>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>AI 에디터 [무료]</strong></p>
+                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">Google 기반의 메타 에이전트 환경. 다중 파일 추론과 작업 분할(CoT) 플래닝에 강합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="coding-ch2">
+                <h2>Chapter 2. 필수 개념 구조도 및 언어 랭킹</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: AI에게 일을 시키기 전에, 시스템의 구성 요소와 그 사이의 연결 방식을 파악해야 합니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-1. 시스템 기본 부품</h3>
+                <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1.5rem;">
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0;">
+                        <div style="font-size:2.5rem;">🎨</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.1rem; color:var(--text-primary);">프론트엔드 (Frontend / UI)</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">사용자가 직접 보고 누르는 화면. 버튼 위치, 애니메이션, 글꼴 등 시각적 요소를 담당합니다.<br/><strong>AI에게 요청할 때:</strong> "아이폰 설정 화면처럼 깔끔하게 만들어줘. 다크모드를 메인으로 해."</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0;">
+                        <div style="font-size:2.5rem;">⚙️</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.1rem; color:var(--text-primary);">백엔드 & 데이터베이스 (Backend / DB)</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">보이지 않는 곳에서 데이터를 저장하고 계산하는 논리 서버입니다.<br/><strong>AI에게 요청할 때:</strong> "회원가입 시 비밀번호는 암호화하고, 사용자 정보는 Supabase에 저장하는 로직을 짜줘."</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0;">
+                        <div style="font-size:2.5rem;">🚀</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.1rem; color:var(--text-primary);">인프라 & 배포 (Deployment)</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">내 컴퓨터에 있는 코드를 전 세계 사람들이 접속할 수 있게 서버에 올리는 과정입니다.<br/><strong>AI에게 요청할 때:</strong> "이 프로젝트를 Vercel에 배포할 건데 세팅 값 좀 알려줘."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API 섹션 (신규) -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-2. API — 부품 사이의 연결 통로</h3>
+                <p style="margin-top:1rem;">API(Application Programming Interface)는 프론트엔드와 백엔드가 데이터를 주고받는 약속된 통로입니다.</p>
+                <div style="display:flex; align-items:center; justify-content:center; gap:0; margin:1.5rem 0; padding:1.5rem; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0; flex-wrap:wrap;">
+                    <div style="background:#e0f2fe; border:1px solid #7dd3fc; border-radius:10px; padding:12px 20px; text-align:center; font-weight:700; color:#0369a1; min-width:100px;">🎨 프론트엔드</div>
+                    <div style="font-size:1.5rem; color:#94a3b8; padding:0 8px;">→</div>
+                    <div style="background:#fdf2f8; border:2px solid #f9a8d4; border-radius:10px; padding:12px 20px; text-align:center; font-weight:700; color:#be185d; min-width:100px; box-shadow:0 2px 8px rgba(219,39,119,0.1);">🔗 API</div>
+                    <div style="font-size:1.5rem; color:#94a3b8; padding:0 8px;">→</div>
+                    <div style="background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:12px 20px; text-align:center; font-weight:700; color:#047857; min-width:100px;">⚙️ 백엔드</div>
+                    <div style="font-size:1.5rem; color:#94a3b8; padding:0 8px;">→</div>
+                    <div style="background:#f5f3ff; border:1px solid #c4b5fd; border-radius:10px; padding:12px 20px; text-align:center; font-weight:700; color:#6d28d9; min-width:100px;">🗄️ DB</div>
+                </div>
+                <div class="callout" style="border-left-color:#db2777; background:#fdf2f8;">
+                    <h4 style="color:#db2777;">💡 비유로 이해하기</h4>
+                    <p style="margin:0; color:var(--text-secondary); font-size:0.95rem;">식당에 비유하면 — 프론트엔드는 <strong>메뉴판</strong>, API는 <strong>주문 전달 시스템</strong>, 백엔드는 <strong>주방</strong>, DB는 <strong>식자재 창고</strong>입니다. 손님(사용자)은 메뉴판만 보지만, 뒤에서 API가 주문을 전달해 요리가 나옵니다.</p>
+                </div>
+
+                <div style="margin-top:2rem; background:#fffbeb; border-left:4px solid #f59e0b; padding:1.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                    <h4 style="color:#b45309; margin-top:0; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:1.3rem;">🙋</span> HTML과 CSS는 프로그래밍 언어인가요?
+                    </h4>
+                    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.6;">
+                        <strong>HTML</strong>은 웹 페이지의 구조를 정의하는 <strong>마크업 언어</strong>, <strong>CSS</strong>는 색상과 배치를 꾸미는 <strong>스타일시트 언어</strong>입니다. 둘 다 웹 화면의 기본이지만, 조건 판단이나 데이터 처리를 하는 <strong>프로그래밍 언어와는 다릅니다.</strong> 바이브코딩에서는 AI가 HTML/CSS 조립을 빠르게 처리해주므로, 우리는 "어떤 화면이 필요한지" 설명하는 데 집중하면 됩니다.
+                    </p>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-3. 코딩 언어 사용량 Top 10</h3>
+                <p style="margin-top:1rem; color:var(--text-secondary);">현업 생태계 규모가 크고 AI 코드 생성 품질이 우수한 상위 10개 언어입니다. 바 길이는 범용성과 시장 활용도를 직관적으로 나타냅니다.</p>
+
+                <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem; background:#fff; padding:1.5rem; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+                            <span style="font-weight:600; color:#b45309;"><span style="font-size:1.2rem; margin-right:4px;">🌐</span> JavaScript & TypeScript</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">웹 프론트 & 백엔드 (1위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:98%; background:linear-gradient(90deg, #fef08a, #eab308); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#1d4ed8;"><span style="font-size:1.2rem; margin-right:4px;">🐍</span> Python</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">데이터/AI/자동화 주력 (2위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:95%; background:linear-gradient(90deg, #93c5fd, #2563eb); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#c2410c;"><span style="font-size:1.2rem; margin-right:4px;">☕</span> Java</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">엔터프라이즈 서버 & 금융권 (3위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:85%; background:linear-gradient(90deg, #fdba74, #ea580c); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#4338ca;"><span style="font-size:1.2rem; margin-right:4px;">⚙️</span> C / C++</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">게임 엔진 & 임베디드 (4위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:75%; background:linear-gradient(90deg, #c7d2fe, #4f46e5); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#7e22ce;"><span style="font-size:1.2rem; margin-right:4px;">💜</span> C#</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">유니티(게임) & .NET (5위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:65%; background:linear-gradient(90deg, #e9d5ff, #8b5cf6); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#475569;"><span style="font-size:1.2rem; margin-right:4px;">🐘</span> PHP</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">워드프레스 · 웹사이트 (6위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:55%; background:linear-gradient(90deg, #cbd5e1, #64748b); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#0284c7;"><span style="font-size:1.2rem; margin-right:4px;">🐹</span> Go</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">클라우드/백엔드 (7위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:45%; background:linear-gradient(90deg, #bae6fd, #0ea5e9); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#b91c1c;"><span style="font-size:1.2rem; margin-right:4px;">🦀</span> Rust</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">메모리 안전 시스템 언어 (8위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:40%; background:linear-gradient(90deg, #fecaca, #ef4444); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#db2777;"><span style="font-size:1.2rem; margin-right:4px;">📱</span> Kotlin</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">안드로이드 공식 언어 (9위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:35%; background:linear-gradient(90deg, #fbcfe8, #ec4899); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; margin-top:0.8rem;">
+                            <span style="font-weight:600; color:#ea580c;"><span style="font-size:1.2rem; margin-right:4px;">🍏</span> Swift</span>
+                            <span style="color:var(--text-secondary); font-size:0.9rem;">iOS/Mac 생태계 (10위)</span>
+                        </div>
+                        <div style="width:100%; background:#f1f5f9; height:12px; border-radius:6px; overflow:hidden;">
+                            <div style="width:30%; background:linear-gradient(90deg, #fed7aa, #f97316); height:100%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div style="margin-top:2rem; background:#f8fafc; border-radius:12px; padding:2rem; border:1px solid #e2e8f0;">
+                    <h4 style="margin-top:0; margin-bottom:1.5rem; color:#334155; font-size:1.1rem;">각 언어가 중요한 이유 (AI 시점)</h4>
+                    <ul style="color:var(--text-primary); font-size:0.95rem; line-height:1.7; padding-left:1.5rem;">
+                        <li><strong style="color:#b45309;">JavaScript/TypeScript:</strong> 모든 브라우저에서 동작하는 웹 표준. AI가 가장 풍부한 레퍼런스를 참조해 UI를 빠르게 생성합니다.</li>
+                        <li><strong style="color:#1d4ed8;">Python:</strong> 영문장처럼 읽기 쉬운 문법. 크롤링, 엑셀 자동화, 데이터 분석에 매우 풍부한 라이브러리를 갖추고 있어 AI 스크립트 생성에 유리합니다.</li>
+                        <li><strong style="color:#c2410c;">Java:</strong> Spring 프레임워크 기반의 안정성. 은행·대기업 서버에서 널리 쓰이며, 한국 기업 서버 생태계에서 강세를 보입니다.</li>
+                        <li><strong style="color:#4338ca;">C/C++:</strong> 하드웨어 직접 제어와 극한의 속도가 필요한 게임 엔진(언리얼) 개발에 사용됩니다.</li>
+                        <li><strong style="color:#7e22ce;">C#:</strong> 유니티(Unity) 게임 엔진과 .NET 기반 엔터프라이즈 앱에 필수적입니다.</li>
+                        <li><strong style="color:#0284c7;">Go:</strong> 구글이 개발. 수만 명 동시 접속을 처리하는 클라우드 백엔드에 최적화되어 있습니다.</li>
+                        <li><strong style="color:#b91c1c;">Rust:</strong> C++급 성능에 메모리 안전성을 더한 차세대 시스템 언어. 개발자 만족도가 매우 높습니다.</li>
+                    </ul>
+                </div>
+
+                <!-- 상황별 선택 가이드 (신규) -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-4. 목표별 언어 선택 가이드</h3>
+                <p style="margin-top:1rem; color:var(--text-secondary);">"어떤 걸 만들고 싶은지"에 따라 첫 번째로 배울 언어가 달라집니다.</p>
+                <div class="metric-grid" style="margin-top:1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #eab308;">
+                        <div class="metric-label" style="color:#b45309;">🌐 웹서비스</div>
+                        <div class="metric-value" style="font-size:1.1rem;">JS / TS</div>
+                        <p class="metric-desc">프론트엔드부터 백엔드까지 한 언어로 만드는 풀스택 개발에 유리합니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #2563eb;">
+                        <div class="metric-label" style="color:#1d4ed8;">🤖 자동화 / AI / 데이터</div>
+                        <div class="metric-value" style="font-size:1.1rem;">Python</div>
+                        <p class="metric-desc">크롤링, 엑셀 처리, 머신러닝까지 방대한 라이브러리 생태계가 강점입니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #ea580c;">
+                        <div class="metric-label" style="color:#c2410c;">🏢 기업형 백엔드</div>
+                        <div class="metric-value" style="font-size:1.1rem;">Java</div>
+                        <p class="metric-desc">Spring 프레임워크 기반의 대규모 안정적 서버 구축에 적합합니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #8b5cf6;">
+                        <div class="metric-label" style="color:#7e22ce;">🎮 게임 (Unity)</div>
+                        <div class="metric-value" style="font-size:1.1rem;">C#</div>
+                        <p class="metric-desc">유니티 엔진의 공식 스크립팅 언어입니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #ec4899;">
+                        <div class="metric-label" style="color:#db2777;">📱 Android</div>
+                        <div class="metric-value" style="font-size:1.1rem;">Kotlin</div>
+                        <p class="metric-desc">구글 공식 지정 Android 개발 언어입니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #f97316;">
+                        <div class="metric-label" style="color:#ea580c;">🍏 iOS</div>
+                        <div class="metric-value" style="font-size:1.1rem;">Swift</div>
+                        <p class="metric-desc">Apple 생태계(iPhone, Mac) 앱 개발 공식 언어입니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #4f46e5;">
+                        <div class="metric-label" style="color:#4338ca;">⚙️ 시스템 / 임베디드</div>
+                        <div class="metric-value" style="font-size:1.1rem;">C / C++ / Rust</div>
+                        <p class="metric-desc">하드웨어 제어, OS, 고성능 프로그램에 사용됩니다.</p>
+                    </div>
+                </div>
+</article>
+
+            <article id="coding-ch3">
+                <h2>Chapter 3. 분야별 바이브코딩 추천 스택</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: AI에게 무작정 만들어달라 하지 말고, 검증된 조합(Stack)을 지정하면 결과물 품질이 크게 올라갑니다.</p>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <div class="card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-color: #bae6fd;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">🌐</div>
+                        <h4 style="color:#0369a1; margin-top:0; margin-bottom:0.5rem;">1. 풀스택 반응형 웹서비스</h4>
+                        <p style="color:#0c4a6e; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Next.js + Tailwind CSS + Supabase</p>
+                        <div style="font-size:0.88rem; color:#0c4a6e; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Next.js(화면+서버) / Tailwind(스타일링) / Supabase(DB/인증)</p>
+                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> SaaS, 포트폴리오, 쇼핑몰</p>
+                            <p style="margin:0 0 6px;"><strong>장점:</strong> AI 학습 레퍼런스가 풍부해 비교적 안정적인 코드 생성</p>
+                            <p style="margin:0;"><strong>주의:</strong> SSR 개념 이해 필요 | 난이도 ★★☆</p>
+                        </div>
+                    </div>
+                    <div class="card" style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-color: #a7f3d0;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">📊</div>
+                        <h4 style="color:#047857; margin-top:0; margin-bottom:0.5rem;">2. 데이터 분석 & 대시보드</h4>
+                        <p style="color:#064e3b; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + Streamlit + Pandas</p>
+                        <div style="font-size:0.88rem; color:#064e3b; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Python(로직) / Streamlit(웹UI) / Pandas(데이터 처리)</p>
+                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 매출 대시보드, 설문 분석, 엑셀 자동화</p>
+                            <p style="margin:0 0 6px;"><strong>장점:</strong> 프론트엔드 지식 없이 인터랙티브 웹 앱 생성 가능</p>
+                            <p style="margin:0;"><strong>주의:</strong> 대규모 트래픽에는 부적합 | 난이도 ★☆☆</p>
+                        </div>
+                    </div>
+                    <div class="card" style="background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fca5a5;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">🤖</div>
+                        <h4 style="color:#b91c1c; margin-top:0; margin-bottom:0.5rem;">3. 반복 업무 자동화</h4>
+                        <p style="color:#7f1d1d; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + Playwright (or Selenium)</p>
+                        <div style="font-size:0.88rem; color:#7f1d1d; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Python(로직) / Playwright(브라우저 제어)</p>
+                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 웹 크롤링, 자동 로그인, 정기 데이터 수집</p>
+                            <p style="margin:0 0 6px;"><strong>장점:</strong> AI가 자동화 스크립트 초안을 빠르게 생성</p>
+                            <p style="margin:0;"><strong>주의:</strong> 대상 사이트 크롤링 정책 반드시 확인 | 난이도 ★★☆</p>
+                        </div>
+                    </div>
+                    <div class="card" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fde68a;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
+                        <h4 style="color:#b45309; margin-top:0; margin-bottom:0.5rem;">4. 발표자료 & 문서 자동화</h4>
+                        <p style="color:#78350f; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Markdown + Python (python-pptx) + Jinja2</p>
+                        <div style="font-size:0.88rem; color:#78350f; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Markdown(원고) / python-pptx(PPTX) / Jinja2(HTML 템플릿)</p>
+                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 보고서, 제안서, 주간 리포트 자동 생성</p>
+                            <p style="margin:0 0 6px;"><strong>장점:</strong> 텍스트만 넣으면 AI가 슬라이드/리포트를 자동 생성</p>
+                            <p style="margin:0;"><strong>주의:</strong> 디자인 커스텀에 한계 | 난이도 ★☆☆</p>
+                        </div>
+                    </div>
+                    <div class="card" style="background: linear-gradient(135deg, #fdf2f8, #fce7f3); border-color: #f9a8d4; grid-column: span 2;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">📱</div>
+                        <h4 style="color:#be185d; margin-top:0; margin-bottom:0.5rem;">5. 모바일 앱 (크로스 플랫폼)</h4>
+                        <p style="color:#831843; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Flutter + Firebase 또는 React Native + Expo + Supabase</p>
+                        <div style="font-size:0.88rem; color:#831843; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Flutter/React Native(화면+로직) / Firebase·Supabase(인증/DB)</p>
+                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 개인 앱, MVP, Android+iOS 동시 출시</p>
+                            <p style="margin:0 0 6px;"><strong>장점:</strong> 한 번의 코드로 두 플랫폼에 동시 배포 가능</p>
+                            <p style="margin:0;"><strong>주의:</strong> 네이티브 기능(카메라, 센서)은 별도 플러그인 필요 | 난이도 ★★★</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="coding-ch4">
+                <h2>Chapter 4. 실패하지 않는 프롬프팅 비법</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: AI는 맥락(Context)과 제약(Constraint)을 함께 줘야 정확한 답을 냅니다.</p>
+
+                <!-- 프롬프트 공식 -->
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-1. 좋은 프롬프트 공식</h3>
+                <div class="formula-box" style="margin-top:1.5rem; font-size:0.95rem; text-align:left; padding:1.5rem;">
+                    <strong style="color:#db2777; display:block; text-align:center; margin-bottom:0.75rem; font-size:1.05rem;">좋은 프롬프트 = 역할 + 목표 + 기술스택 + 디자인 톤 + 기능 요구사항 + 제약조건 + 출력 형식</strong>
+                    <p style="margin:0; color:var(--text-secondary); font-size:0.9rem; text-align:center;">이 공식의 요소가 많을수록 AI의 출력 품질이 올라갑니다.</p>
+                </div>
+
+                <!-- Before / After -->
+                <h3 style="margin-top:2.5rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-2. 나쁜 프롬프트 vs 좋은 프롬프트</h3>
+                <div class="scenario-box" style="margin-top:1.5rem;">
+                    <div class="scenario-card" style="border-top:4px solid var(--color-red);">
+                        <div class="scenario-label" style="color:var(--color-red); font-weight:700;">❌ 나쁜 프롬프트</div>
+                        <div class="scenario-val" style="font-size:1rem; font-weight:400; font-style:italic;">"멋진 쇼핑몰 사이트 하나 만들어줘. 로그인도 되게 해주고."</div>
+                        <div class="scenario-change col-red" style="margin-top:10px; font-weight:normal;">맥락과 제약이 없어 AI가 임의로 결정합니다. 결과 예측이 불가능합니다.</div>
+                    </div>
+                    <div class="scenario-arrow">➔</div>
+                    <div class="scenario-card" style="border-top:4px solid var(--color-blue); box-shadow:0 4px 15px rgba(49,130,246,0.1);">
+                        <div class="scenario-label" style="color:var(--color-blue); font-weight:700;">✅ 좋은 프롬프트</div>
+                        <div class="scenario-val" style="font-size:0.95rem; font-weight:400;">"너는 수석 프론트엔드 개발자야. [쇼핑몰 상품 목록 페이지]를 만들 거야. <br/>1. 스택: Next.js + TailwindCSS <br/>2. 디자인: 무채색 기반 미니멀리즘 <br/>3. 필수 기능: 가격순 정렬, 상품 클릭 시 모달"</div>
+                    </div>
+                </div>
+
+                <!-- 기능 단위 분할 -->
+                <h3 style="margin-top:2.5rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-3. 한 번에 전부 만들지 말 것</h3>
+                <div class="callout" style="border-left-color:#db2777; background:#fdf2f8; margin-top:1.5rem;">
+                    <h4 style="color:#db2777;">🧩 기능 단위 분할 원칙</h4>
+                    <p style="margin:0; color:var(--text-secondary); font-size:0.95rem;">AI에게 "쇼핑몰 전체를 만들어줘"는 실패 확률이 높습니다. 대신 이렇게 나눠서 지시하세요:</p>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+                    <div style="display:flex; align-items:center; gap:1rem; padding:12px 16px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="width:28px; height:28px; background:#fce7f3; color:#db2777; border-radius:6px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.9rem; flex-shrink:0;">1</div>
+                        <span style="font-size:0.95rem; color:var(--text-secondary);">"프로젝트 초기 세팅과 폴더 구조를 잡아줘"</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1rem; padding:12px 16px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="width:28px; height:28px; background:#fce7f3; color:#db2777; border-radius:6px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.9rem; flex-shrink:0;">2</div>
+                        <span style="font-size:0.95rem; color:var(--text-secondary);">"회원가입/로그인 기능을 먼저 만들어줘"</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1rem; padding:12px 16px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="width:28px; height:28px; background:#fce7f3; color:#db2777; border-radius:6px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.9rem; flex-shrink:0;">3</div>
+                        <span style="font-size:0.95rem; color:var(--text-secondary);">"이제 상품 목록 페이지를 추가해줘"</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1rem; padding:12px 16px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="width:28px; height:28px; background:#fce7f3; color:#db2777; border-radius:6px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.9rem; flex-shrink:0;">4</div>
+                        <span style="font-size:0.95rem; color:var(--text-secondary);">"장바구니와 결제 흐름을 연결해줘"</span>
+                    </div>
+                </div>
+
+                <!-- 에러 질문법 -->
+                <h3 style="margin-top:2.5rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-4. 에러가 났을 때 AI에게 질문하는 법</h3>
+                <div style="margin-top:1.5rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:1.5rem;">
+                    <h4 style="margin-top:0; color:var(--text-primary); font-size:1.05rem; margin-bottom:1rem;">✅ 에러 질문 시 함께 보내야 할 4가지</h4>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="color:#16a34a; font-weight:bold;">✓</span> 에러 메시지 <strong>원문 전체</strong> (일부만 자르지 말 것)</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="color:#16a34a; font-weight:bold;">✓</span> 관련 <strong>코드 파일</strong>과 위치</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="color:#16a34a; font-weight:bold;">✓</span> <strong>실행 환경</strong> (OS, Node 버전, 브라우저 등)</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="color:#16a34a; font-weight:bold;">✓</span> <strong>기대한 동작</strong>과 실제 결과의 차이</div>
+                    </div>
+                </div>
+                <div class="scenario-box" style="margin-top:1.5rem;">
+                    <div class="scenario-card" style="border-top:4px solid var(--color-red);">
+                        <div class="scenario-label" style="color:var(--color-red); font-weight:700;">❌ 피해야 할 질문</div>
+                        <div class="scenario-val" style="font-size:0.95rem; font-weight:400; font-style:italic;">"왜 안 돼?" / 에러 일부만 잘라 보내기</div>
+                    </div>
+                    <div class="scenario-arrow">➔</div>
+                    <div class="scenario-card" style="border-top:4px solid var(--color-blue); box-shadow:0 4px 15px rgba(49,130,246,0.1);">
+                        <div class="scenario-label" style="color:var(--color-blue); font-weight:700;">✅ 효과적인 질문</div>
+                        <div class="scenario-val" style="font-size:0.95rem; font-weight:400;">"원인 후보를 3개로 나눠줘" / "수정 범위가 가장 작은 해결책부터 제시해줘" / "줄 단위로 왜 이 수정이 필요한지 설명해줘"</div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="coding-ch5">
+                <h2>Chapter 5. 프로젝트 제작 6단계 로드맵</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: "한 번에 전부"가 아니라 "단계별로, 검증하며" 진행하는 것이 성공의 열쇠입니다.</p>
+                
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:2rem; margin-top:2rem;">
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #e2e8f0;">
+                        <div style="width:40px; height:40px; background:#e0e7ff; color:#4f46e5; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">1</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">기획 및 스케치 (Ideation)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">아이디어를 마인드맵이나 손그림(와이어프레임)으로 구체화합니다. "누가 쓸 것인가, 핵심 기능은 무엇인가"를 먼저 정의합니다.</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #e2e8f0;">
+                        <div style="width:40px; height:40px; background:#fce7f3; color:#db2777; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">2</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">뼈대 생성 (Scaffolding)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">AI에게 기획안을 보여주고 "프로젝트 폴더 구조와 초기 세팅을 만들어줘" 요청합니다.</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #e2e8f0;">
+                        <div style="width:40px; height:40px; background:#dcfce7; color:#16a34a; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">3</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">기능 단위 구현 (Feature Coding)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">"로그인 먼저 → 게시판 → 결제" 순으로 한 기능씩 AI에게 지시합니다. 한 번에 전부 만들지 않습니다.</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #e2e8f0;">
+                        <div style="width:40px; height:40px; background:#fef3c7; color:#b45309; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">4</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">검증 및 테스트 (Verification)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">각 기능이 의도대로 동작하는지 직접 확인합니다. 검증 없이 바로 배포하지 마세요.</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #e2e8f0;">
+                        <div style="width:40px; height:40px; background:#ffedd5; color:#ea580c; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">5</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">디버깅 & 배포 (Launch)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">에러 로그를 AI와 핑퐁하며 해결 후, Vercel/Netlify 등에 배포합니다.</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <div style="width:40px; height:40px; background:#ede9fe; color:#7c3aed; border-radius:8px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2rem;">6</div>
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; color:var(--text-primary); margin-bottom:4px;">배포 후 운영 (Ops)</strong>
+                            <span style="font-size:0.95rem; color:var(--text-secondary);">에러 로그 모니터링, 환경변수 관리, 사용자 피드백 반영으로 서비스를 개선합니다.</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Chapter 6: 실전 기본기 (신규) -->
+            <article id="coding-ch6">
+                <h2>Chapter 6. 실전 기본기 — 바이브코더의 생존 도구</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 코드만 짜는 것이 끝이 아닙니다. 버전 관리, 보안, 검증 습관이 진짜 실력입니다.</p>
+
+                <!-- Git / GitHub -->
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">6-1. Git & GitHub 기초</h3>
+                <div class="metric-grid" style="margin-top:1.5rem;">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #24292f;">
+                        <div class="metric-label" style="color:#24292f;">📦 Git</div>
+                        <div class="metric-value" style="font-size:1.1rem;">변경 이력 기록 도구</div>
+                        <p class="metric-desc">코드의 변경 내역을 타임라인처럼 기록합니다. 실수해도 이전 상태로 되돌릴 수 있습니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #2563eb;">
+                        <div class="metric-label" style="color:#2563eb;">🌐 GitHub</div>
+                        <div class="metric-value" style="font-size:1.1rem;">코드 저장/공유 플랫폼</div>
+                        <p class="metric-desc">Git으로 기록한 코드를 클라우드에 올려두고, 다른 사람과 협업하거나 백업합니다.</p>
+                    </div>
+                </div>
+                <div class="callout" style="border-left-color:#db2777; background:#fdf2f8; margin-top:1rem;">
+                    <h4 style="color:#db2777;">💡 실전 팁</h4>
+                    <p style="margin:0; color:var(--text-secondary); font-size:0.95rem;">AI가 큰 수정을 하기 전에 반드시 현재 상태를 커밋(저장)하세요. 문제가 생기면 이전으로 돌아갈 수 있습니다.</p>
+                </div>
+
+                <!-- 패키지 매니저 -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">6-2. 패키지 매니저 기초</h3>
+                <p style="margin-top:1rem;">라이브러리(남이 만든 도구 모음)를 설치하고 관리하는 프로그램입니다.</p>
+                <div class="metric-grid" style="margin-top:1rem;">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #eab308;">
+                        <div class="metric-label" style="color:#b45309;">JavaScript 계열</div>
+                        <div class="metric-value" style="font-size:1rem;">npm / pnpm / yarn</div>
+                        <p class="metric-desc">Node.js 생태계의 패키지를 설치합니다. 프로젝트마다 package.json에 의존성을 기록합니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:3px solid #2563eb;">
+                        <div class="metric-label" style="color:#1d4ed8;">Python 계열</div>
+                        <div class="metric-value" style="font-size:1rem;">pip / uv / poetry</div>
+                        <p class="metric-desc">Python 라이브러리를 설치합니다. requirements.txt 또는 pyproject.toml로 관리합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 환경변수 -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">6-3. 환경변수(.env)와 비밀키 관리</h3>
+                <div style="margin-top:1.5rem; background:#fef2f2; border-left:4px solid #ef4444; padding:1.5rem; border-radius:8px;">
+                    <h4 style="color:#b91c1c; margin-top:0; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px;"><span style="font-size:1.2rem;">🚨</span> 절대 금지 사항</h4>
+                    <div style="display:flex; flex-direction:column; gap:6px; font-size:0.95rem; color:var(--text-secondary);">
+                        <div><span style="color:#ef4444; font-weight:bold;">✗</span> API 키, DB 주소, 비밀번호를 <strong>코드에 직접</strong> 넣지 마세요.</div>
+                        <div><span style="color:#ef4444; font-weight:bold;">✗</span> .env 파일을 <strong>공개 저장소(GitHub)</strong>에 업로드하지 마세요.</div>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; background:#ecfdf5; border-left:4px solid #16a34a; padding:1.5rem; border-radius:8px;">
+                    <h4 style="color:#047857; margin-top:0; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px;"><span style="font-size:1.2rem;">✅</span> 올바른 방법</h4>
+                    <div style="font-size:0.95rem; color:var(--text-secondary);">
+                        <p style="margin:0 0 4px;">비밀 정보는 <strong>.env</strong> 파일에 분리하고, <strong>.gitignore</strong>에 등록하여 저장소에 올라가지 않게 합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 보안 / 개인정보 -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">6-4. 보안 & 개인정보 기본 원칙</h3>
+                <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+                    <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:#fff; border-radius:8px; border:1px solid #e2e8f0; font-size:0.95rem; color:var(--text-secondary);"><span style="font-size:1.1rem;">🔒</span> 비밀번호를 <strong>평문(Plain Text)</strong>으로 저장하지 말 것 — 반드시 해시(Hash) 처리</div>
+                    <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:#fff; border-radius:8px; border:1px solid #e2e8f0; font-size:0.95rem; color:var(--text-secondary);"><span style="font-size:1.1rem;">🔑</span> API 키를 코드에 직접 노출하지 말 것 — 환경변수로 분리</div>
+                    <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:#fff; border-radius:8px; border:1px solid #e2e8f0; font-size:0.95rem; color:var(--text-secondary);"><span style="font-size:1.1rem;">🤖</span> 자동화 / 크롤링은 <strong>대상 사이트의 이용약관</strong>을 반드시 확인</div>
+                    <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:#fff; border-radius:8px; border:1px solid #e2e8f0; font-size:0.95rem; color:var(--text-secondary);"><span style="font-size:1.1rem;">👤</span> 사용자 데이터를 <strong>최소한만 수집</strong>하고 명확한 목적 하에 보관</div>
+                </div>
+
+                <!-- AI 코드 검증 체크리스트 -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">6-5. AI 코드 검증 체크리스트</h3>
+                <p style="margin-top:1rem;">AI가 생성한 코드는 반드시 아래 항목을 확인한 뒤 사용하세요.</p>
+                <div style="margin-top:1rem; background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:1.5rem;">
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="width:24px; height:24px; border:2px solid #db2777; border-radius:4px; display:inline-flex; justify-content:center; align-items:center; font-size:0.7rem; color:#db2777; font-weight:bold; flex-shrink:0;">✓</span> <strong>실행해봤는가?</strong> — 코드를 실제로 돌려보았는지 확인</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="width:24px; height:24px; border:2px solid #db2777; border-radius:4px; display:inline-flex; justify-content:center; align-items:center; font-size:0.7rem; color:#db2777; font-weight:bold; flex-shrink:0;">✓</span> <strong>에러 없이 동작하는가?</strong> — 콘솔/터미널에 경고나 에러가 없는지 확인</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="width:24px; height:24px; border:2px solid #db2777; border-radius:4px; display:inline-flex; justify-content:center; align-items:center; font-size:0.7rem; color:#db2777; font-weight:bold; flex-shrink:0;">✓</span> <strong>요구사항과 일치하는가?</strong> — 내가 원한 기능이 실제로 구현되었는지</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="width:24px; height:24px; border:2px solid #db2777; border-radius:4px; display:inline-flex; justify-content:center; align-items:center; font-size:0.7rem; color:#db2777; font-weight:bold; flex-shrink:0;">✓</span> <strong>보안 위험은 없는가?</strong> — API키 노출, 인증 우회 등 확인</div>
+                        <div style="display:flex; align-items:center; gap:10px; font-size:0.95rem; color:var(--text-secondary);"><span style="width:24px; height:24px; border:2px solid #db2777; border-radius:4px; display:inline-flex; justify-content:center; align-items:center; font-size:0.7rem; color:#db2777; font-weight:bold; flex-shrink:0;">✓</span> <strong>존재하는 라이브러리인가?</strong> — AI가 없는 패키지를 지어내지 않았는지</div>
+                    </div>
+                </div>
+            </article>
+
+            <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border-light); color:var(--text-tertiary); text-align:center; font-size:0.9rem;">
+                <p>Vibe Coding Academy &copy; 2026</p>
+            </footer>
+        </main>
+    </div>
+</template>
+
+
+<script src="../assets/js/academy-common.js"></script>
+<script>
+mountAcademyView('CodingLectureView');
+</script>
+
+
+</body>
+</html>

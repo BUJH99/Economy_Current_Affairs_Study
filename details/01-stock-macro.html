@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식 기초 및 거시경제 지표 완전 정복</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap">
+    <link rel="stylesheet" href="../assets/css/econ-academy.css">
+</head>
+<body>
+
+
+<div id="app"></div>
+
+<template id="lecture-view-tpl">
+<div class="app-container" style="background: #ffffff; width: 100%;">
+        <nav class="sidebar" id="sidebar">
+            <div @click="$emit('go-home')" class="sidebar-btn-home" style="cursor:pointer; color:var(--color-blue); font-weight:bold; margin-bottom:1rem;">
+                ← 홈으로 돌아가기
+            </div>
+            <div class="sidebar-title">주식/경제 마스터</div>
+            <div class="toc-list">
+                 <div v-for="(item, idx) in toc" :key="idx" :class="['toc-item', {'toc-sub': item.isSub}]">
+                     <a @click.prevent="scrollTo(item.id)" :class="{active: activeToc === item.id}">{{ item.text }}</a>
+                 </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            
+        <header>
+            <p style="color: var(--color-blue); font-weight: 600; margin-bottom: 0.5rem;">강의 교안</p>
+            <h1>주식 및 경제 기초:<br>지표부터 거시경제까지</h1>
+            <p>기업 가치 평가, 자금 조달 이벤트, 일본의 잃어버린 30년, 그리고 업종별 사이클 완전 정복</p>
+        </header>
+
+        <article id="part1">
+            <h2>Part 1: 기업 가치 평가 지표</h2>
+            <p>투자의 기본은 기업의 가격(Price)과 가치(Value)를 비교하는 것입니다. 핵심 지표 5가지를 통해 저평가와 고평가를 판단하는 기준을 배웁니다.</p>
+
+            <valuation-table></valuation-table>
+
+            <section id="p1-1">
+                <h3>1. PER (Price Earning Ratio, 주가수익비율)</h3>
+                <p>기업의 현재 주가가 1주당 벌어들이는 순이익의 몇 배인지를 나타내는 지표. 투자 원금을 해당 기업의 이익으로 회수하는 데 걸리는 기간(년)을 의미함.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Formula</span>
+                        <div class="formula-box" style="margin:0; background:transparent; padding:0; text-align:left;">Price ÷ EPS</div>
+                        <span class="metric-desc" style="margin-top:10px;">투자 원금을 이익으로 회수하는 데 걸리는 시간(년)</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Forward P/E</span>
+                        <span class="metric-value">12개월 선행 PER</span>
+                        <span class="metric-desc">과거 실적보다는 미래 전망을 중시. 분모(E)는 애널리스트 실적 전망치 평균인 컨센서스(Consensus)를 적용함.</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <strong>💡 해석 기준</strong>
+                    <ul>
+                        <li><span class="badge badge-neu">가치주</span> 통상 PER 10~15배 미만. 안정적인 수익을 창출하나 폭발적 성장 기대감이 낮아 낮은 프리미엄을 부여받음.</li>
+                        <li><span class="badge badge-up">성장주/기술주</span> 통상 PER 20~30배, 혹은 50배 이상. 현재 이익 대비 2~3년 뒤의 막대한 성장성을 선반영하여 높은 프리미엄이 형성됨.</li>
+                    </ul>
+                </div>
+                <indicator-bar id="per"></indicator-bar>
+            </section>
+
+            <section id="p1-2">
+                <h3>2. PBR (Price Book-value Ratio, 주가순자산비율)</h3>
+                <div class="formula-box">PBR = 주가(Price) ÷ 주당순자산(BPS)</div>
+                <p>기업의 순자산(총자산-총부채) 대비 현재 주가 수준을 나타내는 지표. 기업 청산 시 주주가 배당받을 수 있는 장부상 가치와 현재 주가를 비교함. <strong>PBR 1배</strong>는 장부가치와 주가가 동일함을 의미.</p>
+                <div class="card">
+                    <strong>💡 해석 기준</strong>
+                    <ul>
+                        <li><span class="badge badge-neu">가치주</span> 통상 PBR 1.0배 미만(0.5~0.8). 은행, 철강 등 대규모 유형자산을 보유한 전통 산업군에 주로 해당하며, 청산 가치보다 주가가 낮아 저평가된 것으로 해석함.</li>
+                        <li><span class="badge badge-up">성장주/기술주</span> 통상 PBR 3.0~5.0배 이상. 소프트웨어, 빅테크 등은 공장이나 토지(유형자산)보다 기술력, 브랜드 가치(무형자산)가 핵심 가치이므로 PBR이 높게 형성됨.</li>
+                    </ul>
+                </div>
+                <indicator-bar id="pbr"></indicator-bar>
+            </section>
+
+            <section id="p1-3">
+                <h3>3. ROE (Return On Equity, 자기자본이익률)</h3>
+                <div class="formula-box">ROE = (당기순이익 ÷ 자기자본) × 100 (%)</div>
+                <p>주주가 투자한 자본(자기자본)을 활용하여 연간 어느 정도의 순이익을 창출했는지를 백분율(%)로 나타낸 지표. 기업의 자본 운용 효율성을 의미함.</p>
+                <div class="card">
+                    <strong>💡 해석 기준</strong>
+                    <ul>
+                        <li><span class="badge badge-neu">가치주</span> 연간 8~10% 수준을 꾸준히 유지할 경우 우량한 것으로 평가함.</li>
+                        <li><span class="badge badge-up">성장주/기술주</span> 연간 15~20% 이상의 높은 ROE가 요구됨. 지속적인 혁신과 재투자를 통해 자본을 빠르게 증식시켜야 함.</li>
+                    </ul>
+                </div>
+                <indicator-bar id="roe"></indicator-bar>
+            </section>
+
+            <section id="p1-4">
+                <h3>4. EV/EBITDA (기업가치 대비 상각전 영업이익)</h3>
+                <div class="formula-box">EV/EBITDA = EV(시가총액 + 순차입금) ÷ EBITDA(영업이익 + 감가상각비 등)</div>
+                <p>주로 기업 인수합병(M&A) 시 활용되는 지표로, 기업 전체를 인수할 때 소요되는 자금을 영업 현금흐름으로 회수하는 데 걸리는 기간을 의미함.</p>
+                <ul>
+                    <li><strong>EV (Enterprise Value):</strong> 시가총액 + 순차입금(총차입금-현금성 자산). 기업을 인수하는 데 필요한 실제 총비용.</li>
+                    <li><strong>EBITDA:</strong> 영업이익 + 감가상각비 + 무형자산상각비. 세금, 이자, 회계상 상각비를 제외하기 전의 순수 영업 현금 창출력.</li>
+                </ul>
+                <div class="callout">
+                    <h4>평가 기준</h4>
+                    <p>가치주는 통상 8~10배 이하, 성장주/기술주는 15~20배 이상으로 평가됨. 대규모 설비 투자가 수반되어 감가상각비가 큰 인프라, 통신 기업 등의 가치 평가 시 PER보다 유용함.</p>
+                </div>
+                <indicator-bar id="evebitda"></indicator-bar>
+            </section>
+
+            <section id="p1-5">
+                <h3>5. PEG (Price Earnings to Growth ratio, 주가수익성장비율)</h3>
+                <div class="formula-box">PEG = PER ÷ 주당순이익(EPS) 예상 성장률(%)</div>
+                <p>기업의 PER이 이익 성장성에 비해 적정한지를 평가하는 지표. 전설적인 투자자 '피터 린치'가 애용하며 대중화됨.</p>
+                <div class="card">
+                    <strong>💡 평가 기준 및 활용</strong>
+                    <p>통상적으로 PEG가 1이면 적정 가치, 1.0 미만이면 성장성 대비 저평가(매수 관점), 1.5 이상이면 고평가로 해석함.</p>
+                    <p><strong>활용 (성장주/기술주):</strong> PER 수치만 보면 50배, 100배로 비싸 보이는 기술주라도, 매년 이익이 50%, 100%씩 폭발적으로 성장하고 있다면 PEG 지표상으로는 저렴하다고 판단할 수 있게 해주는 핵심 지표임.</p>
+                </div>
+                <indicator-bar id="peg"></indicator-bar>
+            </section>
+        </article>
+
+        <article id="part2">
+            <h2>Part 2: 기업의 자금 조달 이벤트와 주가 영향</h2>
+            
+            <section id="p2-1">
+                <h3>1. CB (Convertible Bond, 전환사채)</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">채권(안전성)과 주식(수익성)의 장점을 섞은 하이브리드 투자 상품입니다. 채권으로 이자를 받다가, <strong>원할 때 주식으로 바꿀 수 있는 권리</strong>가 있습니다.</p>
+
+                <div style="background:#f8f9fa; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem; margin-bottom:3rem;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:1.5rem;">
+                        <span style="background:var(--color-blue); color:#fff; font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:20px;">시나리오</span>
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">A기업(돈이 필요함)과 B투자자(안전+대박을 원함)의 계약</strong>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1.5rem; align-items:stretch;">
+                        <!-- 투자 시점 -->
+                        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-weight:800; color:var(--text-primary); margin-bottom:1rem; font-size:1.1rem;">[ 투자 시점 ]</div>
+                            <div style="font-size:2rem; margin-bottom:0.5rem;">🤝</div>
+                            <p style="font-size:0.95rem; color:var(--text-secondary); word-break:keep-all; line-height:1.5; margin:0;">
+                                B투자자가 A기업에 <strong>1억 원을 대출</strong>해줌.<br>A기업은 "매년 이자 2% 주고, 1년 뒤 원하면 우리 <strong>주식(1주당 1만원)으로 바꿀 수 있게</strong> 해줄게!" 약속.
+                            </p>
+                        </div>
+                        
+                        <!-- 화살표 -->
+                        <div style="display:flex; flex-direction:column; justify-content:center; color:#94a3b8; font-size:1.5rem;">
+                            ➔
+                        </div>
+
+                        <!-- 1년 후 결과 -->
+                        <div style="display:flex; flex-direction:column; gap:1rem;">
+                            <!-- 주가 하락 시 -->
+                            <div style="background:#fffcfc; border:1px solid #fecaca; border-radius:var(--radius-md); padding:1rem 1.2rem; display:flex; gap:1rem; align-items:center;">
+                                <div style="font-size:1.8rem;">📉</div>
+                                <div>
+                                    <div style="font-weight:700; color:var(--color-red); font-size:0.9rem; margin-bottom:4px;">A기업 주가 폭락 (5천원)</div>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.4;">주식으로 안 바꾸고 <strong>원금 1억 + 이자</strong>만 받음. (손실 방어, 안전성 확보)</p>
+                                </div>
+                            </div>
+                            <!-- 주가 상승 시 -->
+                            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:var(--radius-md); padding:1rem 1.2rem; display:flex; gap:1rem; align-items:center;">
+                                <div style="font-size:1.8rem;">🚀</div>
+                                <div>
+                                    <div style="font-weight:700; color:var(--color-green); font-size:0.9rem; margin-bottom:4px;">A기업 주가 폭등 (3만원)</div>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.4;">대박 기회! 원금 대신 <strong>주식(1만원 단가)으로 1만주(3억 가치) </strong> 받아서 팔아치움! (전환권 행사)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 기존 주주 영향 -->
+                    <div style="margin-top:1.5rem; background:#fff; border-left:4px solid var(--color-red); padding:1rem 1.5rem; font-size:0.9rem; color:var(--text-secondary);">
+                        <strong style="color:var(--text-primary);">⚠️ 기존 주주에게 미치는 영향 (악재):</strong> 
+                        주가가 올라서 B투자자가 주식으로 전환하면, <strong>새로운 1만주(신주)가 허공에서 찍혀 나옵니다.</strong> 전체 주식 빵(파이) 조각이 늘어나 기존 주주의 1주당 가치가 희석되므로 주가 하락의 원인이 됩니다.
+                    </div>
+                </div>
+            </section>
+
+            <section id="p2-2">
+                <h3>2. BW (Bond with Warrant, 신주인수권부사채)</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">원금과 이자는 그대로 채권으로 돌려받고, 추가로 <strong>'신주를 싸게 살 수 있는 쿠폰(Warrant)'</strong>을 끼워주는 사채입니다. (채권과 쿠폰은 <strong>분리</strong>됩니다!)</p>
+
+                <div style="background:#f8f9fa; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:1.5rem;">
+                        <span style="background:#8b5cf6; color:#fff; font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:20px;">시나리오</span>
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">A기업과 B투자자의 쿠폰 거래 방식</strong>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1.5rem; align-items:stretch;">
+                        <!-- 투자 시점 -->
+                        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-weight:800; color:var(--text-primary); margin-bottom:1rem; font-size:1.1rem;">[ 투자 시점 ]</div>
+                            <div style="font-size:2.5rem; margin-bottom:0.5rem;">🎫</div>
+                            <p style="font-size:0.95rem; color:var(--text-secondary); word-break:keep-all; line-height:1.5; margin:0;">
+                                B투자자가 A기업에 <strong>1억 원을 대출</strong>해줌.<br>A기업은 이자와 함께 <strong>"나중에 우리 주식 1만원에 살 수 있는 쿠폰 1만장"</strong>을 덤으로 줌.
+                            </p>
+                        </div>
+                        
+                        <!-- 화살표 -->
+                        <div style="display:flex; flex-direction:column; justify-content:center; color:#94a3b8; font-size:1.5rem;">
+                            ➔
+                        </div>
+
+                        <!-- 1년 후 결과 -->
+                        <div style="display:flex; flex-direction:column; justify-content:center; gap:1rem;">
+                            <!-- 원금 회수 (기본) -->
+                            <div style="background:#fff; border:2px dashed #94a3b8; border-radius:var(--radius-md); padding:1rem 1.2rem; display:flex; gap:1rem; align-items:center;">
+                                <div style="font-size:1.8rem;">💰</div>
+                                <div>
+                                    <div style="font-weight:700; color:var(--text-primary); font-size:0.95rem; margin-bottom:4px;">사채 본연의 기능 (기본)</div>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.4;">주가 변동과 <strong>상관없이</strong> 빌려준 1억 원 + 이자는 돌려받음.</p>
+                                </div>
+                            </div>
+                            <!-- 쿠폰 행사 (주가 3만원 폭등 시) -->
+                            <div style="background:#f3e8ff; border:1px solid #d8b4fe; border-radius:var(--radius-md); padding:1rem 1.2rem; display:flex; gap:1rem; align-items:center;">
+                                <div style="font-size:1.8rem;">🎁</div>
+                                <div>
+                                    <div style="font-weight:700; color:#7e22ce; font-size:0.95rem; margin-bottom:4px;">쿠폰 행사 (Warrant)</div>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.4;">주가가 3만원이 됨. 쿠폰을 써서 <strong>내 돈을 1억 더 내고!</strong> 새 주식 1만주를 1만원에 삼 (총 2억차익).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CB와의 핵심 차이 요약 -->
+                    <div style="margin-top:1.5rem; align-items:flex-start; background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1rem 1.5rem; display:flex; gap:1rem;">
+                        <span style="font-size:1.5rem;">⚖️</span>
+                        <div>
+                            <strong style="color:var(--text-primary); font-size:0.95rem; display:block; margin-bottom:6px;">핵심 차이 요약 (CB vs BW)</strong>
+                            <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                                <strong>CB(전환사채)</strong>는 주식으로 바꾸면 채권(빚)이 사라지고 회사는 돈을 갚을 필요가 없어집니다. (돈이 주식으로 변환)<br>
+                                <strong>BW(신주인수권부사채)</strong>는 채권은 그대로 살아있어 회사가 돈을 다시 갚아야 하며, 투자자가 쿠폰(신주인수권)을 행사하려면 회사의 <strong>새 주식을 살 돈(현금)을 추가로 더 내야 합니다.</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <details class="accordion" id="p2-deep" open>
+                <summary>심화: 유상증자와 무상증자의 비교 (회사 A 사례)</summary>
+                <div class="accordion-content">
+                    <p>기존 회사 A의 자본 상태를 기준으로, 유상증자와 무상증자를 진행했을 때 자산 자본과 주주의 평가 가치가 어떻게 변하는지 비교해 보겠습니다.</p>
+                    <div class="card" style="margin-bottom: 1.5rem; background: #fff;">
+                        <h4 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:0.8rem;">기존 상태 (기준점)</h4>
+                        <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:0.95rem;">
+                            <ul style="flex:1; margin:0; padding-left:1.5rem;">
+                                <li><strong>현재 주가:</strong> 10,000원</li>
+                                <li><strong>총 발행 주식:</strong> 1,000주</li>
+                            </ul>
+                            <ul style="flex:1; margin:0; padding-left:1.5rem;">
+                                <li><strong>시가총액:</strong> 1,000만 원</li>
+                                <li><strong>회사 현금:</strong> 500만 원</li>
+                                <li><strong>자사주:</strong> 100주</li>
+                            </ul>
+                            <ul style="flex:1; margin:0; padding-left:1.5rem;">
+                                <li><strong>주주 '김철수':</strong> 보유 100주 (평가액 100만 원)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="overflow-x:auto;">
+                        <table class="comp-table" style="min-width: 600px;">
+                            <thead>
+                                <tr>
+                                    <th width="15%">구분</th>
+                                    <th width="20%" style="background:#f8f9fa; border-bottom:2px solid var(--border-light);">기존 상태 (기준)</th>
+                                    <th width="32%" style="background:#fff0f0; border-bottom:2px solid var(--color-red);">유상증자 (할인공모)</th>
+                                    <th width="32%" style="background:#f0fdf4; border-bottom:2px solid var(--color-green);">무상증자 (1:1 배정)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">조달 메커니즘</td>
+                                    <td>-</td>
+                                    <td>신주 발행하여 자금 <strong>수혈</strong><br><span style="font-size:0.8rem; color:var(--text-tertiary);">(+500주, 8000원에 발행)</span></td>
+                                    <td>회사 잉여금을 자본금으로 <strong>수평이동</strong><br><span style="font-size:0.8rem; color:var(--text-tertiary);">(+900주 공짜 발행, 자사주 제외)</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">회사 자산(현금)</td>
+                                    <td>500만 원</td>
+                                    <td><span style="font-weight:bold; color:var(--color-red);">900만 원 (증가)</span></td>
+                                    <td><strong>500만 원 (동일)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">회사 총자산<br><span style="font-weight:normal; font-size:0.8rem; color:var(--text-tertiary);">(현금+자사주 가치)</span></td>
+                                    <td>600만 원<br><span style="font-size:0.8rem; color:var(--text-tertiary);">(현금 500 + 자사주 100)</span></td>
+                                    <td><span style="font-weight:bold; color:var(--color-red);">약 993만 3천 원</span><br><span style="font-size:0.8rem; color:var(--text-tertiary);">(현금 900 + 자사주 93.3)</span></td>
+                                    <td><span style="font-weight:bold; color:var(--color-blue);">약 552만 6천 원</span><br><span style="font-size:0.8rem; color:var(--text-tertiary);">(현금 500 + 자사주 52.6)</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">총 주식 수</td>
+                                    <td>1,000주</td>
+                                    <td>1,500주</td>
+                                    <td>1,900주</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">이론 주가</td>
+                                    <td>10,000원</td>
+                                    <td><strong>약 9,333원</strong></td>
+                                    <td><strong>약 5,263원</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">김철수 보유가치</td>
+                                    <td>100주 (100만 원)</td>
+                                    <td><span style="font-weight:bold; color:var(--color-blue);">약 93만 3천 원</span> (하락)</td>
+                                    <td><span style="font-weight:bold; color:var(--color-red);">약 105만 2천 원</span> (상승)</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; background:#fafafa;">시장 평가</td>
+                                    <td>-</td>
+                                    <td>통상 <strong>악재</strong> (지분 가치 희석)</td>
+                                    <td>통상 <strong>단기 호재</strong> (자본 탄탄함 증명)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <hr style="border:0; border-top:1px solid var(--border-light); margin:1.5rem 0;">
+
+                    <h4>3. 유상증자 (자본금 확충을 위해 신주를 발행하여 자금 조달)</h4>
+                    <p>회사 A가 신규 공장 설립을 위해 500주를 새로 발행하여 외부 투자자에게 할인된 가격인 8,000원에 파는 상황 (일반 공모 가정).</p>
+                    <ul>
+                        <li><strong>회사 자산(현금) 변동:</strong> 신주 발행 대금 400만 원(500주 × 8,000원)이 회사로 유입되어, 회사 보유 현금은 기존 500만 원에서 900만 원으로 증가함 (실질적 자산 증가).</li>
+                        <li><strong>자사주 변동:</strong> 회사가 기존에 보유한 자사주 100주는 그대로 유지됨.</li>
+                        <li><strong>증자 후 상태:</strong> 총 주식 수 1,500주 (기존 1,000주 + 신규 500주), 시가총액 1,400만 원.</li>
+                        <li><strong>이론 주가(권리락 주가):</strong> 14,000,000원 ÷ 1,500주 = 약 9,333원.</li>
+                    </ul>
+                    <div class="card" style="margin-top: 1rem;">
+                        <strong>주가 영향 및 평가:</strong> 
+                        회사의 현금 자산은 늘어났으나, 주식 수가 더 크게 늘어 10,000원이던 1주당 가치가 이론상 약 9,333원으로 하락함. 기존 주주 김철수가 유상증자에 추가로 돈을 내고 참여하지 않는다면, 보유한 100주의 가치는 100만 원에서 93만 3,300원으로 떨어지며 지분율도 희석됨. 따라서 일반적인 유상증자는 악재로 인식됨. (단, 글로벌 빅테크 등 우량 기업이 참여하는 '제3자 배정 유상증자'는 호재로 작용 가능)
+                    </div>
+                    <scenario-box type="paid"></scenario-box>
+
+                    <hr style="border:0; border-top:1px solid var(--border-light); margin:1.5rem 0;">
+
+                    <h4>4. 무상증자 (잉여금을 자본금으로 전입하며 신주 무상 배정)</h4>
+                    <p>회사 A가 그동안 영업으로 벌어둔 이익잉여금을 회계상 자본금으로 이동시키면서, 1:1 비율로 신주를 발행하여 주주들에게 공짜로 나누어 주는 상황.</p>
+                    <ul>
+                        <li><strong>회사 자산 변동:</strong> 외부에서 유입된 자금이 없으므로, 회사 보유 현금은 기존 500만 원으로 동일함 (실질적 자산 변동 없음). 단지 회계 장부상 계정(잉여금 → 자본금)만 이동했을 뿐임.</li>
+                        <li><strong>자사주 배정 제외(★자사주의 마법):</strong> 원칙적으로 회사가 보유한 자사주(100주)에는 무상증자 신주를 배정하지 않음. 따라서 실제 유통 중인 900주에 대해서만 900주의 신주가 발행됨.</li>
+                        <li><strong>증자 후 상태:</strong> 총 주식 수 1,900주 (기존 1,000주 + 신규 발행 900주). 자사주는 여전히 100주, 시가총액 1,000만 원.</li>
+                        <li><strong>이론 주가(권리락 주가):</strong> 10,000,000원 ÷ 1,900주 = 약 5,263원 (단순 1:1 권리락 주가인 5,000원보다 높게 형성됨).</li>
+                    </ul>
+                    <div class="card" style="margin-top: 1rem;">
+                        <strong>주가 영향 및 평가:</strong> 
+                        기업의 본질적 자산(현금)은 그대로이나, 주식 시장에서는 "무상증자를 할 만큼 잉여금이 많고 재무 구조가 탄탄하다"는 신호로 해석됨. 주당 가격이 낮아져 거래가 활성화되므로 통상 단기적 호재로 인식됨. 특히 위 사례처럼 자사주가 있는 경우, 자사주에 배정될 몫이 사라지면서 기존 주주들의 가치가 상승하는 현상이 발생함. 주주 김철수는 100주를 무상으로 받아 200주가 되었고, 이론 주가를 곱한 평가액은 105만 2,600원(200주 × 5,263원)이 되어 증자 전(100만 원)보다 가치가 상승하는 이익을 보게 됨.
+                    </div>
+                    <scenario-box type="bonus"></scenario-box>
+                </div>
+            </details>
+
+            <section id="p2-5">
+                <h3>5. 액면분할</h3>
+                <p>자본금 증가 없이 발행된 주식을 일정한 비율로 쪼개어 주식 수를 늘리는 것.</p>
+                <ul>
+                    <li><strong>예시:</strong> 1주당 50,000원인 주식을 10대 1로 액면분할하면, 주가는 5,000원이 되고 주식 수는 10배로 증가함.</li>
+                    <li><strong>주가 영향:</strong> 기업의 자산, 펀더멘털, 시가총액에는 전혀 변화가 없음. 그러나 1주당 가격이 낮아져 소액 주주의 접근성이 높아지고 거래량이 활성화되는 긍정적 효과를 기대할 수 있음.</li>
+                </ul>
+            </section>
+
+            <section id="p2-6">
+                <h3>6. 자사주 매입 및 소각 (Share Buyback & Cancellation)</h3>
+                <p>회사가 보유한 잉여 현금으로 유통 중인 자기 회사 주식을 사들인(매입) 뒤, 이를 영구적으로 없애버리는(소각) 행위. 애플(Apple) 등 글로벌 우량 기업들이 가장 선호하는 최고의 주주 환원 정책임.</p>
+                <ul>
+                    <li><strong>메커니즘:</strong> 자사주 매입 시 시장의 수요가 늘어나 주가 방어 효과가 발생하며, 이후 소각을 통해 발행 주식 수 자체가 영구적으로 삭제됨.</li>
+                </ul>
+                <div class="callout" style="border-left-color: var(--color-green); background: #f0fdf4;">
+                    <h4>강력한 장기적 호재</h4>
+                    <p>회사가 벌어들이는 전체 순이익(파이)은 그대로인데 총 주식 수(조각 수)가 줄어들기 때문에, 남은 주주들이 보유한 1주당 순이익(EPS)과 지분 가치가 자동적으로 상승함. 투자자 입장에서는 배당금에 부과되는 세금을 피하면서도 확실한 가치 증대 효과를 누릴 수 있음.</p>
+                </div>
+            </section>
+        </article>
+
+        <article id="part3">
+            <h2>Part 3: 금리와 거시경제 (일본의 잃어버린 30년 사례 분석)</h2>
+            
+            <section id="p3-1">
+                <h3>1. 금리의 기초 개념</h3>
+                <p style="color:var(--text-secondary); margin-bottom: 2rem;">돈(유동성)은 중앙은행을 수원지로 삼아 가장 안전한 곳에서부터 위험한 곳으로 흘러갑니다. <strong>리스크(위험도)</strong>가 높아질수록 금리(돈의 가격)는 비싸집니다.</p>
+
+                <div style="background:#f8f9fa; border:1px solid var(--border-light); border-radius:var(--radius-md); padding:2rem; margin:2rem 0;">
+                    <h4 style="text-align:center; color:var(--text-secondary); margin-top:0; margin-bottom:2.5rem; font-size:1.15rem; letter-spacing:-0.5px;">[금리의 계층 구조와 대소 비교]</h4>
+                    
+                    <div style="position:relative; max-width:600px; margin:0 auto; padding-bottom:1rem; display:flex; flex-direction:column; align-items:center; gap:1.5rem;">
+                        <!-- 연결선 (배경) -->
+                        <div style="position:absolute; width:4px; height:calc(100% - 40px); left:50%; top:20px; transform:translateX(-50%); background:linear-gradient(to bottom, var(--color-blue), #fbbf24, var(--color-red)); z-index:0; border-radius:2px;"></div>
+                        
+                        <!-- 1. 기준금리 -->
+                        <div style="position:relative; z-index:1; background:#fff; border:3px solid var(--color-blue); border-radius:30px; padding:1.2rem 2rem; width:85%; box-shadow:var(--shadow-card); text-align:center;">
+                            <div style="font-size:0.85rem; color:var(--color-blue); font-weight:700; margin-bottom:4px;">중앙은행 (예: 한국은행, 미국 연준)</div>
+                            <strong style="font-size:1.3rem; color:var(--text-primary); display:block; margin-bottom:8px;">기준금리 (Base Rate)</strong>
+                            <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; word-break:keep-all;">시중 모든 금리의 기준점. 국가 경제 펌프의 핵심 밸브.</p>
+                        </div>
+
+                        <!-- 2. 콜금리 -->
+                        <div style="position:relative; z-index:1; background:#fff; border:2px solid #a78bfa; border-radius:16px; padding:1.2rem 2rem; width:85%; box-shadow:var(--shadow-card); text-align:center;">
+                            <div style="font-size:0.85rem; color:#8b5cf6; font-weight:700; margin-bottom:4px;">초단기 자금 시장</div>
+                            <strong style="font-size:1.2rem; color:var(--text-primary); display:block; margin-bottom:8px;">콜 금리 (Call Rate)</strong>
+                            <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; word-break:keep-all;">금융 기관 간에 하루(1일) 등 초단기로 급전을 빌릴 때 적용되는 금리.</p>
+                        </div>
+
+                        <!-- 3. CD금리 -->
+                        <div style="position:relative; z-index:1; background:#fff; border:2px solid #fbbf24; border-radius:16px; padding:1.2rem 2rem; width:85%; box-shadow:var(--shadow-card); text-align:center;">
+                            <div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:4px;">시중 은행 간 자금 거래</div>
+                            <strong style="font-size:1.2rem; color:var(--text-primary); display:block; margin-bottom:8px;">CD (양도성예금증서) 금리</strong>
+                            <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; word-break:keep-all;">시중 단기(보통 91일물) 자금 지표. 주로 은행 대출의 기준이 됨.</p>
+                        </div>
+
+                        <!-- 4. 국고채 -->
+                        <div style="position:relative; z-index:1; background:#fff; border:2px solid #60a5fa; border-radius:16px; padding:1.2rem 2rem; width:85%; box-shadow:var(--shadow-card); text-align:center;">
+                            <div style="font-size:0.85rem; color:#3b82f6; font-weight:700; margin-bottom:4px;">무위험 자산 기준 수익률</div>
+                            <strong style="font-size:1.2rem; color:var(--text-primary); display:block; margin-bottom:8px;">국고채 금리 (국가 발행 채권)</strong>
+                            <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; word-break:keep-all;">국가가 발행한 중장기(3년물 등) 대표 무위험 채권 금리.</p>
+                        </div>
+
+                        <!-- 5. 회사채 / 대출 -->
+                        <div style="position:relative; z-index:1; background:#fff; border:2px solid var(--color-red); border-radius:16px; padding:1.2rem 2rem; width:85%; box-shadow:var(--shadow-card); text-align:center;">
+                            <div style="font-size:0.85rem; color:var(--color-red); font-weight:700; margin-bottom:4px;">민간 기업 및 개인 자금 조달</div>
+                            <strong style="font-size:1.2rem; color:var(--text-primary); display:block; margin-bottom:8px;">회사채 및 시중 대출 금리</strong>
+                            <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; word-break:keep-all;">기업 및 개인의 신용 등급에 따라 가산금리(Spread) 차등 구조.</p>
+                        </div>
+                        
+                        <!-- 대소 비교 공식 -->
+                        <div style="position:relative; z-index:2; text-align:center; margin-top:0.5rem; background:#fff; padding:12px 24px; border-radius:30px; border:1px solid var(--border-light); font-weight:800; color:var(--text-primary); box-shadow:0 4px 15px rgba(0,0,0,0.06); width:fit-content; display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">
+                            <span style="color:var(--color-blue); font-size:1.1rem; vertical-align:middle;">기준금리</span>
+                            <span style="color:#d1d5db; vertical-align:middle;">&lt;</span> 
+                            <span style="color:#8b5cf6; font-size:1.1rem; vertical-align:middle;">콜금리</span>
+                            <span style="color:#d1d5db; vertical-align:middle;">&lt;</span> 
+                            <span style="color:#d97706; font-size:1.1rem; vertical-align:middle;">CD금리</span>
+                            <span style="color:#d1d5db; vertical-align:middle;">&lt;</span> 
+                            <span style="color:#3b82f6; font-size:1.1rem; vertical-align:middle;">국고채</span>
+                            <span style="color:#d1d5db; vertical-align:middle;">&lt;</span> 
+                            <span style="color:var(--color-red); font-size:1.1rem; vertical-align:middle;">회사채/대출</span>
+                        </div>
+                    </div>
+
+                    <hr style="border:0; border-top:1px dashed #cbd5e1; margin:3rem 0;">
+
+                    <h4 style="text-align:center; color:var(--text-secondary); margin-top:0; margin-bottom:2rem; font-size:1.15rem; letter-spacing:-0.5px;">[핵심 금리 연산 및 관계식]</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+                        
+                        <!-- 연산 1: 실질금리 -->
+                        <div style="background:#e8f3ff; border:1px solid #bfdbfe; padding:1.8rem; border-radius:var(--radius-md);">
+                            <div style="font-size:0.95rem; color:var(--color-blue); font-weight:800; margin-bottom:0.8rem;">1. 실제 자산 가치 변동률</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:var(--text-primary); margin-bottom:1rem; word-break:keep-all; line-height:1.4;">
+                                실질금리 = <br><span style="color:var(--color-blue);">명목금리 - 물가상승률</span>
+                            </div>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">명목금리가 표면상 제시된 이자율이라면, 실질금리는 이를 인플레이션으로 보정한 진짜 가치입니다. 은행 예금(명목)이 3%일 때 인플레이션이 5%라면, 돈을 안 쓰고 예금에 넣어둬도 <strong>매년 2%씩 구매력이 증발</strong>하고 있는 것입니다.</p>
+                        </div>
+
+                        <!-- 연산 2: 대출금리 -->
+                        <div style="background:#fff0f0; border:1px solid #fecaca; padding:1.8rem; border-radius:var(--radius-md);">
+                            <div style="font-size:0.95rem; color:var(--color-red); font-weight:800; margin-bottom:0.8rem;">2. 대출 이자 산정의 원리</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:var(--text-primary); margin-bottom:1rem; word-break:keep-all; line-height:1.4;">
+                                대출금리 = <br><span style="color:var(--color-red);">기준금리(CD/코픽스) + 가산금리</span>
+                            </div>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">가산금리(Spread)는 차주의 <strong>신용도 및 대출 위험 프리미엄</strong>을 뜻합니다. 경제 위기가 오면 중앙은행이 기준금리를 0%로 낮춰도 은행들의 부실 우려로 인해 가산금리가 폭등하므로, 실제 서민 대출 금리는 더 오를 수 있습니다.</p>
+                        </div>
+                        
+                    </div>
+
+                    <!-- 3. COFIX 설명 (신규 추가) -->
+                    <div style="margin-top:2rem; background:#f3f4f6; border-left:4px solid #6b7280; padding:1.5rem; border-radius:0 var(--radius-md) var(--radius-md) 0;">
+                        <div style="font-size:1rem; color:#374151; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px;">
+                            <span style="display:inline-block; background:#6b7280; color:#fff; border-radius:4px; padding:2px 8px; font-size:0.8rem;">용어 사전</span>
+                            COFIX (자금조달비용지수)
+                        </div>
+                        <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.6;">
+                            국내 주요 시중은행들이 예금, 적금, 은행채 등 자금을 조달할 때 실제로 지불한 <strong style="color:var(--text-primary);">평균 이자율(비용)</strong>입니다. 
+                            은행이 돈을 원가에 떼어오는 '도매가격'이라고 볼 수 있으며, 오늘날 대부분의 <strong>변동금리 주택담보대출 및 전세자금대출의 기준이 되는 가장 중요한 실생활 지표</strong>입니다. (코픽스가 오르면 내 대출 이자도 오릅니다.)
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="p3-2">
+                <h3>2. 엔 캐리 트레이드 (Yen Carry Trade)와 그 청산의 파급력</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">글로벌 금융 시장에 막대한 '값싼 돈(유동성)'을 공급해 온 핵심 파이프라인. 헤지펀드들이 가장 애용하는 <strong>'가장 안전하고 저렴한 레버리지'</strong> 기법입니다.</p>
+                
+                <div style="background:#f8f9fa; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem; margin-bottom:2rem;">
+                    
+                    <strong style="color:var(--text-primary); font-size:1.1rem; display:block; margin-bottom:1.5rem;">⚙️ 엔 캐리 트레이드의 작동 원리 (금리 차익 먹기)</strong>
+                    <div style="display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:1rem; align-items:center;">
+                        
+                        <!-- 1단계: 빌리기 -->
+                        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.2rem; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-size:2rem; margin-bottom:0.5rem;">🇯🇵</div>
+                            <div style="font-weight:800; color:var(--text-primary); font-size:1rem; margin-bottom:4px;">1. 엔화 차입</div>
+                            <p style="font-size:0.85rem; color:var(--text-secondary); margin:0; line-height:1.4;">일본 은행에서 <strong>단 0%대(초저금리)</strong>로 엔화를 잔뜩 빌림 (조달 비용 거의 0).</p>
+                        </div>
+                        
+                        <div style="color:#94a3b8; font-size:1.5rem; font-weight:bold;">➔</div>
+
+                        <!-- 2단계: 환전 -->
+                        <div style="background:#fff; border:1px dashed #3b82f6; border-radius:var(--radius-md); padding:1.2rem; text-align:center;">
+                            <div style="font-size:2rem; margin-bottom:0.5rem;">💱</div>
+                            <div style="font-weight:800; color:#3b82f6; font-size:1rem; margin-bottom:4px;">2. 통화 환전</div>
+                            <p style="font-size:0.85rem; color:var(--text-secondary); margin:0; line-height:1.4;">빌린 엔화를 즉시 글로벌 기축 통화인 <strong>달러($)</strong>로 모두 바꿈.</p>
+                        </div>
+
+                        <div style="color:#94a3b8; font-size:1.5rem; font-weight:bold;">➔</div>
+
+                        <!-- 3단계: 투자 -->
+                        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.2rem; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-size:2rem; margin-bottom:0.5rem;">🇺🇸</div>
+                            <div style="font-weight:800; color:var(--text-primary); font-size:1rem; margin-bottom:4px;">3. 고수익 투자</div>
+                            <p style="font-size:0.85rem; color:var(--text-secondary); margin:0; line-height:1.4;">미국 국채(4~5%), 미 빅테크 주식 등 <strong>금리/수익률이 높은 자산</strong>에 투자함.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <details class="accordion" id="p3-deep" open>
+                <summary>심화: 글로벌 증시의 뇌관, 엔 캐리 트레이드 청산 (Unwinding)</summary>
+                <div class="accordion-content">
+                    <p style="color:var(--text-secondary); margin-bottom:1.5rem;">투자를 멈추고 <strong>판을 엎는 것</strong>입니다. 투자했던 해외 자산을 팔아 달러를 다시 엔화로 바꾼 뒤, 일본 은행에 빌린 돈을 갚아버립니다. 이 과정에서 시장의 돈이 급격히 증발합니다.</p>
+                    
+                    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+                        
+                        <!-- 청산의 트리거 -->
+                        <div style="background:#fff; border:1px solid #fecaca; border-left:4px solid var(--color-red); border-radius:var(--radius-md); padding:1.5rem;">
+                            <h4 style="margin-top:0; color:var(--color-red); font-size:1rem; display:flex; align-items:center; gap:8px;">
+                                <span>🚨</span> 청산의 3대 트리거 (왜 갑자기 돈을 갚을까?)
+                            </h4>
+                            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-top:1rem;">
+                                <div style="background:#fff0f0; padding:1rem; border-radius:8px; display:flex; gap:12px; align-items:flex-start;">
+                                    <div style="font-size:1.5rem;">🏦</div>
+                                    <div><strong style="font-size:0.9rem; color:var(--text-primary);">일본 기준금리 인상</strong><br><span style="font-size:0.85rem; color:var(--text-secondary);">이자 부담이 커져 수익률 훼손</span></div>
+                                </div>
+                                <div style="background:#fff0f0; padding:1rem; border-radius:8px; display:flex; gap:12px; align-items:flex-start;">
+                                    <div style="font-size:1.5rem;">🦅</div>
+                                    <div><strong style="font-size:0.9rem; color:var(--text-primary);">미국 기준금리 인하</strong><br><span style="font-size:0.85rem; color:var(--text-secondary);">양국 간 금리차(Spread) 이점 감소</span></div>
+                                </div>
+                                <div style="background:#fff0f0; padding:1rem; border-radius:8px; display:flex; gap:12px; align-items:flex-start;">
+                                    <div style="font-size:1.5rem;">🌍</div>
+                                    <div><strong style="font-size:0.9rem; color:var(--text-primary);">글로벌 위기 발생</strong><br><span style="font-size:0.85rem; color:var(--text-secondary);">위험자산 회피, 안전자산(엔화) 선호</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 시장에 미치는 영향 (밝은 테마로 변경) -->
+                        <div style="background:#fef3c7; border:1px solid #fde68a; padding:1.5rem; border-radius:var(--radius-md); color:var(--text-primary);">
+                            <h4 style="margin-top:0; color:#b45309; font-size:1rem; display:flex; align-items:center; gap:8px;">
+                                <span>⚡</span> 글로벌 금융시장 발작 현상 (연쇄 충격)
+                            </h4>
+                            <ul style="margin:0; padding-left:1.5rem; margin-top:1rem; display:flex; flex-direction:column; gap:12px;">
+                                <li style="font-size:0.95rem; line-height:1.5;">
+                                    <strong style="color:var(--color-red);">글로벌 자산 투매:</strong> 급하게 일본 은행에 빚을 갚으려면 투자했던 자산을 전부 팔아야 함. 이로 인해 <strong>미국 빅테크 주식 및 국채 시장의 갑작스러운 대폭락</strong> 유발.
+                                </li>
+                                <li style="font-size:0.95rem; line-height:1.5;">
+                                    <strong style="color:#2563eb;">환율 요동 (엔화 폭등):</strong> 판 주식으로 받은 엄청난 양의 달러를 다시 엔화로 급하게 다구니 환전수요가 몰려 단기적으로 <strong>엔화 가치가 비정상적으로 폭등(엔고)</strong>함.
+                                </li>
+                                <li style="font-size:0.95rem; line-height:1.5;">
+                                    <strong style="color:#475569;">유동성 증발:</strong> 글로벌 증시를 부양하던 막대한 '값싼 일본 돈'이 순식간에 회수되어 전 세계적인 돈 가뭄(유동성 경색) 현상 초래.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <section id="p3-3">
+                <h3>3. 일본 버블 경제의 형성 (1980년대)</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">미국의 극단적인 고금리 정책에서 출발한 나비효과가 일본의 구조적 거품을 만들어낸 역사적 과정입니다.</p>
+
+                <div style="background:#f8f9fa; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem; margin-bottom:2rem;">
+                    
+                    <strong style="color:var(--text-primary); font-size:1.1rem; display:block; margin-bottom:1.5rem;">📈 버블 형성 프로세스 타임라인</strong>
+                    
+                    <div style="display:flex; flex-direction:column; gap:1rem; position:relative;">
+                        <!-- 타임라인 중앙선 -->
+                        <div style="position:absolute; width:2px; height:caLc(100% - 20px); background:#cbd5e1; left:20px; top:10px; z-index:0;"></div>
+
+                        <!-- Step 1: 미국의 위기 (1980s 초반) -->
+                        <div style="position:relative; z-index:1; display:flex; gap:1.5rem; align-items:flex-start;">
+                            <div style="width:40px; height:40px; border-radius:50%; background:#fff; border:2px solid var(--color-blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:var(--color-blue); box-shadow:0 2px 5px rgba(0,0,0,0.1);">1</div>
+                            <div style="background:#fff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.2rem; flex:1; box-shadow:var(--shadow-sm);">
+                                <strong style="color:var(--color-blue); font-size:0.95rem; display:block; margin-bottom:4px;">1980년대 초반: 미국의 '슈퍼 달러' 부작용</strong>
+                                <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                                    미국의 초고금리(20%) 정책으로 '슈퍼 달러' 시대가 옴. 달러가 너무 비싸져 미국 기업들이 수출경쟁력을 상실하고 무역적자가 사상 최대(1,220억 달러)에 달함. 반면 <strong>일본은 값싼 엔화를 바탕으로 미국 수출 시장을 싹쓸이함.</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: 플라자 합의 (1985) -->
+                        <div style="position:relative; z-index:1; display:flex; gap:1.5rem; align-items:flex-start;">
+                            <div style="width:40px; height:40px; border-radius:50%; background:#fff; border:2px solid var(--color-red); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:var(--color-red); box-shadow:0 2px 5px rgba(0,0,0,0.1);">2</div>
+                            <div style="background:#fffcfc; border:1px solid #fecaca; border-radius:var(--radius-md); padding:1.2rem; flex:1; box-shadow:var(--shadow-sm);">
+                                <strong style="color:var(--color-red); font-size:0.95rem; display:block; margin-bottom:4px;">1985년 9월: 플라자 합의 (강압적 환율 조정)</strong>
+                                <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                                    위기감을 느낀 미국이 G5를 소집, <strong>"일본 엔화 가치를 당장 2배 올려!(달러 약세 유도)"</strong>라고 강압적 합의 도출. 환율이 250엔에서 120엔대로 폭락하며 <strong>일본 수출 기업들은 환율로 인한 채산성 악화의 치명타</strong>를 맞음.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: 유동성 팽창 (버블) -->
+                        <div style="position:relative; z-index:1; display:flex; gap:1.5rem; align-items:flex-start;">
+                            <div style="width:40px; height:40px; border-radius:50%; background:#fff; border:2px solid var(--color-green); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:var(--color-green); box-shadow:0 2px 5px rgba(0,0,0,0.1);">3</div>
+                            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:var(--radius-md); padding:1.2rem; flex:1; box-shadow:var(--shadow-sm);">
+                                <strong style="color:var(--color-green); font-size:0.95rem; display:block; margin-bottom:4px;">1980년대 후반: 유동성 폭탄과 자산 거품의 극치</strong>
+                                <div style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5; margin-top:0.5rem;">
+                                    <strong>수출 타격을 만회하기 위해 일본은행(BOJ)이 1년 만에 금리를 반토막(5%→2.5%) 냄.</strong> 시장에 천문학적인 돈이 풀리며 진풍경 발생:
+                                    <ul style="margin:8px 0 0 0; padding-left:1.2rem;">
+                                        <li><strong>기업들:</strong> 싼 이자로 돈 빌려 본업 대신 주식/부동산에 투자하는 <strong>'자이테크(재테크)' 광풍</strong> 불어닥침.</li>
+                                        <li><strong>주식 폭등:</strong> '85년 말 1.3만pt 닛케이 주가가 4년 만에 약 3배 뛰어 38,915pt 달성.</li>
+                                        <li><strong>부동산 폭등:</strong> 6대 상업 도시 지가 3~4배 수직 상승. <strong>"도쿄 땅을 다 팔면 미국 땅 전체를 4번 살 수 있다"</strong>는 극도의 자산 버블 팽창.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem;">
+                    <div>
+                        <strong style="display:block; text-align:center; font-size:0.9rem; margin-bottom:0.5rem;">닛케이 지수 (주식)</strong>
+                        <svg-chart :dataset="vizData.history.nikkei" color="#e15241" style="height:180px;"></svg-chart>
+                    </div>
+                    <div>
+                        <strong style="display:block; text-align:center; font-size:0.9rem; margin-bottom:0.5rem;">엔/달러 환율 (엔화 가치)</strong>
+                        <svg-chart :dataset="vizData.history.usdjpy" color="#3182f6" style="height:180px;"></svg-chart>
+                    </div>
+                </div>
+            </section>
+
+            <section id="p3-4">
+                <h3>4. 버블의 붕괴와 막대한 부채</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">끝을 모르고 치솟던 자산 가격은 정부의 급격한 정책 선회와 함께 단숨에 붕괴해버렸습니다.</p>
+
+                <div style="display:flex; flex-direction:column; gap:1.5rem; margin-bottom:2rem; background:#f8f9fa; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem;">
+                    
+                    <strong style="color:var(--text-primary); font-size:1.1rem; display:block; margin-bottom:1rem;">💥 자산 시장 산사태의 3단계</strong>
+                    
+                    <!-- 1. 트리거 -->
+                    <div style="background:#fffcfc; border:2px solid #fca5a5; border-radius:var(--radius-lg); padding:1.5rem; position:relative;">
+                        <span style="position:absolute; top:-12px; left:20px; background:#ef4444; color:#fff; font-size:0.8rem; font-weight:800; padding:4px 12px; border-radius:20px;">1단계: 정책의 급선회</span>
+                        <div style="display:flex; gap:1rem; align-items:flex-start; margin-top:0.5rem;">
+                            <div style="font-size:2rem;">🏦</div>
+                            <div>
+                                <strong style="color:var(--text-primary); font-size:1.05rem; display:block; margin-bottom:6px;">금리 급상승 & 대출 전면 규제</strong>
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">거품을 깨기 위해 일본은행이 1년 남짓 만에 <strong>금리를 2.5%에서 6.0%로 수직 인상</strong>하고, 부동산 대출 총량 규제를 실시하여 시장의 돈줄을 완전히 끊어버림.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 화살표 -->
+                    <div style="text-align:center; color:#cbd5e1; font-size:1.5rem; font-weight:800; margin:-0.5rem 0;">⏬</div>
+
+                    <!-- 2. 폭락 -->
+                    <div style="background:#fffcfc; border:2px solid #f87171; border-radius:var(--radius-lg); padding:1.5rem; position:relative;">
+                        <span style="position:absolute; top:-12px; left:20px; background:#ef4444; color:#fff; font-size:0.8rem; font-weight:800; padding:4px 12px; border-radius:20px;">2단계: 자산 가치 대폭락</span>
+                        <div style="display:flex; gap:1rem; align-items:flex-start; margin-top:0.5rem;">
+                            <div style="font-size:2rem;">📉</div>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">이자 압박을 견디지 못한 가계와 기업이 주식과 부동산을 일제히 투매하기 시작.</p>
+                                <div style="display:flex; gap:10px; font-weight:700; flex-wrap:wrap;">
+                                    <span style="background:#fee2e2; color:#dc2626; padding:4px 10px; border-radius:6px; font-size:0.85rem;">주식(닛케이): 3년만에 -60% 반토막 이하</span>
+                                    <span style="background:#fee2e2; color:#dc2626; padding:4px 10px; border-radius:6px; font-size:0.85rem;">부동산(6대도시): -70~80% 폭락 소멸</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 화살표 -->
+                    <div style="text-align:center; color:#cbd5e1; font-size:1.5rem; font-weight:800; margin:-0.5rem 0;">⏬</div>
+
+                    <!-- 3. 빚 무덤 -->
+                    <div style="background:#f8f9fa; border:2px solid #94a3b8; border-radius:var(--radius-lg); padding:1.5rem; position:relative;">
+                        <span style="position:absolute; top:-12px; left:20px; background:#64748b; color:#fff; font-size:0.8rem; font-weight:800; padding:4px 12px; border-radius:20px;">3단계: 막대한 부채가 남긴 상흔</span>
+                        <div style="display:flex; gap:1rem; align-items:flex-start; margin-top:0.5rem;">
+                            <div style="font-size:2rem;">💣</div>
+                            <div>
+                                <strong style="color:var(--text-primary); font-size:1.05rem; display:block; margin-bottom:6px;">1,000조 원의 부실채권과 막대한 국가 부채</strong>
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">자산은 1/3 토막 났지만, 은행에 빌린 빚 원금 상환액은 그대로임. 기업들 연쇄 파산으로, 당시 일본 은행이 떠안은 <strong>부실채권(NPL)이 약 100조 엔(한화 1,000조 원)</strong>. 경제가 뒤집어지는 걸 막기 위해 천문학적인 구제 국채를 찍어내면서 지금의 <strong>세계 최악 압도적 부채 국가(GDP 대비 250% 초과)</strong>로 전락함.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout" style="border-left-color:#64748b; background:#f1f5f9;">
+                    <h4 style="margin-top:0; color:#334155;">🔒 제로 금리 고착화의 굴레 (금리의 덫)</h4>
+                    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.6;">현재 일본 정부가 발행한 국채 누적 잔액은 <strong>1,000조 엔(약 1경 원)</strong>을 훌쩍 넘긴 상태임. 부채 덩치가 천문학적이라, 오늘 금리를 겨우 단 1%P만 올려도 내년부터 <strong>매년 나라가 갚아야 할 이자가 10조 엔(약 100조 원)씩 폭증하는 파멸적 구조</strong>가 형성됨. 결국, 나라가 파산하는 디폴트를 막기 위해 수십 년간 0%대 초저금리를 강제로 묶어둘 수밖에 없는 구조적인 늪에 빠짐.</p>
+                </div>
+            </section>
+
+            <section id="p3-5">
+                <h3>5. 디플레이션의 악순환과 잃어버린 30년</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem;">버블 붕괴 후 남은 것은 물가가 끝없이 하락하는 <strong>'디플레이션(Deflation)'</strong>이라는 치명적인 경제적 질병이었습니다. 이는 '인플레이션'보다 질이 나쁘고 훨씬 파괴적입니다.</p>
+                
+                <div class="card" style="padding:2rem;">
+                    
+                    <strong style="color:var(--text-primary); font-size:1.1rem; display:block; margin-bottom:0.5rem; text-align:center;">🌀 죽음의 소용돌이 (Deflationary Spiral)</strong>
+                    <p style="text-align:center; font-size:0.9rem; color:var(--text-secondary); margin-bottom:2.5rem;">"물가가 떨어지면 서민들은 싼값에 살 수 있어 좋은 거 아냐?" - <strong>그렇지 않습니다.</strong> 모두의 피를 말리는 과정입니다.</p>
+
+                    <!-- 루프 시작을 알리기 위한 컨테이너 중심 정렬 -->
+                    <div style="display:grid; grid-template-columns:1fr 60px 1fr; gap:1.5rem; align-items:center; width:100%; max-width:800px; margin:0 auto 1.5rem auto;">
+                        
+                        <!-- 1. 소비 지연 (선 순환 구조: Top Left) -->
+                        <div style="background:#f8f9fa; border:1px solid #cbd5e1; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); grid-column:1; grid-row:1; height:100%;">
+                            <div style="font-size:2.5rem; margin-bottom:8px;">🛒</div>
+                            <strong style="display:block; font-size:1rem; color:var(--color-blue); margin-bottom:6px;">1. 소비 지연</strong>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); word-break:keep-all;">"물가가 떨어질텐데 <strong>뭐하러 비싸게 사?</strong> 미루자" 며 모두가 지갑을 닫음.</span>
+                        </div>
+
+                        <!-- Arrow 1 ➔ 2 (Top Middle) -->
+                        <div style="font-size:2rem; color:#94a3b8; text-align:center; grid-column:2; grid-row:1;">➔</div>
+
+                        <!-- 2. 기업 실적 붕괴 (Top Right) -->
+                        <div style="background:#f8f9fa; border:1px solid #cbd5e1; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); grid-column:3; grid-row:1; height:100%;">
+                            <div style="font-size:2.5rem; margin-bottom:8px;">🏢</div>
+                            <strong style="display:block; font-size:1rem; color:var(--text-primary); margin-bottom:6px;">2. 악성 재고 및 가격인하</strong>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); word-break:keep-all;">물건이 안 팔리니 창고에 재고가 썩어남. 원가 밑으로라도 팔기 위해 <strong>초저가 출혈 경쟁</strong> 시작.</span>
+                        </div>
+
+                        <!-- Arrow 4 ⬆️ 1 (Left Middle) -->
+                        <div style="font-size:2rem; color:#94a3b8; text-align:center; transform:rotate(-90deg); grid-column:1; grid-row:2;">➔</div>
+
+                        <!-- Center Text -->
+                        <div style="text-align:center; grid-column:2; grid-row:2;">
+                            <strong style="font-size:1.1rem; color:var(--color-blue); display:block;">무한<br>악순환</strong>
+                        </div>
+
+                        <!-- Arrow 2 ⬇️ 3 (Right Middle) -->
+                        <div style="font-size:2rem; color:#94a3b8; text-align:center; transform:rotate(90deg); grid-column:3; grid-row:2;">➔</div>
+
+                        <!-- 4. 소비 마비 (Bottom Left) -->
+                        <div style="background:#fffcfc; border:2px solid #fecaca; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); grid-column:1; grid-row:3; height:100%;">
+                            <div style="font-size:2.5rem; margin-bottom:8px;">🥶</div>
+                            <strong style="display:block; font-size:1rem; color:var(--color-red); margin-bottom:6px;">4. 소비 마비 (루프 반복)</strong>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); word-break:keep-all;">월급마저 깎인 가계는 당장 돈이 없어 <strong>극단적으로 소비를 쥐어짜고 </strong>디플레 심해로 빠져듦.</span>
+                        </div>
+
+                        <!-- Arrow 3 ⬅️ 4 (Bottom Middle) -->
+                        <div style="font-size:2rem; color:#94a3b8; text-align:center; transform:rotate(180deg); grid-column:2; grid-row:3;">➔</div>
+
+                        <!-- 3. 고용/임금 축소 (Bottom Right) -->
+                        <div style="background:#f8f9fa; border:1px solid #cbd5e1; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); grid-column:3; grid-row:3; height:100%;">
+                            <div style="font-size:2.5rem; margin-bottom:8px;">✂️</div>
+                            <strong style="display:block; font-size:1rem; color:var(--text-primary); margin-bottom:6px;">3. 고용 축소 및 삭감</strong>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); word-break:keep-all;">적자에 허덕이는 사장이 <strong>신입 채용을 멈추고 기존 직원의 월급마저 삭감(동결)</strong>함.</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 거시적 부작용 리스트 -->
+                <div style="background:#f8fafc; border-left:4px solid #3b82f6; padding:1.5rem; border-radius:0 var(--radius-md) var(--radius-md) 0; margin-top:2rem;">
+                    <strong style="color:var(--text-primary); font-size:1.05rem; display:flex; align-items:center; gap:8px; margin-bottom:1rem;">
+                        <span>🕰️</span> '잃어버린 30년'이 국가에 남긴 흉터 (The Scars)
+                    </strong>
+                    <ul style="margin:0; padding-left:1.5rem; display:flex; flex-direction:column; gap:12px; font-size:0.95rem; line-height:1.6;">
+                        <li><strong>소득 정체 시대:</strong> 30년간 직장인 평균 연봉은 거의 오르지 않고 약 400만 엔 대에 멈춰버림. (물가가 떨어지니 월급을 올려줄 이유가 없었음)</li>
+                        <li><strong>글로벌 구매력 붕괴 (수입 물가 쇼크):</strong> 자원 100% 수입국가에서 <strong>가장 치명적인 일.</strong> 글로벌 인플레이션으로 과거 10년 전보다 아이폰, 석유, 천연가스 등 <strong>수입품 가격은 3배 이상 올랐으나</strong> <strong>국민 월급은 30년째 제자리</strong>여서 실질적 구매력이 완전히 반토막 남.</li>
+                        <li><strong>국가 경제 시간의 정지:</strong> 1995년 당시 5.5조 달러(글로벌 2위)에 달했던 총 명목 GDP가, 물가 하락과 성장 정체 덕분에 <strong>25여 년이 지난 2020년대에도 비슷한 숫자에 고착화</strong>되는 전무후무한 역사적 오점을 남김.</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+
+        <article id="part4">
+            <h2>Part 4: 업종별 Cycle(경기 순환)의 이해</h2>
+            <p>주식 시장을 주도하는 각 산업(업종)은 거시경제 환경과 자체적인 수급 구조에 따라 고유의 호황과 불황 사이클을 갖습니다. 개별 기업의 밸류에이션 이전에, <strong>'현재 거시경제가 어느 국면에 있으며, 어떤 업종의 사이클이 돌아오고 있는가'</strong>를 먼저 파악하는 것이 투자의 승률을 높이는 핵심입니다.</p>
+
+            <div class="callout" style="margin-bottom: 2rem;">
+                <h4>💡 [핵심] 경기 순환 4국면과 주도 업종 매핑 (투자 시계)</h4>
+                <cycle-grid></cycle-grid>
+            </div>
+
+            <section id="p4-sectors">
+                <h3>주요 업종별 특징 요약</h3>
+                <div class="metric-grid">
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">1. 반도체</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">시클리컬 수출주</span>
+                        <p class="metric-desc" style="margin-top:8px;">대규모 설비 투자가 필수적이며 3~4년 주기의 강력한 호황과 불황(Silicon Cycle)을 반복함. <strong>투자 전략:</strong> "최악의 적자(PBR 바닥)일 때 사서, 사상 최대 실적일 때 팔아라."</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">2. 조선</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">장기 슈퍼 사이클</span>
+                        <p class="metric-desc" style="margin-top:8px;">업종 중 가장 길고 진폭이 큰 10~15년 주기(Super Cycle). 노후 선박 교체와 환경 규제로 <strong>신조선가 지수</strong>가 바닥을 찍고 반등하기 시작할 때가 장기 투자의 적기임.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">3. IT/플랫폼</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">금리 민감 대형성장주</span>
+                        <p class="metric-desc" style="margin-top:8px;">미래 성장을 당겨와 주가에 반영하여 할인율(금리) 변화에 극적으로 반응함. 금리가 낮을 때(회복기, 유동성 장세) 급상승하나 금리 인상 시 고평가 부담으로 큰 조정을 받음.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">4. 철강/화학</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">전통 경기민감주</span>
+                        <p class="metric-desc" style="margin-top:8px;">글로벌 인프라 건설 경기와 직결되어 중국의 경제 상황에 절대적 영향을 받음. 원재료보다 제품 가격 인상이 빨라 기업의 <strong>스프레드(마진)</strong>가 넓어지는 초입이 매수 적기임.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">5. 자동차</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">고가 내구소비재</span>
+                        <p class="metric-desc" style="margin-top:8px;">소비자 지갑 사정에 민감하여 고용률이 높고 낮은 금리 환경에서 수익 발생. 거시 호황과 더불어 <strong>신차 빅 사이클 (수익성 높은 라인업 출시)</strong>이 겹칠 때 투자 성과 극대화.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">6. 금융주</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">배당 수익, 금리 민감주</span>
+                        <p class="metric-desc" style="margin-top:8px;">중앙은행 금리에 수익이 연동됨. 금리 인상 시기엔 <strong>예대마진(NIM) 확대</strong>로 호재. 단, 이자 부담이 과도해져 대출 연체율이 치솟으면 주가가 하락세를 보이게 됨.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">7. 제약/바이오</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">고위험·고수익 꿈의 주식</span>
+                        <p class="metric-desc" style="margin-top:8px;">실적보다 신약 개발(파이프라인) 모멘텀으로만 변동. 결과 발표 '이전'에 기대감으로 상승하고 직후소멸로 <strong>급락하는 재료소멸 패턴</strong>이 잦음. 돈 많이 드므로 저금리 수혜.</p>
+                    </div>
+                    <div class="metric-card" style="background:white; border:1px solid var(--border-light);">
+                        <strong style="color:var(--text-primary); font-size:1.1rem;">8. 필수소비재</strong> <span style="font-size:0.8rem; color:var(--text-tertiary);">안전 피난처 (방어주)</span>
+                        <p class="metric-desc" style="margin-top:8px;">거시경제나 불황 시에도 꾸준히 소비됨(음식료, 유통). 자금이 대피하는 방어주 역할을 하며 원자재가 안정 시 제품가 인상으로 매출을 방어하고 이익률을 높임.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 세계 GDP 순위 (Top 30) 표 형식 -->
+            <section id="p4-gdp" style="margin-top:3rem;">
+            <h3>📊 2026년 세계 GDP 순위 Top 30 (IMF 전망치)</h3>
+            <p>개별 업종의 사이클을 이해했다면, <strong>글로벌 자본의 거대한 분포</strong>를 마지막으로 점검하는 것이 중요합니다. 아래는 2026년 기준 국가별 명목 GDP 전망치입니다.</p>
+
+            <div class="comp-table-container">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center; width: 7%;">순위</th>
+                            <th style="text-align:center; width: 11%;">대륙</th>
+                            <th style="text-align:left; width: 24%;">국가</th>
+                            <th style="text-align:right; width: 20%;">GDP <span style="font-size:0.8rem; font-weight:normal;">(US$million)</span></th>
+                            <th style="text-align:right; width: 20%;">주식시장 시가총액 <span style="font-size:0.8rem; font-weight:normal;">(US$million)</span></th>
+                            <th style="text-align:right; width: 10%;">시총/GDP</th>
+                            <th style="text-align:center; width: 8%;">비고</th>
+                        </tr>
+                        <tr style="background:#f8fafc;">
+                            <td style="text-align:center;">-</td>
+                            <td style="text-align:center; color:var(--text-secondary);">-</td>
+                            <td style="text-align:left; font-weight:bold; color:var(--color-blue);">전 세계 (Global)</td>
+                            <td style="text-align:right;" class="num-cell">-</td>
+                            <td style="text-align:right;" class="num-cell">-</td>
+                            <td style="text-align:right;" class="num-cell">-</td>
+                            <td style="text-align:center;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="text-align:center;">1</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">북미</td><td style="text-align:left;">🇺🇸 미국</td><td style="text-align:right;" class="num-cell">31,821,293</td><td style="text-align:right;" class="num-cell">70,872,000</td><td style="text-align:right;" class="num-cell">222.7%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">2</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇨🇳 중국</td><td style="text-align:right;" class="num-cell">20,650,754</td><td style="text-align:right;" class="num-cell">11,097,000</td><td style="text-align:right;" class="num-cell">53.7%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">3</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇩🇪 독일</td><td style="text-align:right;" class="num-cell">5,328,184</td><td style="text-align:right;" class="num-cell">3,106,000</td><td style="text-align:right;" class="num-cell">58.3%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">4</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇮🇳 인도</td><td style="text-align:right;" class="num-cell">4,505,629</td><td style="text-align:right;" class="num-cell">4,328,000</td><td style="text-align:right;" class="num-cell">96.1%</td><td style="text-align:center; color:var(--color-red); font-weight:bold;">▲1</td></tr>
+                        <tr><td style="text-align:center;">5</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇯🇵 일본</td><td style="text-align:right;" class="num-cell">4,463,634</td><td style="text-align:right;" class="num-cell">7,033,000</td><td style="text-align:right;" class="num-cell">157.6%</td><td style="text-align:center; color:var(--color-blue); font-weight:bold;">▼1</td></tr>
+                        <tr><td style="text-align:center;">6</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇬🇧 영국</td><td style="text-align:right;" class="num-cell">4,225,639</td><td style="text-align:right;" class="num-cell">4,584,000</td><td style="text-align:right;" class="num-cell">108.5%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">7</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇫🇷 프랑스</td><td style="text-align:right;" class="num-cell">3,558,562</td><td style="text-align:right;" class="num-cell">3,447,000</td><td style="text-align:right;" class="num-cell">96.9%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">8</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇮🇹 이탈리아</td><td style="text-align:right;" class="num-cell">2,701,544</td><td style="text-align:right;" class="num-cell">1,218,000</td><td style="text-align:right;" class="num-cell">45.1%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">9</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽/아시아</td><td style="text-align:left;">🇷🇺 러시아</td><td style="text-align:right;" class="num-cell">2,509,421</td><td style="text-align:right;" class="num-cell">418,610</td><td style="text-align:right;" class="num-cell">16.7%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">10</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">북미</td><td style="text-align:left;">🇨🇦 캐나다</td><td style="text-align:right;" class="num-cell">2,420,837</td><td style="text-align:right;" class="num-cell">4,109,000</td><td style="text-align:right;" class="num-cell">169.7%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">11</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">남미</td><td style="text-align:left;">🇧🇷 브라질</td><td style="text-align:right;" class="num-cell">2,292,690</td><td style="text-align:right;" class="num-cell">1,122,000</td><td style="text-align:right;" class="num-cell">48.9%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">12</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇪🇸 스페인</td><td style="text-align:right;" class="num-cell">2,041,830</td><td style="text-align:right;" class="num-cell">1,381,000</td><td style="text-align:right;" class="num-cell">67.6%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">13</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">북미</td><td style="text-align:left;">🇲🇽 멕시코</td><td style="text-align:right;" class="num-cell">2,030,999</td><td style="text-align:right;" class="num-cell">566,860</td><td style="text-align:right;" class="num-cell">27.9%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">14</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">오세아니아</td><td style="text-align:left;">🇦🇺 호주</td><td style="text-align:right;" class="num-cell">1,948,227</td><td style="text-align:right;" class="num-cell">1,985,000</td><td style="text-align:right;" class="num-cell">101.9%</td><td style="text-align:center; color:var(--color-red); font-weight:bold;">▲1</td></tr>
+                        <tr><td style="text-align:center;">15</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇰🇷 대한민국</td><td style="text-align:right;" class="num-cell">1,936,617</td><td style="text-align:right;" class="num-cell">2,838,000</td><td style="text-align:right;" class="num-cell">146.5%</td><td style="text-align:center; color:var(--color-blue); font-weight:bold;">▼1</td></tr>
+                        <tr><td style="text-align:center;">16</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아/유럽</td><td style="text-align:left;">🇹🇷 튀르키예</td><td style="text-align:right;" class="num-cell">1,576,110</td><td style="text-align:right;" class="num-cell">264,350</td><td style="text-align:right;" class="num-cell">16.8%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">17</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇮🇩 인도네시아</td><td style="text-align:right;" class="num-cell">1,550,236</td><td style="text-align:right;" class="num-cell">420,410</td><td style="text-align:right;" class="num-cell">27.1%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">18</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇳🇱 네덜란드</td><td style="text-align:right;" class="num-cell">1,413,076</td><td style="text-align:right;" class="num-cell">1,754,000</td><td style="text-align:right;" class="num-cell">124.1%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">19</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">중동/아시아</td><td style="text-align:left;">🇸🇦 사우디아라비아</td><td style="text-align:right;" class="num-cell">1,316,250</td><td style="text-align:right;" class="num-cell">2,488,000</td><td style="text-align:right;" class="num-cell">189.0%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">20</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇵🇱 폴란드</td><td style="text-align:right;" class="num-cell">1,109,962</td><td style="text-align:right;" class="num-cell">297,680</td><td style="text-align:right;" class="num-cell">26.8%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">21</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇨🇭 스위스</td><td style="text-align:right;" class="num-cell">1,029,910</td><td style="text-align:right;" class="num-cell">3,138,000</td><td style="text-align:right;" class="num-cell">304.7%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">22</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇹🇼 대만</td><td style="text-align:right;" class="num-cell">996,000</td><td style="text-align:right;" class="num-cell">3,266,000</td><td style="text-align:right;" class="num-cell">327.9%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">23</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇧🇪 벨기에</td><td style="text-align:right;" class="num-cell">700,420</td><td style="text-align:right;" class="num-cell">494,400</td><td style="text-align:right;" class="num-cell">70.6%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">24</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇮🇪 아일랜드</td><td style="text-align:right;" class="num-cell">655,000</td><td style="text-align:right;" class="num-cell">1,123,000</td><td style="text-align:right;" class="num-cell">171.5%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">25</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇸🇪 스웨덴</td><td style="text-align:right;" class="num-cell">650,230</td><td style="text-align:right;" class="num-cell">1,380,000</td><td style="text-align:right;" class="num-cell">212.2%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">26</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">남미</td><td style="text-align:left;">🇦🇷 아르헨티나</td><td style="text-align:right;" class="num-cell">620,000</td><td style="text-align:right;" class="num-cell">160,250</td><td style="text-align:right;" class="num-cell">25.8%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">27</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">중동/아시아</td><td style="text-align:left;">🇮🇱 이스라엘</td><td style="text-align:right;" class="num-cell">576,000</td><td style="text-align:right;" class="num-cell">579,260</td><td style="text-align:right;" class="num-cell">100.6%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">28</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">아시아</td><td style="text-align:left;">🇸🇬 싱가포르</td><td style="text-align:right;" class="num-cell">560,000</td><td style="text-align:right;" class="num-cell">707,810</td><td style="text-align:right;" class="num-cell">126.4%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">29</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">유럽</td><td style="text-align:left;">🇦🇹 오스트리아</td><td style="text-align:right;" class="num-cell">556,000</td><td style="text-align:right;" class="num-cell">237,950</td><td style="text-align:right;" class="num-cell">42.8%</td><td style="text-align:center;"></td></tr>
+                        <tr><td style="text-align:center;">30</td><td style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">중동/아시아</td><td style="text-align:left;">🇦🇪 아랍에미리트 (UAE)</td><td style="text-align:right;" class="num-cell">543,000</td><td style="text-align:right;" class="num-cell">1,098,000</td><td style="text-align:right;" class="num-cell">202.2%</td><td style="text-align:center;"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="text-align:right; font-size:0.85rem; color:var(--text-tertiary); margin-top:8px;">* GDP: IMF World Economic Outlook (2026 Projections) | Stock Market Cap: companiesmarketcap.com (as of 2026-02-25) | Ratio = (Stock Market Cap / GDP) x 100</p>
+        </section>
+        </article>
+        
+        <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border-light); color:var(--text-tertiary); text-align:center; font-size:0.9rem;">
+            <p>Economic Fundamentals Lecture &copy; 2024</p>
+        </footer>
+    
+        </main>
+    </div>
+</template>
+
+<template id="valuation-table-tpl">
+<div class="comp-table-container">
+        <table class="comp-table">
+            <thead>
+                <tr>
+                    <th width="15%">지표</th>
+                    <th width="20%">가치주 (Value)</th>
+                    <th width="20%">성장주 (Growth)</th>
+                    <th>해석</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in data" :key="item.metric">
+                    <td style="font-weight:bold">{{ item.metric }}</td>
+                    <td style="background:#f4f6f8">{{ item.value }}</td>
+                    <td style="background:#e8f3ff; color:var(--color-blue); font-weight:600;">{{ item.growth }}</td>
+                    <td style="color:#8b95a1; font-size:0.85rem;">{{ item.desc }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template id="indicator-bar-tpl">
+<div style="margin-top: 1rem;">
+       <div style="display:flex; align-items:center; gap:10px; font-size:0.9rem;">
+           <span style="width:50px; text-align:right; font-weight:bold;">{{ bar.minLabel }}</span>
+           <div :style="{flex:1, height:'12px', background: bar.gradient, borderRadius:'6px', position:'relative'}">
+               <div v-if="bar.markPos !== null" :style="{position:'absolute', left: bar.markPos + '%', top:'-20px', transform:'translateX(-50%)', fontSize:'0.8rem', fontWeight:'bold'}">{{ bar.markLabel }}</div>
+           </div>
+           <span style="width:50px; font-weight:bold;">{{ bar.maxLabel }}</span>
+       </div>
+       <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:0.8rem; color:var(--text-tertiary);">
+           <span v-html="bar.infoLeft"></span>
+           <span v-html="bar.infoRight"></span>
+       </div>
+    </div>
+</template>
+
+<template id="scenario-box-tpl">
+<div class="scenario-box" v-if="data">
+        <div class="scenario-card">
+            <div class="scenario-label">1주당 가격</div>
+            <div class="scenario-val">{{ formatNum(data.before.price) }}원</div>
+            <div class="scenario-arrow">↓</div>
+            <div :class="['scenario-val', pColor]">{{ formatNum(data.after.price) }}원</div>
+            <div :class="['scenario-change', pColor]">({{ deltaPrice }}%)</div>
+        </div>
+        <div class="scenario-card" style="background:#fafafa;">
+            <div class="scenario-label">내 평가금액 (김철수)</div>
+            <div class="scenario-val">{{ formatNum(data.before.myVal) }}원</div>
+            <div class="scenario-arrow">→</div>
+            <div :class="['scenario-val', vColor]">{{ formatNum(data.after.myVal) }}원</div>
+            <div :class="['scenario-change', vColor]">({{ vSign }}{{ deltaVal }}%)</div>
+        </div>
+    </div>
+</template>
+
+<template id="svg-chart-tpl">
+<div class="chart-container">
+        <svg viewBox="0 0 300 150" class="chart">
+            <polyline :points="pointsStr" fill="none" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <template v-for="(circle, i) in circles" :key="i">
+                 <circle :cx="circle.x" :cy="circle.y" r="3" fill="#fff" :stroke="color" stroke-width="2"/>
+                 <text :x="circle.x" :y="circle.y - 10" text-anchor="middle" class="chart-text" :style="{fontWeight:'bold', fill: color}">{{ formatNum(circle.val) }}</text>
+                 <text :x="circle.x" :y="145" text-anchor="middle" class="chart-text">{{ circle.year }}</text>
+            </template>
+        </svg>
+    </div>
+</template>
+
+<template id="cycle-grid-tpl">
+<div>
+        <div style="margin-bottom: 2rem; position: relative; height: 160px; background: #fafafa; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; padding: 1rem;">
+            <h5 style="margin:0 0 10px 0; text-align:center; color: var(--text-secondary);">경기 순환 곡선 (Sine Graph)</h5>
+            <svg viewBox="0 0 800 100" style="width:100%; height:100px;">
+                <!-- Base line -->
+                <line x1="0" y1="50" x2="800" y2="50" stroke="#e5e8eb" stroke-width="2" stroke-dasharray="5,5"/>
+                <!-- Sine Wave form (2 cycles) -->
+                <path d="M 50,50 Q 150,0 250,50 T 450,50 T 650,50 T 850,50" fill="none" stroke="#3182f6" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Markers -->
+                <circle cx="150" cy="25" r="5" fill="#e15241" />
+                <text x="150" y="15" text-anchor="middle" font-size="12" font-weight="bold" fill="#e15241">2. 호황기(여름)</text>
+                
+                <circle cx="250" cy="50" r="5" fill="#d97706" />
+                <text x="250" y="70" text-anchor="middle" font-size="12" font-weight="bold" fill="#d97706">3. 후퇴기(가을)</text>
+                
+                <circle cx="350" cy="75" r="5" fill="#1d4ed8" />
+                <text x="350" y="95" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">4. 침체기(겨울)</text>
+                
+                <circle cx="450" cy="50" r="5" fill="#166534" />
+                <text x="450" y="35" text-anchor="middle" font-size="12" font-weight="bold" fill="#166534">1. 회복기(봄)</text>
+                
+                <circle cx="550" cy="25" r="5" fill="#e15241" />
+                <text x="550" y="15" text-anchor="middle" font-size="12" font-weight="bold" fill="#e15241">2. 호황기</text>
+            </svg>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- Phase 1 -->
+            <div style="background:#f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1.5rem; display:flex; flex-direction:column;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.2rem; font-weight:800; color:var(--color-green);">🌱 1. 회복기</span>
+                    <span style="font-size:0.8rem; background:white; padding:4px 8px; border-radius:12px; border:1px solid #dcfce7; color:#166534;">봄</span>
+                </div>
+                <div style="margin-top:1rem; flex:1;">
+                    <p style="margin:0; font-size:0.9rem; color:#166534;"><strong>거시 환경:</strong> 금리 인하 지속, 물가 안정, 유동성 공급</p>
+                    <p style="margin:0; font-size:0.9rem; color:#166534; margin-top:0.4rem;"><strong>주도 업종:</strong> IT, 플랫폼/소프트웨어, 증권</p>
+                </div>
+                <div style="margin-top:1rem; font-size:0.85rem; color:#15803d; border-top:1px dashed #bbf7d0; padding-top:0.5rem;">
+                    미래 가치를 당겨오는 <strong>성장주</strong>에 가장 유리한 환경.
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div style="background:#fff0f0; border: 1px solid #fecaca; border-radius: 12px; padding: 1.5rem; display:flex; flex-direction:column;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.2rem; font-weight:800; color:var(--color-red);">🔥 2. 호황기</span>
+                    <span style="font-size:0.8rem; background:white; padding:4px 8px; border-radius:12px; border:1px solid #fee2e2; color:#991b1b;">여름</span>
+                </div>
+                <div style="margin-top:1rem; flex:1;">
+                    <p style="margin:0; font-size:0.9rem; color:#991b1b;"><strong>거시 환경:</strong> 경기 과열, 물가 상승, 금리 인상 사이클 진입</p>
+                    <p style="margin:0; font-size:0.9rem; color:#991b1b; margin-top:0.4rem;"><strong>주도 업종:</strong> 철강, 화학, 기계, 차, 부품 (경기민감주)</p>
+                </div>
+                <div style="margin-top:1rem; font-size:0.85rem; color:#b91c1c; border-top:1px dashed #fecaca; padding-top:0.5rem;">
+                    제품 수요 폭발과 가격 인상으로 <strong>시클리컬(제조업)</strong> 이익 극대화.
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div style="background:#fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 1.5rem; display:flex; flex-direction:column;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.2rem; font-weight:800; color:#d97706;">🍂 3. 후퇴기</span>
+                    <span style="font-size:0.8rem; background:white; padding:4px 8px; border-radius:12px; border:1px solid #fef3c7; color:#92400e;">가을</span>
+                </div>
+                <div style="margin-top:1rem; flex:1;">
+                    <p style="margin:0; font-size:0.9rem; color:#92400e;"><strong>거시 환경:</strong> 고금리 유지, 물가 피크, 수요 위축 시작</p>
+                    <p style="margin:0; font-size:0.9rem; color:#92400e; margin-top:0.4rem;"><strong>주도 업종:</strong> 에너지, 필수소비재 (인플레 방어)</p>
+                </div>
+                <div style="margin-top:1rem; font-size:0.85rem; color:#b45309; border-top:1px dashed #fde68a; padding-top:0.5rem;">
+                    원가 상승을 소비자에 전가할 수 있는 <strong>가격 결정력</strong>이 중요.
+                </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div style="background:#e8f3ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 1.5rem; display:flex; flex-direction:column;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.2rem; font-weight:800; color:var(--color-blue);">❄️ 4. 침체기</span>
+                    <span style="font-size:0.8rem; background:white; padding:4px 8px; border-radius:12px; border:1px solid #dbeafe; color:#1e3a8a;">겨울</span>
+                </div>
+                <div style="margin-top:1rem; flex:1;">
+                    <p style="margin:0; font-size:0.9rem; color:#1e3a8a;"><strong>거시 환경:</strong> 기업 실적 악화 및 도산 우려, 금리 인하 압력</p>
+                    <p style="margin:0; font-size:0.9rem; color:#1e3a8a; margin-top:0.4rem;"><strong>주도 업종:</strong> 통신, 헬스케어, 유틸리티 (방어주)</p>
+                </div>
+                <div style="margin-top:1rem; font-size:0.85rem; color:#1d4ed8; border-top:1px dashed #bfdbfe; padding-top:0.5rem;">
+                    경기와 무관하게 필수적인 계열의 주식이 자금의 <strong>피난처</strong>가 됨.
+                </div>
+            </div>
+        </div>
+        </div>
+        <div style="text-align:center; margin-top:1rem; font-size:0.85rem; color:var(--text-tertiary);">
+            ※ 주식 시장은 실제 실물 경기보다 약 <strong>6개월~1년</strong> 선행하여 움직이는 경향이 있습니다.
+        </div>
+</template>
+
+
+<script src="../assets/js/academy-common.js"></script>
+<script>
+mountAcademyView('LectureView');
+</script>
+
+
+</body>
+</html>

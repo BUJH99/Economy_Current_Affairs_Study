@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 반도체 패권과 미래 전망</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap">
+    <link rel="stylesheet" href="../assets/css/econ-academy.css">
+</head>
+<body>
+
+
+<div id="app"></div>
+
+<template id="ai-lecture-view-tpl">
+<div class="app-container" style="background: #ffffff; width: 100%;">
+        <nav class="sidebar" id="sidebar-ai">
+            <div @click="$emit('go-home')" class="sidebar-btn-home" style="cursor:pointer; color:var(--color-blue); font-weight:bold; margin-bottom:1rem;">
+                ← 홈으로 돌아가기
+            </div>
+            <div class="sidebar-title">AI 반도체 특강</div>
+            <div class="toc-list">
+                 <div v-for="(item, idx) in toc" :key="idx" :class="['toc-item', {'toc-sub': item.isSub}]">
+                     <a @click.prevent="scrollTo(item.id)" :class="{active: activeToc === item.id}">{{ item.text }}</a>
+                 </div>
+            </div>
+        </nav>
+
+        <main class="main-content ai-lecture-content">
+            <header>
+                <p style="color: var(--color-indigo); font-weight: 600; margin-bottom: 0.5rem;">스페셜 리포트</p>
+                <h1>AI 반도체 패권과 미래 전망</h1>
+                <p>데이터 고속도로의 병목부터 '슈퍼 을' 삼성전자의 반격까지 완벽 정리</p>
+            </header>
+
+            <article id="ai-part1">
+                <h2>Chapter 1. AI의 탄생과 진화</h2>
+                <p><strong>AI는 어떻게 똑똑해졌을까요?</strong> 인간 두뇌의 연결망인 인공신경망이 복잡해질수록 계산량은 기하급수적으로 늘어났습니다.</p>
+
+                <div class="card" style="margin-bottom: 2rem; background: #f8fafc; border: 1px solid #e2e8f0; text-align: center; padding: 2rem;">
+                    <h3 style="margin-top:0; color:var(--color-blue); font-size:1.1rem; margin-bottom: 1.5rem;">🧠 인공신경망 (Artificial Neural Network) 직관적 이해</h3>
+                    <div style="display:flex; justify-content:center; align-items:center; gap: 2rem; flex-wrap: wrap;">
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+                            <div style="font-weight:800; color:var(--text-secondary); font-size:0.9rem; margin-bottom:8px;">입력 (데이터)</div>
+                            <div style="width:40px; height:40px; border-radius:50%; background:#bfdbfe; border: 2px solid #3b82f6;"></div>
+                            <div style="width:40px; height:40px; border-radius:50%; background:#bfdbfe; border: 2px solid #3b82f6;"></div>
+                            <div style="width:40px; height:40px; border-radius:50%; background:#bfdbfe; border: 2px solid #3b82f6;"></div>
+                        </div>
+                        <div style="color:#cbd5e1; font-size:2rem; font-weight:bold;">➔</div>
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+                            <div style="font-weight:800; color:#8b5cf6; font-size:0.9rem; margin-bottom:8px;">은닉층 (패턴 학습)</div>
+                            <div style="display:flex; gap:1.5rem; background:#f5f3ff; border:2px dashed #ddd6fe; padding:1rem; border-radius:12px;">
+                                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                    <div style="width:40px; height:40px; border-radius:50%; background:#d8b4fe; border: 2px solid #a855f7;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="color:#cbd5e1; font-size:2rem; font-weight:bold;">➔</div>
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+                            <div style="font-weight:800; color:var(--text-secondary); font-size:0.9rem; margin-bottom:8px;">출력 (판단/정답)</div>
+                            <div style="width:40px; height:40px; border-radius:50%; background:#fecaca; border: 2px solid #ef4444;"></div>
+                            <div style="width:40px; height:40px; border-radius:50%; background:#fecaca; border: 2px solid #ef4444;"></div>
+                        </div>
+                    </div>
+                    <p style="margin-top:1.5rem; margin-bottom:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">서로 얽히고설킨 수십억 개의 연결선(가중치)을 통해 데이터를 확률적으로 계산합니다. <strong>이 무수한 점과 선 사이의 곱셈/덧셈(행렬 연산)을 동시에 쳐내야 하기 때문에 병렬 처리가 가능한 GPU가 필수불가결</strong>해졌습니다.</p>
+                </div>
+                <div class="metric-grid">
+                    <div class="card" style="margin:0;">
+                        <div style="font-size:2rem; margin-bottom:1rem;">🧮 CPU</div>
+                        <h3 style="margin-top:0;">천재 수학자 1명 (Serial)</h3>
+                        <p>고난도 문제를 순서대로 하나씩 해결. 복잡한 논리 연산에 최적화되어 있으나, 행렬 연산 등 1억 개의 단순 문제를 푸는 데는 오랜 시간이 걸립니다.</p>
+                        <span class="badge badge-neu">비효율적 연산 구조</span>
+                    </div>
+                    <div class="card" style="margin:0; border: 2px solid var(--color-indigo); background: #f8f8fc; box-shadow: 0 4px 15px rgba(88,86,214,0.1);">
+                        <div style="font-size:2rem; margin-bottom:1rem; color:var(--color-indigo);">🟩 GPU</div>
+                        <h3 style="margin-top:0; color:var(--color-indigo);">초등학생 1만 명 (Parallel)</h3>
+                        <p>단순 계산 문제를 1억 개 동시에 처리(병렬 처리). 빠른 학습속도를 요구하는 오늘날 <strong>AI 딥러닝 학습과 추론의 핵심 장치</strong>입니다.</p>
+                        <span class="badge badge-up" style="background: var(--color-indigo); color: white;">혁신: NVIDIA의 부상</span>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part2">
+                <h2>Chapter 2. 혁신의 아이러니 (Transformer)</h2>
+                <p>2017년 구글이 발표한 <strong>Transformer</strong> 논문은 AI 시장의 패러다임을 바꿨습니다. 단어를 하나씩 순서대로 읽던 기존(RNN) 방식과 달리, <strong>문장 전체를 한 번에(Parallel)</strong> 펼쳐놓고 관계를 계산하여 GPU의 동시 처리 능력을 100% 활용할 수 있게 되었습니다.</p>
+
+                <div style="display:flex; gap: 1.5rem; margin: 2rem 0; flex-wrap: wrap;">
+                    
+                    <!-- 기존 RNN 방식 -->
+                    <div style="flex:1; background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); min-width: 280px;">
+                        <h4 style="margin-top:0; color:var(--text-primary); font-size:1rem; margin-bottom:1.5rem;">기존 방식 (RNN)</h4>
+                        <div style="display:flex; justify-content:center; align-items:center; gap:0.5rem; font-size:0.9rem; font-weight:bold; color:var(--text-secondary);">
+                            <div style="padding:0.8rem; border:2px solid #cbd5e1; border-radius:8px;">I</div>
+                            <span>➔</span>
+                            <div style="padding:0.8rem; border:2px solid #cbd5e1; border-radius:8px;">am</div>
+                            <span>➔</span>
+                            <div style="padding:0.8rem; border:2px solid #cbd5e1; border-radius:8px;">a</div>
+                            <span>➔</span>
+                            <div style="padding:0.8rem; border:2px solid #cbd5e1; border-radius:8px;">boy</div>
+                        </div>
+                        <div style="margin-top:1.5rem; font-size:0.85rem; color: #ef4444; font-weight:bold;">
+                            ⛔ 순차적 처리 (병목 발생, GPU 활용도 낮음)
+                        </div>
+                    </div>
+
+                    <!-- 트랜스포머 (Self-Attention) -->
+                    <div style="flex:1; background:#f0fdfa; border:2px solid #2dd4bf; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:0 4px 15px rgba(45,212,191,0.15); min-width: 280px; position:relative;">
+                        <h4 style="margin-top:0; color:#0f766e; font-size:1rem; margin-bottom:1.5rem;">트랜스포머 (Self-Attention) ✨</h4>
+                        <div style="position:relative; width:100%; height:80px; display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; font-weight:bold; color:#0f766e;">
+                            <!-- 배경 연결선들 -->
+                            <svg width="100%" height="80" style="position:absolute; top:0; left:0; z-index:0; pointer-events:none;">
+                                <path d="M 30,40 Q 150,0 270,40" fill="none" stroke="#99f6e4" stroke-dasharray="4,4" stroke-width="2" />
+                                <path d="M 30,40 Q 150,80 270,40" fill="none" stroke="#99f6e4" stroke-dasharray="4,4" stroke-width="2" />
+                                <path d="M 110,40 Q 150,10 190,40" fill="none" stroke="#99f6e4" stroke-width="2" />
+                                <path d="M 110,40 Q 150,70 190,40" fill="none" stroke="#99f6e4" stroke-width="2" />
+                                <path d="M 30,40 Q 110,25 190,40" fill="none" stroke="#99f6e4" stroke-width="2" />
+                                <path d="M 110,40 L 150,40" fill="none" stroke="#99f6e4" stroke-width="2" />
+                            </svg>
+                            <div style="position:relative; z-index:1; padding:0.8rem; background:#fff; border:2px solid #2dd4bf; border-radius:8px; width:45px; margin: 0 auto; box-shadow:0 2px 4px rgba(0,0,0,0.1);">I</div>
+                            <div style="position:relative; z-index:1; padding:0.8rem; background:#fff; border:2px solid #2dd4bf; border-radius:8px; width:45px; margin: 0 auto; box-shadow:0 2px 4px rgba(0,0,0,0.1);">am</div>
+                            <div style="position:relative; z-index:1; padding:0.8rem; background:#fff; border:2px solid #2dd4bf; border-radius:8px; width:45px; margin: 0 auto; box-shadow:0 2px 4px rgba(0,0,0,0.1);">a</div>
+                            <div style="position:relative; z-index:1; padding:0.8rem; background:#fff; border:2px solid #2dd4bf; border-radius:8px; width:45px; margin: 0 auto; box-shadow:0 2px 4px rgba(0,0,0,0.1);">boy</div>
+                        </div>
+                        <div style="margin-top:1.5rem; font-size:0.85rem; color: #059669; font-weight:bold;">
+                            ⚡ 문장 전체 무한 연결 관계망 (병렬 처리, GPU 100% 효율)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-grid" style="grid-template-columns: 1fr 1fr; margin-top: 2rem;">
+                    <div class="card" style="background: #fffcfc; border-color: #fca5a5; margin:0;">
+                        <span style="font-size:1.5rem;">🛡️</span>
+                        <h3 style="color: var(--color-red); margin-top:0.5rem;">구글의 딜레마 (Innovator's Dilemma)</h3>
+                        <p>"AI가 모든 정답을 주면, 검색 광고는 누가 눌러?"<br>구글은 혁신적인 기술을 세상에 발표하고도, 세계 1위의 주 수익원인 검색 광고 시장을 지키기 위해 기술 상용화를 망설였습니다.</p>
+                    </div>
+                    <div class="card" style="background: #f0fdf4; border-color: #86efac; margin:0;">
+                         <span style="font-size:1.5rem;">🚀</span>
+                        <h3 style="color: var(--color-green); margin-top:0.5rem;">OpenAI의 혁명 (Game Changer)</h3>
+                        <p>"우린 시장 점유율 잃을 게 없다!"<br>오픈AI는 트랜스포머 아키텍처를 극단적으로 키워 사람처럼 맥락을 파악하고 대답하는 <strong>ChatGPT</strong>를 무료로 세상에 전격 공개하며 AI 시대의 주도권을 쥐었습니다.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part3">
+                <h2>Chapter 3. 병목 현상과 초고층 아파트, HBM</h2>
+                <p>슈퍼컴퓨터의 최전선에서 일하는 <strong>계산원(GPU)</strong>은 미친 듯이 빠르지만, 그들에게 데이터를 가져다주는 <strong>서빙 직원(DRAM)</strong>이 느리면 전체 시스템이 멈추는 <strong>병목 현상(Bottleneck)</strong>이 일어납니다.</p>
+
+                <!-- 병목 현상 시각화 -->
+                <div style="display:flex; flex-direction:column; gap:1.5rem; margin:2.5rem 0;">
+                    <!-- 기존 DRAM 방식 -->
+                    <div style="background:#fffcfc; border:1px solid #fecaca; border-radius:var(--radius-lg); padding:1.5rem; display:flex; align-items:center; gap:1rem;">
+                        <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:8px; padding:1.5rem 1rem; font-weight:bold; color:#b91c1c; text-align:center; font-size:1.1rem; width:120px; box-shadow:var(--shadow-sm);">
+                            천재 계산원<br>(GPU)
+                        </div>
+                        <div style="flex:1; position:relative; height:40px; background:#f87171; clip-path: polygon(0 0, 80% 0, 100% 30%, 100% 70%, 80% 100%, 0 100%); display:flex; align-items:center; justify-content:center; color:white; font-size:0.85rem; font-weight:bold;">
+                            🚫 좁은 1차선 도로 (병목 발생)
+                        </div>
+                        <div style="background:#f1f5f9; border:2px solid #94a3b8; border-radius:8px; padding:1rem; font-weight:bold; color:#475569; text-align:center; font-size:1rem; width:120px; box-shadow:var(--shadow-sm);">
+                            느린 서빙<br>(일반 DRAM)
+                        </div>
+                    </div>
+
+                    <!-- HBM 구조 시각화 -->
+                    <div style="background:#f0fdfa; border:2px solid #2dd4bf; border-radius:var(--radius-lg); padding:1.5rem; display:flex; align-items:center; gap:1rem; box-shadow:0 4px 15px rgba(45,212,191,0.15);">
+                        <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:8px; padding:2rem 1rem; font-weight:bold; color:#b91c1c; text-align:center; font-size:1.1rem; width:120px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            천재 계산원<br>(GPU)
+                        </div>
+                        <div style="flex:1; position:relative; height:80px; background:linear-gradient(90deg, #2dd4bf, #14b8a6); clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%); display:flex; align-items:center; justify-content:center; color:white; font-size:0.95rem; font-weight:bold;">
+                            ⚡ 넓고 거대한 1024차선 쾌속 도로
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center; position:relative; width:120px; margin-right:5px;">
+                            <!-- TSV (수직 관통 전극) 시각화 -->
+                            <div style="position:absolute; width:4px; height:120%; background:#fcd34d; left:30%; top:-10%; z-index:1; border-radius:2px; box-shadow: 0 0 5px #fcd34d;"></div>
+                            <div style="position:absolute; width:4px; height:120%; background:#fcd34d; right:30%; top:-10%; z-index:1; border-radius:2px; box-shadow: 0 0 5px #fcd34d;"></div>
+                            
+                            <!-- 적층된 아파트 -->
+                            <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:4px; padding:0.4rem; width:100%; text-align:center; font-size:0.75rem; font-weight:bold; color:#15803d; margin-bottom:3px; z-index:2; position:relative;">DRAM 층</div>
+                            <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:4px; padding:0.4rem; width:100%; text-align:center; font-size:0.75rem; font-weight:bold; color:#15803d; margin-bottom:3px; z-index:2; position:relative;">DRAM 층</div>
+                            <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:4px; padding:0.4rem; width:100%; text-align:center; font-size:0.75rem; font-weight:bold; color:#15803d; margin-bottom:3px; z-index:2; position:relative;">DRAM 층</div>
+                            <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:4px; padding:0.4rem; width:100%; text-align:center; font-size:0.75rem; font-weight:bold; color:#15803d; margin-bottom:3px; z-index:2; position:relative;">DRAM 층</div>
+                            <div style="background:#86efac; border:2px solid #16a34a; border-radius:6px; padding:0.5rem; width:115%; text-align:center; font-size:0.85rem; font-weight:bold; color:#14532d; z-index:2; position:relative;">초고층 아파트 (HBM)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="callout" style="border-left-color: var(--color-green); background: #f0fdf4;">
+                    <h4 style="color: var(--color-green);">해결책: 고대역폭 메모리 (HBM, High Bandwidth Memory)</h4>
+                    <p>기존 DRAM이 '단층 주택'이라면, HBM은 <strong>'초고층 아파트'</strong>입니다. 얇게 깎은 D램 칩을 수직으로 겹겹이 쌓아 올린 뒤, 미세한 구멍(TSV 기법)을 뚫어 수천 개의 엘리베이터(데이터 전송로)를 수직 연결했습니다. 물리적 공간과 전력 소모는 획기적으로 낮추면서 데이터 전송 속도는 수십 배 끌어올렸습니다.</p>
+                </div>
+            </article>
+
+            <article id="ai-part4">
+                <h2>Chapter 4. 시장의 지배자와 슈퍼 파워</h2>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>2025년 기준 DRAM 및 HBM 시장 점유율 👑</h3>
+                    <p>스마트폰, PC용 <strong>일반 DRAM 시장</strong>에서는 SK하이닉스와 삼성전자가 박빙의 승부를 벌이고 있지만, 가장 고부가가치인 <strong>AI용 HBM 시장은 SK하이닉스가 완벽히 선점하고 장악</strong>했습니다.</p>
+
+                    <!-- Market Share Charts (DRAM vs HBM) -->
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                        <!-- Global DRAM -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem;">
+                            <h4 style="margin-top:0; color:var(--text-secondary); font-size:0.95rem; text-align:center;">📊 글로벌 일반 DRAM 점유율<br><span style="font-size:0.8rem; font-weight:normal;">(Traditional War)</span></h4>
+                            <div style="display:flex; flex-direction:column; gap: 1rem; margin-top: 1.5rem;">
+                                <!-- SK Hynix -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #ef4444; font-size:0.9rem;">SK하이닉스</div>
+                                    <div style="flex:1; background:#e2e8f0; border-radius:20px; height:20px; overflow:hidden;">
+                                        <div style="width:35%; background:linear-gradient(90deg, #f87171, #ef4444); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">35%</div>
+                                    </div>
+                                </div>
+                                <!-- Samsung -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #3b82f6; font-size:0.9rem;">삼성전자</div>
+                                    <div style="flex:1; background:#e2e8f0; border-radius:20px; height:20px; overflow:hidden;">
+                                        <div style="width:34%; background:linear-gradient(90deg, #60a5fa, #3b82f6); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">34%</div>
+                                    </div>
+                                </div>
+                                <!-- Micron -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #64748b; font-size:0.9rem;">마이크론</div>
+                                    <div style="flex:1; background:#e2e8f0; border-radius:20px; height:20px; overflow:hidden;">
+                                        <div style="width:23%; background:linear-gradient(90deg, #94a3b8, #64748b); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">23%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top:1.5rem; text-align:center; font-size:0.9rem; font-weight:bold; color:#475569;">승자: 박빙 (Tight)</div>
+                        </div>
+
+                        <!-- Global HBM -->
+                        <div style="background: #fff1f2; border: 2px solid #fda4af; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 10px rgba(225,29,72,0.1);">
+                            <h4 style="margin-top:0; color:#be185d; font-size:0.95rem; text-align:center;">🔥 글로벌 AI용 HBM 점유율<br><span style="font-size:0.8rem; font-weight:normal;">(AI Battlefield, 2025 예상)</span></h4>
+                            <div style="display:flex; flex-direction:column; gap: 1rem; margin-top: 1.5rem;">
+                                <!-- SK Hynix -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #e11d48; font-size:0.9rem;">SK하이닉스</div>
+                                    <div style="flex:1; background:#ffe4e6; border-radius:20px; height:20px; overflow:hidden; position:relative;">
+                                        <div style="width:55%; background:linear-gradient(90deg, #fb7185, #e11d48); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">55% (압도적 1위)</div>
+                                    </div>
+                                </div>
+                                <!-- Samsung -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #2563eb; font-size:0.9rem;">삼성전자</div>
+                                    <div style="flex:1; background:#ffe4e6; border-radius:20px; height:20px; overflow:hidden;">
+                                        <div style="width:27%; background:linear-gradient(90deg, #60a5fa, #2563eb); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">27%</div>
+                                    </div>
+                                </div>
+                                <!-- Micron -->
+                                <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                    <div style="width: 70px; text-align:right; font-weight:bold; color: #475569; font-size:0.9rem;">마이크론</div>
+                                    <div style="flex:1; background:#ffe4e6; border-radius:20px; height:20px; overflow:hidden;">
+                                        <div style="width:21%; background:linear-gradient(90deg, #94a3b8, #475569); height:100%; display:flex; align-items:center; padding-left:10px; color:white; font-weight:bold; font-size:0.8rem;">21%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top:1.5rem; text-align:center; font-size:0.9rem; font-weight:bold; color:#be185d;">👑 승자: SK Hynix 독주</div>
+                        </div>
+                    </div>
+
+                    <ul style="margin:1rem 0 0 1.5rem; list-style-type:disc; color:var(--text-secondary);">
+                        <li><strong style="color:var(--text-primary);">"아이디어는 삼성이, 실속은 하이닉스가"</strong>: 일반 DRAM 시장에선 수익성이 비슷하지만, 수익률이 이례적으로 높은 AI용 시장(HBM)은 SK하이닉스가 장악했습니다. (2025년 영업이익 역전의 1등 공신)</li>
+                        <li><strong style="color:#e11d48;">SK Hynix (1위): 약 55% 점유.</strong> NVIDIA에 HBM3E를 선도적으로 독점 공급하며 압도적 지위 확보.</li>
+                        <li><strong>Samsung (2위): 약 27% 점유.</strong> 차세대 규격으로 맹추격 중.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article id="ai-part5">
+                <h2>Chapter 5. 미래의 승부처 (2026~): "Turn-Key Solution"</h2>
+                <p>다가오는 HBM4(6세대)부터는 기성복이 아닌 <strong>맞춤 정장(Custom Era)</strong> 시대가 열립니다. 구글, 애플, 메타 등 글로벌 빅테크 고객들은 각자의 AI 서비스와 커스텀 칩 설계에 딱 맞는 최적화된 형태의 HBM을 요구하게 됩니다.</p>
+
+                <div class="card" style="margin:2rem 0; background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border-color: var(--color-blue);">
+                    <h3 style="color: var(--color-blue); margin-top:0; text-align:center;">삼성전자의 거대한 기회: 턴키(Turn-Key) 솔루션</h3>
+                    <p style="text-align:center; font-size:0.95rem; color:var(--text-secondary); margin-bottom:2rem;">빅테크의 맞춤형 고부가가치 메모리를 만들려면 아래 3대 핵심 공정이 완벽하게 연계되어야 합니다.</p>
+                    
+                    <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:800px; margin:0 auto;">
+                        <!-- 공정 1: 메모리 설계/생산 -->
+                        <div style="display:flex; align-items:stretch; border:1px solid #cbd5e1; border-radius:12px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                            <div style="background:#3b82f6; color:white; padding:1.5rem; width:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; font-weight:bold;">
+                                <span style="font-size:2rem; margin-bottom:8px;">🧠</span>
+                                Memory
+                            </div>
+                            <div style="background:#fff; padding:1.5rem; flex:1;">
+                                <h4 style="margin:0 0 8px 0; color:var(--text-primary);">메모리 칩 설계 및 양산</h4>
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary);">초고속 데이터 저장을 위한 최상급 HBM용 D램 코어 칩을 설계하고 대량으로 찍어냅니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 화살표 -->
+                        <div style="text-align:center; color:#94a3b8; font-size:1.5rem; line-height:0;">⬇️</div>
+
+                        <!-- 공정 2: 파운드리 -->
+                        <div style="display:flex; align-items:stretch; border:1px solid #cbd5e1; border-radius:12px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                            <div style="background:#10b981; color:white; padding:1.5rem; width:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; font-weight:bold;">
+                                <span style="font-size:2rem; margin-bottom:8px;">🏭</span>
+                                Foundry
+                            </div>
+                            <div style="background:#fff; padding:1.5rem; flex:1;">
+                                <h4 style="margin:0 0 8px 0; color:var(--text-primary);">맞춤형 연산 라우팅 (Base Die)</h4>
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary);">기본 바닥 칩(Base Die)에 고객사가 원하는 특수한 논리 회로 체계를 도면대로 주문 제작합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 화살표 -->
+                        <div style="text-align:center; color:#94a3b8; font-size:1.5rem; line-height:0;">⬇️</div>
+
+                        <!-- 공정 3: 패키징 -->
+                        <div style="display:flex; align-items:stretch; border:1px solid #cbd5e1; border-radius:12px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                            <div style="background:#8b5cf6; color:white; padding:1.5rem; width:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; font-weight:bold;">
+                                <span style="font-size:2rem; margin-bottom:8px;">📦</span>
+                                Packaging
+                            </div>
+                            <div style="background:#fff; padding:1.5rem; flex:1;">
+                                <h4 style="margin:0 0 8px 0; color:var(--text-primary);">초정밀 어드밴스드 패키징</h4>
+                                <p style="margin:0; font-size:0.9rem; color:var(--text-secondary);">메모리와 베이스 다이를 머리카락보다 얇은 단위로 오차 없이 완벽하게 포개어 하나로 조립(적층)합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 삼성전자 유일망 결론 -->
+                        <div style="margin-top:1rem; padding:1.5rem; background:#eff6ff; border:2px solid #bfdbfe; border-radius:12px; text-align:center;">
+                            <h4 style="margin:0 0 0.5rem 0; color:#1e40af; font-size:1.1rem;">🌟 전 세계 유일의 All-in-One 생태계</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-primary);">어떤 기업은 설계만, 어떤 기업은 포장만 잘합니다. 그러나 이 모든 <strong>설계 → 파운드리 → 패키징 라인을 한 지붕 아래 100% 내재화</strong>한 회사는 <strong>전 세계에서 대한민국 삼성전자가 유일</strong>합니다. 이것이 삼성의 가장 강력한 잠재력입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <article id="ai-part6">
+                <h2>Chapter 6. 대한민국 반도체의 절대 위상</h2>
+                <p>단 두 개의 한국 회사(삼성전자, SK하이닉스)가 글로벌 사이클의 최정점에 서면서 벌어지는 거시적 파장을 직관적으로 살펴보겠습니다.</p>
+                
+                <div style="margin: 2rem 0; display:flex; gap: 2rem; flex-wrap: wrap;">
+                    
+                    <!-- 일본 비교 -->
+                    <div style="flex:1; min-width:300px; background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem; box-shadow:var(--shadow-md);">
+                        <h3 style="margin-top:0; text-align:center; font-size:1.1rem; color:var(--text-primary); margin-bottom:1.5rem;">이익 규모 비교 (예상 추정치)</h3>
+                        
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; height:150px; padding:0 1rem; margin-bottom:1rem; border-bottom:2px solid #cbd5e1;">
+                            <!-- 일본 -->
+                            <div style="width:40%; display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
+                                <div style="font-weight:bold; color:var(--text-secondary); font-size:0.9rem; text-align:center;">일본 상장사 전체<br>(약 3,800개 기업 합산)</div>
+                                <div style="width:100%; height:120px; background:#e2e8f0; border:1px solid #cbd5e1; border-radius:4px 4px 0 0; display:flex; justify-content:center; align-items:center; font-weight:bold; color:#475569;">
+                                    약 580조 원
+                                </div>
+                            </div>
+                            
+                            <!-- 한국 -->
+                            <div style="width:40%; display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
+                                <div style="font-weight:bold; color:var(--text-primary); font-size:0.9rem; text-align:center;">삼성전자 + SK하이닉스<br>(단 2개 기업 합산)</div>
+                                <div style="width:100%; height:93px; background:#fecaca; border:1px solid #f87171; border-radius:4px 4px 0 0; display:flex; justify-content:center; align-items:center; font-weight:bold; color:#b91c1c; position:relative;">
+                                    약 450조 원
+                                    <div style="position:absolute; top:-35px; background:#ef4444; color:white; padding:4px 8px; border-radius:4px; font-size:0.8rem;">일본 전체의 80% 육박</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="text-align:center; font-size:0.85rem; color:var(--text-tertiary); margin:0;">* 향후 반도체 호황기(2~3년 내) 누적/연간 달성 기대치 기반 추정</p>
+                    </div>
+
+                    <!-- 영향력 요약 -->
+                    <div style="flex:1; min-width:300px; display:flex; flex-direction:column; justify-content:center; gap:1.5rem;">
+                        <div style="background:#f8fafc; border-left:4px solid var(--color-blue); padding:1.5rem; border-radius:0 var(--radius-md) var(--radius-md) 0;">
+                            <h4 style="margin:0 0 8px 0; color:var(--color-blue);">잃어버린 30년을 넘어선 저력</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">일본이란 거대한 단일 경제권 전체 상장사의 막대한 이익 총합을, 대한민국 반도체 인프라 단 2개의 회사가 홀로 따라잡을 만큼 폭발적으로 성장하고 있습니다.</p>
+                        </div>
+                        <div style="background:#f0fdf4; border-left:4px solid var(--color-green); padding:1.5rem; border-radius:0 var(--radius-md) var(--radius-md) 0;">
+                            <h4 style="margin:0 0 8px 0; color:var(--color-green);">글로벌 자본의 거대한 종착지</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">현재 전 세계 컴퓨팅 인프라에 쏟아지는 수백, 수천 조 원의 막대한 부(富)의 흐름이 결국 메모리 병목 생태계의 최정점에 선 대한민국 팹(Fab) 생태계를 거쳐가고 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part6-1">
+                <h2>Chapter 6-1. 2025년 실적 (Data)</h2>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="margin-top:0;">하이닉스의 반란: 삼성을 추월하다</h3>
+                    <div class="chart-container-bar">
+                        <div class="bar-row"><div class="bar-label">Apple</div><div class="track"><div class="fill c-tech" style="width: 80%;">175조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Microsoft</div><div class="track"><div class="fill c-tech" style="width: 75%;">165조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">NVIDIA</div><div class="track"><div class="fill c-tech" style="width: 61%;">135조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Google</div><div class="track"><div class="fill c-tech" style="width: 61%;">135조</div></div></div>
+                        <div class="bar-row" style="margin-top:10px;"><div class="bar-label" style="color:#be185d;">SK Hynix</div><div class="track"><div class="fill c-hynix" style="width: 21.5%;">47.2조</div><div class="winner-badge" style="left: 23%;">▲ Winner</div></div></div>
+                        <div class="bar-row"><div class="bar-label" style="color:#2563eb;">Samsung</div><div class="track"><div class="fill c-samsung" style="width: 20%;">43.5조</div></div></div>
+                    </div>
+                    <div class="fc-insight-box" style="background:#fff1f2; border-left:4px solid #be185d;">
+                        <strong style="color:#881337; font-size:1rem;">💡 Historical Moment</strong>
+                        <span style="color:var(--text-secondary); font-size:0.95rem;">HBM 시장을 선점한 SK하이닉스가 창사 이래 처음으로 삼성전자의 영업이익을 추월했습니다.</span>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part6-2">
+                <h2>Chapter 6-2. 2026년 전망 (Forecast)</h2>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="margin-top:0;">한국 반도체의 대약진 (Quantum Jump)</h3>
+                    <div class="chart-container-bar">
+                        <div class="bar-row"><div class="bar-label">Microsoft</div><div class="track"><div class="fill c-tech" style="width: 86%;">190조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Apple</div><div class="track"><div class="fill c-tech" style="width: 84%;">185조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">NVIDIA</div><div class="track"><div class="fill c-tech" style="width: 81%;">180조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Google</div><div class="track"><div class="fill c-tech" style="width: 68%;">150조</div></div></div>
+                        <div class="bar-row" style="margin-top:10px;"><div class="bar-label" style="color:#2563eb;">Samsung</div><div class="track"><div class="fill c-samsung-boom" style="width: 63%;">140조</div><div class="jump-badge" style="left: 65%;">▲ 3.2배 폭등</div></div></div>
+                        <div class="bar-row"><div class="bar-label" style="color:#db2777;">SK Hynix</div><div class="track"><div class="fill c-hynix" style="width: 50%;">110조</div></div></div>
+                    </div>
+                    <div class="fc-insight-box" style="background:#eff6ff; border-left:4px solid #2563eb;">
+                        <strong style="color:#1e40af; font-size:1rem;">💡 The Great Leap</strong>
+                        <span style="color:var(--text-secondary); font-size:0.95rem;">HBM4 턴키 솔루션과 파운드리 수율 안정화로 삼성전자의 영업이익이 전년 대비 3배 이상 폭증하며 글로벌 빅테크 대열에 합류합니다.</span>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part6-3">
+                <h2 style="display:inline-block; background:#fef3c7; color:#d97706; padding:4px 12px; border-radius:4px; margin-bottom:1.5rem;">Chapter 6-3. 2027년 골든 피크 (Golden Peak)</h2>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="margin-top:0;">세계 1위와 어깨를 나란히 하다</h3>
+                    <div class="chart-container-bar" style="gap:10px;">
+                        <div class="bar-row"><div class="bar-label">NVIDIA</div><div class="track"><div class="fill c-tech" style="width: 100%;">220조</div></div></div>
+                        <div class="bar-row" style="margin-top:5px;"><div class="bar-label" style="color:#2563eb; font-weight:800;">Samsung</div><div class="track"><div class="fill c-samsung-gold" style="width: 100%;">220조+</div><div class="crown-icon">👑</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Microsoft</div><div class="track"><div class="fill c-tech" style="width: 97%;">215조</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Apple</div><div class="track"><div class="fill c-tech" style="width: 90%;">200조</div></div></div>
+                        <div class="bar-row" style="margin-top:5px;"><div class="bar-label" style="color:#db2777; font-weight:800;">SK Hynix</div><div class="track"><div class="fill c-hynix" style="width: 82%;">180조+</div></div></div>
+                        <div class="bar-row"><div class="bar-label">Google</div><div class="track"><div class="fill c-tech" style="width: 77%;">170조</div></div></div>
+                    </div>
+                    <div class="fc-insight-box" style="background:#fffbeb; border-left:4px solid #f59e0b;">
+                        <strong style="color:#92400e; font-size:1rem;">💡 Global Top Tier</strong>
+                        <span style="color:var(--text-secondary); font-size:0.95rem;">2027년, 삼성전자는 반도체 절대 강자인 엔비디아와 대등한 영업이익을 기록하며 글로벌 테크 시장의 최상위 포식자로 등극합니다.</span>
+                    </div>
+                </div>
+            </article>
+
+            <article id="ai-part8">
+                <h2>Chapter 8. Power Shift: '슈퍼 을(Super Vendor)'의 찬란한 탄생</h2>
+                <p>과거에는 '돈을 주는 빅테크(갑)'와 '부품을 대는 제조사(을)'의 수직적 권력 구조였습니다. 하지만 HBM이 병목의 핵심 열쇠가 되면서, 시장의 권력 지도가 역사상 처음으로 완전히 뒤집히는 거대한 전환(Power Shift)이 일어났습니다.</p>
+
+                <!-- Power Shift 시각화 -->
+                <div style="margin:2.5rem 0; position:relative; background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:2rem;">
+                    
+                    <div style="display:flex; flex-direction:column; gap:2rem;">
+                        <!-- 과거 벤더 -->
+                        <div style="display:flex; gap:1.5rem; align-items:center; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border-left:4px solid #cbd5e1;">
+                            <div style="flex:1; text-align:right;">
+                                <strong style="font-size:1.1rem; color:var(--text-primary); display:block;">글로벌 빅테크 (M7)</strong>
+                                <span style="font-size:0.9rem; color:var(--color-blue); font-weight:bold;">👑 막강한 '갑'</span>
+                            </div>
+                            <div style="display:flex; flex-direction:column; align-items:center; width:100px;">
+                                <div style="font-size:0.8rem; color:var(--color-red); font-weight:bold; margin-bottom:4px;">단가 인하 (CR)</div>
+                                <div style="width:100%; height:2px; background:#94a3b8; position:relative;">
+                                    <div style="position:absolute; right:0; top:-4px; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:8px solid #94a3b8;"></div>
+                                </div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">대체제 위협</div>
+                            </div>
+                            <div style="flex:1;">
+                                <strong style="font-size:1.1rem; color:var(--text-secondary); display:block;">부품 제조사</strong>
+                                <span style="font-size:0.9rem; color:var(--text-tertiary);">수동적 일반 하청업체 (을)</span>
+                            </div>
+                        </div>
+
+                        <!-- 현재 슈퍼 벤더 (권력 역전) -->
+                        <div style="position:relative;">
+                            <!-- 전환 아이콘 -->
+                            <div style="position:absolute; left:50%; top:-30px; transform:translateX(-50%); background:#3b82f6; color:white; font-size:1.2rem; font-weight:bold; width:40px; height:40px; border-radius:50%; display:flex; justify-content:center; align-items:center; box-shadow: 0 2px 5px rgba(59,130,246,0.3); border:3px solid #fff;">
+                                ⇅
+                            </div>
+                            
+                            <div style="display:flex; gap:1.5rem; align-items:center; background:#fffcfc; padding:1.5rem; border-radius:12px; box-shadow:0 4px 15px rgba(239,68,68,0.1); border-left:4px solid var(--color-red);">
+                                <div style="flex:1; text-align:right;">
+                                    <strong style="font-size:1.1rem; color:var(--text-primary); display:block;">AI 쏠림을 겪는 빅테크</strong>
+                                    <span style="font-size:0.9rem; color:var(--text-secondary);">반도체 확보에 사활을 건 고객들</span>
+                                </div>
+                                <div style="display:flex; flex-direction:column; align-items:center; width:100px;">
+                                    <div style="font-size:0.8rem; color:var(--color-green); font-weight:bold; margin-bottom:4px;">우선 공급 요청</div>
+                                    <div style="width:100%; height:3px; background:var(--color-red); position:relative;">
+                                        <div style="position:absolute; left:0; top:-3.5px; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:8px solid var(--color-red);"></div>
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#b91c1c; font-weight:bold; margin-top:4px;">선입금 지원</div>
+                                </div>
+                                <div style="flex:1;">
+                                    <strong style="font-size:1.1rem; color:var(--color-red); display:block;">첨단 HBM 제조사</strong>
+                                    <span style="font-size:0.9rem; color:var(--color-red); font-weight:bold;">👑 절대적 협상력 (슈퍼 파트너)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout" style="border-left-color:var(--color-indigo); background:#f5f3ff;">
+                    <h4 style="color:var(--color-indigo); margin-top:0;">📌 거대한 파라다임 시프트의 핵심</h4>
+                    <ul style="margin:0; padding-left:1.5rem; line-height:1.6; color:var(--text-secondary);">
+                        <li>이제 빅테크 기업들이 반도체 제조사 연구진 <strong>자리에 직접 찾아와 회의를 대기</strong>합니다.</li>
+                        <li>공장을 짓기도 전에 수조 원 규모의 자금을 <strong>"우리 물량만 우선 빼달라"며 선수금으로 지원</strong>합니다.</li>
+                        <li>가격 인하 압박은 고사하고, 만들면 부르는 게 값이 되어 이익률이 유례없이 치솟는 진정한 <strong>핵심 비즈니스 파트너(Super Partner)</strong>로 격상되었습니다.</li>
+                    </ul>
+                </div>
+            </article>    
+                <div class="callout" style="border-left-color: var(--color-blue); background: #e8f3ff; margin-top: 3rem; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+                    <h3 style="color: var(--color-blue); margin-top:0; font-size:1.8rem; text-align:center; letter-spacing:-0.5px;">최종 결론: 금광보다는 '곡괭이'를 주목하라</h3>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items:center; margin-top: 2rem;">
+                        
+                        <!-- 19th Century -->
+                        <div style="background:white; border:1px solid #fde68a; border-radius:12px; padding:1.5rem; text-align:center; box-shadow:0 4px 6px rgba(217, 119, 6, 0.1);">
+                            <div style="display:inline-block; font-size:0.85rem; font-weight:800; padding:4px 12px; border-radius:12px; margin-bottom:1rem; color:#d97706; background:#fef3c7;">19th Century</div>
+                            <div style="font-size:3rem; margin-bottom:0.5rem; animation: floatFloat 3s infinite ease-in-out;">👖</div>
+                            <h4 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin:0 0 0.5rem 0;">미국 서부 골드러시</h4>
+                            <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.5; margin-bottom:1.5rem; word-break:keep-all;">
+                                수많은 광부들이 대박을 꿈꾸며 금침을 캐러 몰려들었으나, <strong>진정한 최후의 승리자</strong>는 그들에게 질긴 청바지와 곡괭이를 독점 공급한 <strong>리바이스(Levi's)</strong>였습니다.
+                            </p>
+                            <div style="background:#fffbeb; color:#d97706; font-weight:800; padding:10px; border-radius:8px; border:1px dashed #fcd34d;">
+                                승자: Levi's (인프라 공급자)
+                            </div>
+                        </div>
+                        
+                        <!-- Arrow -->
+                        <div style="display:flex; flex-direction:column; align-items:center; color:#94a3b8;">
+                            <div style="font-size:2rem; font-weight:900;">↻</div>
+                            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:4px;">History<br>Repeats</span>
+                        </div>
+                        
+                        <!-- 21st Century -->
+                        <div style="background:white; border:1px solid #bfdbfe; border-radius:12px; padding:1.5rem; text-align:center; box-shadow:0 4px 15px rgba(37, 99, 235, 0.15); position:relative;">
+                            <div style="position:absolute; top:-10px; right:-10px; font-size:2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">👑</div>
+                            <div style="display:inline-block; font-size:0.85rem; font-weight:800; padding:4px 12px; border-radius:12px; margin-bottom:1rem; color:#2563eb; background:#dbeafe;">21st Century</div>
+                            <div style="font-size:3rem; margin-bottom:0.5rem; animation: floatFloat 3s infinite ease-in-out; animation-delay: 1.5s;">💎</div>
+                            <h4 style="font-size:1.3rem; font-weight:800; color:var(--color-blue); margin:0 0 0.5rem 0;">생성형 AI 패권 전쟁</h4>
+                            <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.5; margin-bottom:1.5rem; word-break:keep-all;">
+                                수백 조 원을 태우는 빅테크 간의 피 터지는 왕위 쟁탈전. 이 난타전에서 <strong>가장 확실하고 리스크 없이 돈을 버는 곳</strong>은 세계 최고의 AI 병목 해소 곡괭이(HBM)를 독점 공급하는 기업입니다.
+                            </p>
+                            <div style="background:#eff6ff; color:#1d4ed8; font-weight:800; padding:10px; border-radius:8px; border:2px solid #bfdbfe;">
+                                최종 승자: 대한민국 (반도체 인프라)
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </article>
+
+            <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border-light); color:var(--text-tertiary); text-align:center; font-size:0.9rem;">
+                <p>AI Semiconductor Special Report &copy; 2024</p>
+            </footer>
+        </main>
+    </div>
+</template>
+
+
+<script src="../assets/js/academy-common.js"></script>
+<script>
+mountAcademyView('AiLectureView');
+</script>
+
+
+</body>
+</html>
