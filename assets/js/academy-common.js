@@ -270,57 +270,151 @@ const GeoLectureView = {
     }
 };
 
+const seoulPriceGeoJsonUrl = 'https://raw.githubusercontent.com/southkorea/seoul-maps/master/kostat/2013/json/seoul_municipalities_geo_simple.json';
+
+const seoulPriceStops = [
+    { label: '< 15,000,000', max: 1500, color: '#a8d7ff' },
+    { label: '15,000,000 - 20,000,000', min: 1500, max: 2000, color: '#82b7f6' },
+    { label: '20,000,000 - 25,000,000', min: 2000, max: 2500, color: '#7f8ded' },
+    { label: '25,000,000 - 30,000,000', min: 2500, max: 3000, color: '#8e64e8' },
+    { label: '30,000,000 - 35,000,000', min: 3000, max: 3500, color: '#aa4bdd' },
+    { label: '35,000,000 - 40,000,000', min: 3500, max: 4000, color: '#c23ec7' },
+    { label: '40,000,000 - 45,000,000', min: 4000, max: 4500, color: '#d936a3' },
+    { label: '>= 45,000,000', min: 4500, color: '#cf1e76' }
+];
+
+const seoulBaseMapStyle = {
+    version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+    sources: {
+        'carto-light': {
+            type: 'raster',
+            tiles: ['https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; CARTO &copy; OpenStreetMap contributors'
+        },
+        'carto-labels': {
+            type: 'raster',
+            tiles: ['https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; CARTO &copy; OpenStreetMap contributors'
+        },
+        'esri-satellite': {
+            type: 'raster',
+            tiles: ['https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            attribution: 'Tiles &copy; Esri'
+        }
+    },
+    layers: [
+        {
+            id: 'carto-base',
+            type: 'raster',
+            source: 'carto-light',
+            paint: {
+                'raster-opacity': 0.86,
+                'raster-saturation': -0.2
+            }
+        },
+        {
+            id: 'satellite-base',
+            type: 'raster',
+            source: 'esri-satellite',
+            layout: { visibility: 'none' },
+            paint: {
+                'raster-opacity': 0.48,
+                'raster-saturation': -0.25
+            }
+        },
+        {
+            id: 'carto-road-labels',
+            type: 'raster',
+            source: 'carto-labels',
+            layout: { visibility: 'none' },
+            paint: { 'raster-opacity': 0.82 }
+        }
+    ]
+};
+
+const getSeoulPriceColor = (price) => {
+    const stop = seoulPriceStops.find((item) => {
+        const aboveMin = item.min === undefined || price >= item.min;
+        const belowMax = item.max === undefined || price < item.max;
+        return aboveMin && belowMax;
+    });
+
+    return stop ? stop.color : seoulPriceStops[seoulPriceStops.length - 1].color;
+};
+
+const buildSeoulPriceData = () => {
+    const data = [
+        { id: 'gangnam', name: '강남구', grade: 1, pyeongPrice: 4850, dongs: [{ name: '압구정동', price: 6200 }, { name: '대치동', price: 5350 }, { name: '개포동', price: 4880 }, { name: '삼성동', price: 4750 }, { name: '역삼동', price: 4300 }] },
+        { id: 'seocho', name: '서초구', grade: 1, pyeongPrice: 4550, dongs: [{ name: '반포동', price: 5900 }, { name: '잠원동', price: 5150 }, { name: '서초동', price: 4300 }, { name: '방배동', price: 3950 }] },
+        { id: 'songpa', name: '송파구', grade: 1, pyeongPrice: 4200, dongs: [{ name: '잠실동', price: 5100 }, { name: '신천동', price: 4800 }, { name: '문정동', price: 3850 }, { name: '가락동', price: 3650 }] },
+        { id: 'yongsan', name: '용산구', grade: 1, pyeongPrice: 4050, dongs: [{ name: '한남동', price: 5600 }, { name: '이촌동', price: 4550 }, { name: '원효로', price: 3500 }] },
+        { id: 'seongdong', name: '성동구', grade: 2, pyeongPrice: 3800, dongs: [{ name: '성수동', price: 4700 }, { name: '옥수동', price: 4050 }, { name: '금호동', price: 3500 }, { name: '왕십리', price: 3350 }] },
+        { id: 'mapo', name: '마포구', grade: 2, pyeongPrice: 3600, dongs: [{ name: '아현동', price: 4050 }, { name: '공덕동', price: 3750 }, { name: '용강동', price: 3600 }, { name: '성산동', price: 3050 }] },
+        { id: 'gwangjin', name: '광진구', grade: 2, pyeongPrice: 3450, dongs: [{ name: '광장동', price: 4300 }, { name: '자양동', price: 3450 }, { name: '구의동', price: 3250 }] },
+        { id: 'yangcheon', name: '양천구', grade: 2, pyeongPrice: 3350, dongs: [{ name: '목동', price: 4400 }, { name: '신정동', price: 3150 }, { name: '신월동', price: 2350 }] },
+        { id: 'ydp', name: '영등포구', grade: 3, pyeongPrice: 3200, dongs: [{ name: '여의도동', price: 4650 }, { name: '당산동', price: 3350 }, { name: '문래동', price: 3100 }, { name: '신길동', price: 2950 }] },
+        { id: 'dongjak', name: '동작구', grade: 3, pyeongPrice: 3150, dongs: [{ name: '흑석동', price: 4050 }, { name: '상도동', price: 3150 }, { name: '사당동', price: 3000 }, { name: '대방동', price: 2850 }] },
+        { id: 'jung', name: '중구', grade: 3, pyeongPrice: 3050, dongs: [{ name: '신당동', price: 3300 }, { name: '황학동', price: 2850 }] },
+        { id: 'jongno', name: '종로구', grade: 3, pyeongPrice: 2950, dongs: [{ name: '평동', price: 3950 }, { name: '무악동', price: 3200 }, { name: '창신동', price: 2300 }] },
+        { id: 'gangdong', name: '강동구', grade: 3, pyeongPrice: 2850, dongs: [{ name: '고덕동', price: 3600 }, { name: '명일동', price: 3300 }, { name: '암사동', price: 2850 }, { name: '길동', price: 2650 }] },
+        { id: 'seodaemun', name: '서대문구', grade: 4, pyeongPrice: 2700, dongs: [{ name: '북아현동', price: 3450 }, { name: '남가좌동', price: 2950 }, { name: '홍제동', price: 2500 }] },
+        { id: 'dongdaemun', name: '동대문구', grade: 4, pyeongPrice: 2550, dongs: [{ name: '전농동', price: 3200 }, { name: '답십리동', price: 3000 }, { name: '청량리동', price: 2850 }, { name: '이문동', price: 2450 }] },
+        { id: 'seongbuk', name: '성북구', grade: 4, pyeongPrice: 2450, dongs: [{ name: '길음동', price: 3050 }, { name: '종암동', price: 2650 }, { name: '정릉동', price: 2150 }] },
+        { id: 'gangseo', name: '강서구', grade: 4, pyeongPrice: 2400, dongs: [{ name: '마곡동', price: 3400 }, { name: '염창동', price: 2850 }, { name: '가양동', price: 2650 }, { name: '화곡동', price: 2050 }] },
+        { id: 'gwanak', name: '관악구', grade: 4, pyeongPrice: 2350, dongs: [{ name: '봉천동', price: 2600 }, { name: '신림동', price: 2150 }] },
+        { id: 'eunpyeong', name: '은평구', grade: 4, pyeongPrice: 2250, dongs: [{ name: '녹번동', price: 2850 }, { name: '진관동', price: 2700 }, { name: '응암동', price: 2450 }, { name: '불광동', price: 2300 }] },
+        { id: 'guro', name: '구로구', grade: 5, pyeongPrice: 2100, dongs: [{ name: '신도림동', price: 3150 }, { name: '구로동', price: 2200 }, { name: '개봉동', price: 1850 }] },
+        { id: 'nowon', name: '노원구', grade: 5, pyeongPrice: 2050, dongs: [{ name: '중계동', price: 2800 }, { name: '하계동', price: 2300 }, { name: '상계동', price: 1900 }] },
+        { id: 'jungnang', name: '중랑구', grade: 5, pyeongPrice: 1950, dongs: [{ name: '상봉동', price: 2400 }, { name: '신내동', price: 2150 }, { name: '면목동', price: 1800 }] },
+        { id: 'geumcheon', name: '금천구', grade: 5, pyeongPrice: 1900, dongs: [{ name: '독산동', price: 2100 }, { name: '시흥동', price: 1800 }] },
+        { id: 'gangbuk', name: '강북구', grade: 5, pyeongPrice: 1850, dongs: [{ name: '미아동', price: 2250 }, { name: '번동', price: 1850 }, { name: '수유동', price: 1750 }] },
+        { id: 'dobong', name: '도봉구', grade: 5, pyeongPrice: 1750, dongs: [{ name: '창동', price: 2350 }, { name: '도봉동', price: 1800 }, { name: '방학동', price: 1700 }] }
+    ].map((gu) => ({ ...gu, color: getSeoulPriceColor(gu.pyeongPrice) }));
+
+    const ranked = [...data].sort((a, b) => b.pyeongPrice - a.pyeongPrice);
+    data.forEach((gu) => {
+        gu.rank = ranked.findIndex((item) => item.id === gu.id) + 1;
+    });
+
+    return data;
+};
+
 const ReLectureView = {
     template: '#re-lecture-view-tpl',
     emits: ['go-home'],
     data() {
+        const seoulData = buildSeoulPriceData();
+
         return {
             toc: [],
             activeToc: '',
-            selectedGu: null,
-            seoulData: [
-                // 1급지 (Red)
-                { id: 'gangnam', name: '강남구', grade: 1, pyeongPrice: 8500, row: 5, col: 5, dongs: [ {name:'압구정동', price: 12000}, {name:'대치동', price: 9500}, {name:'개포동', price: 9000}, {name:'삼성동', price: 8200}, {name:'역삼동', price: 7800} ] },
-                { id: 'seocho', name: '서초구', grade: 1, pyeongPrice: 8200, row: 5, col: 4, dongs: [ {name:'반포동', price: 11000}, {name:'잠원동', price: 9500}, {name:'서초동', price: 7500}, {name:'방배동', price: 6500} ] },
-                { id: 'yongsan', name: '용산구', grade: 1, pyeongPrice: 6500, row: 4, col: 4, dongs: [ {name:'한남동', price: 9000}, {name:'이촌동', price: 7500}, {name:'원효로', price: 5500} ] },
-                { id: 'songpa', name: '송파구', grade: 1, pyeongPrice: 6200, row: 5, col: 6, dongs: [ {name:'잠실동', price: 7500}, {name:'신천동', price: 7000}, {name:'가락동', price: 5500}, {name:'문정동', price: 5200} ] },
-
-                // 2급지 (Orange)
-                { id: 'seongdong', name: '성동구', grade: 2, pyeongPrice: 5500, row: 4, col: 5, dongs: [ {name:'성수동', price: 7500}, {name:'옥수동', price: 6000}, {name:'금호동', price: 5000}, {name:'왕십리', price: 4800} ] },
-                { id: 'mapo', name: '마포구', grade: 2, pyeongPrice: 5200, row: 3, col: 3, dongs: [ {name:'아현동', price: 6000}, {name:'용강동', price: 5500}, {name:'공덕동', price: 5000}, {name:'성산동', price: 4500} ] },
-                { id: 'gwangjin', name: '광진구', grade: 2, pyeongPrice: 5000, row: 4, col: 6, dongs: [ {name:'광장동', price: 6500}, {name:'구의동', price: 5000}, {name:'자양동', price: 4800} ] },
-                { id: 'yangcheon', name: '양천구', grade: 2, pyeongPrice: 4800, row: 4, col: 2, dongs: [ {name:'목동', price: 6500}, {name:'신정동', price: 4500}, {name:'신월동', price: 3000} ] },
-
-                // 3급지 (Yellow)
-                { id: 'ydp', name: '영등포구', grade: 3, pyeongPrice: 4500, row: 4, col: 3, dongs: [ {name:'여의도동', price: 7000}, {name:'당산동', price: 4500}, {name:'신길동', price: 4200}, {name:'문래동', price: 4000} ] },
-                { id: 'dongjak', name: '동작구', grade: 3, pyeongPrice: 4500, row: 5, col: 3, dongs: [ {name:'흑석동', price: 5800}, {name:'상도동', price: 4500}, {name:'사당동', price: 4200}, {name:'대방동', price: 4000} ] },
-                { id: 'jung', name: '중구', grade: 3, pyeongPrice: 4200, row: 3, col: 4, dongs: [ {name:'신당동', price: 4500}, {name:'황학동', price: 3800} ] },
-                { id: 'gangdong', name: '강동구', grade: 3, pyeongPrice: 4200, row: 4, col: 7, dongs: [ {name:'고덕동', price: 5500}, {name:'명일동', price: 5000}, {name:'암사동', price: 4200}, {name:'길동', price: 3800} ] },
-                { id: 'jongno', name: '종로구', grade: 3, pyeongPrice: 4000, row: 2, col: 4, dongs: [ {name:'평동(경희궁)', price: 6000}, {name:'무악동', price: 4500}, {name:'창신동', price: 3000} ] },
-
-                // 4급지 (Blue)
-                { id: 'seodaemun', name: '서대문구', grade: 4, pyeongPrice: 3800, row: 2, col: 3, dongs: [ {name:'북아현동', price: 5000}, {name:'남가좌동', price: 4200}, {name:'홍제동', price: 3500} ] },
-                { id: 'dongdaemun', name: '동대문구', grade: 4, pyeongPrice: 3500, row: 3, col: 5, dongs: [ {name:'전농동', price: 4500}, {name:'답십리동', price: 4200}, {name:'청량리동', price: 4000}, {name:'이문동', price: 3500} ] },
-                { id: 'seongbuk', name: '성북구', grade: 4, pyeongPrice: 3200, row: 2, col: 5, dongs: [ {name:'길음동', price: 4000}, {name:'종암동', price: 3500}, {name:'정릉동', price: 2800} ] },
-                { id: 'gwanak', name: '관악구', grade: 4, pyeongPrice: 3200, row: 6, col: 3, dongs: [ {name:'봉천동', price: 3500}, {name:'신림동', price: 3000} ] },
-                { id: 'gangseo', name: '강서구', grade: 4, pyeongPrice: 3200, row: 3, col: 2, dongs: [ {name:'마곡동', price: 5000}, {name:'염창동', price: 4000}, {name:'가양동', price: 3800}, {name:'화곡동', price: 2800} ] },
-                { id: 'eunpyeong', name: '은평구', grade: 4, pyeongPrice: 3000, row: 1, col: 4, dongs: [ {name:'녹번동', price: 4000}, {name:'진관동(뉴타운)', price: 3800}, {name:'응암동', price: 3500}, {name:'불광동', price: 3200} ] },
-
-                // 5급지 (Slate)
-                { id: 'guro', name: '구로구', grade: 5, pyeongPrice: 2800, row: 5, col: 2, dongs: [ {name:'신도림동', price: 4200}, {name:'구로동', price: 3000}, {name:'개봉동', price: 2500} ] },
-                { id: 'nowon', name: '노원구', grade: 5, pyeongPrice: 2800, row: 1, col: 7, dongs: [ {name:'중계동', price: 3800}, {name:'하계동', price: 3200}, {name:'상계동', price: 2600} ] },
-                { id: 'jungnang', name: '중랑구', grade: 5, pyeongPrice: 2600, row: 2, col: 6, dongs: [ {name:'상봉동', price: 3200}, {name:'신내동', price: 3000}, {name:'면목동', price: 2500} ] },
-                { id: 'geumcheon', name: '금천구', grade: 5, pyeongPrice: 2500, row: 6, col: 2, dongs: [ {name:'독산동', price: 2800}, {name:'시흥동', price: 2500} ] },
-                { id: 'gangbuk', name: '강북구', grade: 5, pyeongPrice: 2500, row: 1, col: 5, dongs: [ {name:'미아동', price: 3000}, {name:'번동', price: 2500}, {name:'수유동', price: 2400} ] },
-                { id: 'dobong', name: '도봉구', grade: 5, pyeongPrice: 2400, row: 1, col: 6, dongs: [ {name:'창동', price: 3200}, {name:'도봉동', price: 2500}, {name:'방학동', price: 2300} ] }
-            ]
+            selectedGu: seoulData[0],
+            seoulData,
+            priceStops: seoulPriceStops,
+            miniPaths: [],
+            mapLoading: true,
+            mapError: '',
+            layerPanelCollapsed: false,
+            priceLegendCollapsed: false,
+            extrusionEnabled: true,
+            heightScale: 0.35,
+            layers: {
+                price: true,
+                boundary: true,
+                roads: false,
+                satellite: false
+            }
         };
     },
     mounted() {
         const headers = this.$el.querySelectorAll('h2, h3');
         const tocList = [];
         headers.forEach((h, index) => {
-            if (h.closest('.dong-list-card')) return; // Ignore dynamic inner h3
+            if (h.closest('.seoul-maplibre-shell') || h.closest('.district-insight-card')) return;
             const id = h.id || `re-section-${index}`;
             h.id = id;
             let text = h.textContent;
@@ -343,6 +437,11 @@ const ReLectureView = {
         }, { rootMargin: '-10% 0px -70% 0px' });
 
         headers.forEach(h => observer.observe(h));
+        this.$nextTick(() => this.initSeoulMap());
+    },
+    beforeUnmount() {
+        if (this.mapPopup) this.mapPopup.remove();
+        if (this.seoulMapInstance) this.seoulMapInstance.remove();
     },
     methods: {
         scrollTo(id) {
@@ -351,6 +450,366 @@ const ReLectureView = {
         },
         formatPrice(price) {
             return (price/10000).toFixed(1) + '억';
+        },
+        formatKrw(price) {
+            return `₩${(price * 10000).toLocaleString('ko-KR')}`;
+        },
+        initSeoulMap() {
+            if (!this.$refs.seoulMap) return;
+
+            if (!window.maplibregl) {
+                this.mapLoading = false;
+                this.mapError = 'MapLibre GL JS를 불러오지 못했습니다.';
+                return;
+            }
+
+            const map = new maplibregl.Map({
+                container: this.$refs.seoulMap,
+                style: seoulBaseMapStyle,
+                center: [126.993, 37.556],
+                zoom: 10.05,
+                pitch: 50,
+                bearing: -18,
+                antialias: true,
+                attributionControl: false,
+                localIdeographFontFamily: '"Apple SD Gothic Neo", "Malgun Gothic", sans-serif'
+            });
+
+            this.seoulMapInstance = map;
+            map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-left');
+            map.addControl(new maplibregl.FullscreenControl(), 'top-left');
+            map.addControl(new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true } }), 'top-left');
+            map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+
+            map.on('load', () => this.loadSeoulDistricts());
+        },
+        async loadSeoulDistricts() {
+            try {
+                const response = await fetch(seoulPriceGeoJsonUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const geoJson = await response.json();
+                const enrichedGeoJson = this.enrichSeoulGeoJson(geoJson);
+                this.buildMiniMapPaths(enrichedGeoJson.features);
+                this.addSeoulMapLayers(enrichedGeoJson);
+                this.mapLoading = false;
+                this.syncMapLayers();
+                this.syncSelectedDistrict(this.selectedGu.id);
+
+                const initialFeature = enrichedGeoJson.features.find((feature) => feature.properties.id === this.selectedGu.id);
+                if (initialFeature) {
+                    this.showDistrictPopup(this.selectedGu, this.getGeometryCenter(initialFeature.geometry));
+                }
+            } catch (error) {
+                this.mapLoading = false;
+                this.mapError = '서울시 행정구역 GeoJSON을 불러오지 못했습니다.';
+                console.error(error);
+            }
+        },
+        enrichSeoulGeoJson(geoJson) {
+            const priceByName = new Map(this.seoulData.map((gu) => [gu.name, gu]));
+            const prices = this.seoulData.map((gu) => gu.pyeongPrice);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const range = maxPrice - minPrice || 1;
+
+            return {
+                type: 'FeatureCollection',
+                features: geoJson.features
+                    .map((feature) => {
+                        const gu = priceByName.get(feature.properties.name);
+                        if (!gu) return null;
+
+                        const normalized = (gu.pyeongPrice - minPrice) / range;
+                        return {
+                            ...feature,
+                            id: gu.id,
+                            properties: {
+                                ...feature.properties,
+                                id: gu.id,
+                                name: gu.name,
+                                grade: gu.grade,
+                                rank: gu.rank,
+                                pyeongPrice: gu.pyeongPrice,
+                                priceKrw: gu.pyeongPrice * 10000,
+                                color: gu.color,
+                                height: 1800 + normalized * 9000
+                            }
+                        };
+                    })
+                    .filter(Boolean)
+            };
+        },
+        addSeoulMapLayers(geoJson) {
+            const map = this.seoulMapInstance;
+            if (!map) return;
+
+            if (map.getSource('seoul-districts')) {
+                map.getSource('seoul-districts').setData(geoJson);
+                return;
+            }
+
+            map.addSource('seoul-districts', {
+                type: 'geojson',
+                data: geoJson,
+                promoteId: 'id'
+            });
+
+            map.addLayer({
+                id: 'seoul-price-flat',
+                type: 'fill',
+                source: 'seoul-districts',
+                layout: { visibility: 'none' },
+                paint: {
+                    'fill-color': ['get', 'color'],
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.92,
+                        0.78
+                    ]
+                }
+            });
+
+            map.addLayer({
+                id: 'seoul-price-extrusion',
+                type: 'fill-extrusion',
+                source: 'seoul-districts',
+                paint: {
+                    'fill-extrusion-color': ['get', 'color'],
+                    'fill-extrusion-height': this.getExtrusionHeightExpression(),
+                    'fill-extrusion-base': 0,
+                    'fill-extrusion-opacity': 0.86,
+                    'fill-extrusion-vertical-gradient': true
+                }
+            });
+
+            map.addLayer({
+                id: 'seoul-boundary',
+                type: 'line',
+                source: 'seoul-districts',
+                paint: {
+                    'line-color': '#ffffff',
+                    'line-width': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        2.7,
+                        1.35
+                    ],
+                    'line-opacity': 0.92
+                }
+            });
+
+            map.addLayer({
+                id: 'seoul-selected-outline',
+                type: 'line',
+                source: 'seoul-districts',
+                filter: ['==', ['get', 'id'], this.selectedGu.id],
+                paint: {
+                    'line-color': '#312e81',
+                    'line-width': 3.5,
+                    'line-opacity': 0.95
+                }
+            });
+
+            map.addLayer({
+                id: 'seoul-price-label',
+                type: 'symbol',
+                source: 'seoul-districts',
+                layout: {
+                    'text-field': ['get', 'name'],
+                    'text-font': ['Open Sans Bold'],
+                    'text-size': ['interpolate', ['linear'], ['zoom'], 9, 11, 11, 15],
+                    'text-allow-overlap': false,
+                    'text-ignore-placement': false
+                },
+                paint: {
+                    'text-color': '#ffffff',
+                    'text-halo-color': 'rgba(42, 55, 105, 0.82)',
+                    'text-halo-width': 1.8,
+                    'text-halo-blur': 0.5
+                }
+            });
+
+            ['seoul-price-extrusion', 'seoul-price-flat'].forEach((layerId) => {
+                map.on('mousemove', layerId, (event) => this.handleDistrictHover(event));
+                map.on('mouseleave', layerId, () => this.clearDistrictHover());
+                map.on('click', layerId, (event) => {
+                    const feature = event.features && event.features[0];
+                    if (feature) this.selectDistrict(feature, event.lngLat);
+                });
+            });
+
+            map.fitBounds([[126.74, 37.41], [127.19, 37.72]], {
+                padding: { top: 70, right: 320, bottom: 80, left: 70 },
+                duration: 0,
+                pitch: 50,
+                bearing: -18
+            });
+        },
+        getExtrusionHeightExpression() {
+            return [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['*', ['get', 'height'], this.heightScale * 1.12],
+                ['*', ['get', 'height'], this.heightScale]
+            ];
+        },
+        handleDistrictHover(event) {
+            const map = this.seoulMapInstance;
+            const feature = event.features && event.features[0];
+            if (!map || !feature) return;
+
+            map.getCanvas().style.cursor = 'pointer';
+            const nextId = feature.properties.id;
+            if (this.hoveredDistrictId === nextId) return;
+
+            this.clearDistrictHover();
+            this.hoveredDistrictId = nextId;
+            map.setFeatureState({ source: 'seoul-districts', id: nextId }, { hover: true });
+        },
+        clearDistrictHover() {
+            const map = this.seoulMapInstance;
+            if (!map) return;
+
+            map.getCanvas().style.cursor = '';
+            if (this.hoveredDistrictId) {
+                map.setFeatureState({ source: 'seoul-districts', id: this.hoveredDistrictId }, { hover: false });
+                this.hoveredDistrictId = null;
+            }
+        },
+        selectDistrict(feature, lngLat) {
+            const selected = this.seoulData.find((gu) => gu.id === feature.properties.id);
+            if (!selected) return;
+
+            this.selectedGu = selected;
+            this.syncSelectedDistrict(selected.id);
+            this.showDistrictPopup(selected, lngLat);
+        },
+        showDistrictPopup(gu, lngLat) {
+            const map = this.seoulMapInstance;
+            if (!map || !lngLat) return;
+
+            const html = `
+                <div class="seoul-popup-card">
+                    <button type="button" class="popup-close-spacer" aria-hidden="true"></button>
+                    <strong>${gu.name}</strong>
+                    <span>Price per pyeong</span>
+                    <b>${this.formatKrw(gu.pyeongPrice)}</b>
+                    <span>Rank</span>
+                    <b>${gu.rank} / 25</b>
+                </div>
+            `;
+
+            if (this.mapPopup) this.mapPopup.remove();
+            this.mapPopup = new maplibregl.Popup({
+                closeButton: true,
+                closeOnClick: false,
+                offset: [0, -20],
+                className: 'seoul-price-popup'
+            })
+                .setLngLat(lngLat)
+                .setHTML(html)
+                .addTo(map);
+        },
+        syncSelectedDistrict(id) {
+            const map = this.seoulMapInstance;
+            if (!map || !map.getLayer('seoul-selected-outline')) return;
+
+            map.setFilter('seoul-selected-outline', ['==', ['get', 'id'], id]);
+        },
+        syncMapLayers() {
+            const map = this.seoulMapInstance;
+            if (!map || !map.isStyleLoaded()) return;
+
+            const setVisibility = (layerId, visible) => {
+                if (map.getLayer(layerId)) {
+                    map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+                }
+            };
+
+            setVisibility('seoul-price-extrusion', this.layers.price && this.extrusionEnabled);
+            setVisibility('seoul-price-flat', this.layers.price && !this.extrusionEnabled);
+            setVisibility('seoul-price-label', this.layers.price);
+            setVisibility('seoul-boundary', this.layers.boundary);
+            setVisibility('seoul-selected-outline', this.layers.boundary);
+            setVisibility('carto-road-labels', this.layers.roads);
+            setVisibility('satellite-base', this.layers.satellite);
+
+            if (map.getLayer('carto-base')) {
+                map.setPaintProperty('carto-base', 'raster-opacity', this.layers.satellite ? 0.28 : 0.86);
+            }
+        },
+        toggleExtrusion() {
+            this.extrusionEnabled = !this.extrusionEnabled;
+            this.syncMapLayers();
+        },
+        syncExtrusionHeight() {
+            const map = this.seoulMapInstance;
+            if (!map || !map.getLayer('seoul-price-extrusion')) return;
+
+            map.setPaintProperty('seoul-price-extrusion', 'fill-extrusion-height', this.getExtrusionHeightExpression());
+        },
+        collectCoordinates(coordinates, points = []) {
+            if (!Array.isArray(coordinates)) return points;
+            if (typeof coordinates[0] === 'number' && typeof coordinates[1] === 'number') {
+                points.push(coordinates);
+                return points;
+            }
+
+            coordinates.forEach((item) => this.collectCoordinates(item, points));
+            return points;
+        },
+        getGeometryCenter(geometry) {
+            const points = this.collectCoordinates(geometry.coordinates, []);
+            if (!points.length) return null;
+
+            const lngs = points.map((point) => point[0]);
+            const lats = points.map((point) => point[1]);
+            return [
+                (Math.min(...lngs) + Math.max(...lngs)) / 2,
+                (Math.min(...lats) + Math.max(...lats)) / 2
+            ];
+        },
+        buildMiniMapPaths(features) {
+            const allPoints = [];
+            features.forEach((feature) => this.collectCoordinates(feature.geometry.coordinates, allPoints));
+            if (!allPoints.length) return;
+
+            const lngs = allPoints.map((point) => point[0]);
+            const lats = allPoints.map((point) => point[1]);
+            const minLng = Math.min(...lngs);
+            const maxLng = Math.max(...lngs);
+            const minLat = Math.min(...lats);
+            const maxLat = Math.max(...lats);
+            const spanLng = maxLng - minLng || 1;
+            const spanLat = maxLat - minLat || 1;
+
+            const project = (point) => {
+                const x = 12 + ((point[0] - minLng) / spanLng) * 136;
+                const y = 106 - ((point[1] - minLat) / spanLat) * 92;
+                return [x.toFixed(2), y.toFixed(2)];
+            };
+
+            const ringToPath = (ring) => ring
+                .map((point, index) => {
+                    const [x, y] = project(point);
+                    return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+                })
+                .join(' ') + ' Z';
+
+            const polygonToPath = (polygon) => polygon.map(ringToPath).join(' ');
+
+            this.miniPaths = features.map((feature) => {
+                const d = feature.geometry.type === 'MultiPolygon'
+                    ? feature.geometry.coordinates.map(polygonToPath).join(' ')
+                    : polygonToPath(feature.geometry.coordinates);
+
+                return {
+                    id: feature.properties.id,
+                    d
+                };
+            });
         }
     }
 };

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>서울 부동산 사이클과 실전 투자</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css">
+    <script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap">
     <link rel="stylesheet" href="../assets/css/econ-academy.css">
 </head>
@@ -46,19 +48,19 @@
                         <p style="color:var(--text-secondary); font-size:0.95rem;">서울시 아파트 연간 적정 수요는 약 4.8만호이나, 향후 2035년까지 장기적인 공급 부족 누적이 예상됩니다.</p>
                         <div style="margin-top: 1.5rem; padding-right: 20px;">
                             <div class="chart-container-bar" style="display: flex; flex-direction: column; gap: 16px;">
-                                <div class="bar-row"><div class="bar-label" style="font-size:0.95rem; width:100px;">적정 수요</div><div class="track" style="height:14px;"><div class="fill" style="background:#94a3b8; width: 48%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.8만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--text-primary); font-size:0.95rem; width:100px;">2024년(추정)</div><div class="track" style="height:14px;"><div class="fill" style="background:#3b82f6; width: 25%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">2.5만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-red); font-weight:800; font-size:0.95rem; width:100px;">2025년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#ef4444; width: 18%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.8만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:#b91c1c; font-weight:800; font-size:0.95rem; width:100px;">2026년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#b91c1c; width: 12%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.2만호</div><div class="winner-badge" style="background:#fef2f2; border-color:#fecaca; color:#b91c1c; right:-100px; padding:4px 8px; font-size:0.85rem;">⚠️ 극심한 부족</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:#991b1b; font-weight:800; font-size:0.95rem; width:100px;">2027년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#991b1b; width: 10%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.0만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:#991b1b; font-weight:800; font-size:0.95rem; width:100px;">2028년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#991b1b; width: 14%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.4만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-red); font-weight:800; font-size:0.95rem; width:100px;">2029년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#ef4444; width: 22%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">2.2만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-blue); font-weight:800; font-size:0.95rem; width:100px;">2030년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#3b82f6; width: 35%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">3.5만호</div><div class="jump-badge" style="background:#eff6ff; border-color:#bfdbfe; color:#2563eb; right:-110px; padding:4px 8px; font-size:0.85rem;">🔄 주요 재건축 입주</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--text-primary); font-size:0.95rem; width:100px;">2031년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#64748b; width: 40%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.0만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--text-primary); font-size:0.95rem; width:100px;">2032년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#64748b; width: 45%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.5만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800; font-size:0.95rem; width:100px;">2033년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 55%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.5만호</div><div class="winner-badge" style="background:#f0fdf4; border-color:#bbf7d0; color:#166534; right:-80px; padding:4px 8px; font-size:0.85rem;">✅ 공급 초과</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800; font-size:0.95rem; width:100px;">2034년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 52%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.2만호</div></div></div>
-                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800; font-size:0.95rem; width:100px;">2035년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 50%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.0만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label">적정 수요</div><div class="track" style="height:14px;"><div class="fill" style="background:#94a3b8; width: 48%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.8만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label">2024년(추정)</div><div class="track" style="height:14px;"><div class="fill" style="background:#3b82f6; width: 25%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">2.5만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-red); font-weight:800;">2025년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#ef4444; width: 18%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.8만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:#b91c1c; font-weight:800;">2026년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#b91c1c; width: 12%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.2만호</div><div class="winner-badge" style="background:#fef2f2; border-color:#fecaca; color:#b91c1c; right:-100px; padding:4px 8px; font-size:0.85rem;">⚠️ 극심한 부족</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:#991b1b; font-weight:800;">2027년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#991b1b; width: 10%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.0만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:#991b1b; font-weight:800;">2028년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#991b1b; width: 14%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">1.4만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-red); font-weight:800;">2029년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#ef4444; width: 22%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">2.2만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-blue); font-weight:800;">2030년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#3b82f6; width: 35%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">3.5만호</div><div class="jump-badge" style="background:#eff6ff; border-color:#bfdbfe; color:#2563eb; right:-110px; padding:4px 8px; font-size:0.85rem;">🔄 주요 재건축 입주</div></div></div>
+                                <div class="bar-row"><div class="bar-label">2031년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#64748b; width: 40%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.0만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label">2032년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#64748b; width: 45%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">4.5만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800;">2033년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 55%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.5만호</div><div class="winner-badge" style="background:#f0fdf4; border-color:#bbf7d0; color:#166534; right:-80px; padding:4px 8px; font-size:0.85rem;">✅ 공급 초과</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800;">2034년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 52%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.2만호</div></div></div>
+                                <div class="bar-row"><div class="bar-label" style="color:var(--color-green); font-weight:800;">2035년(전망)</div><div class="track" style="height:14px;"><div class="fill" style="background:#22c55e; width: 50%; padding:4px 8px 4px 0; color:#fff; font-weight:800; text-align:right;">5.0만호</div></div></div>
                             </div>
                         </div>
                     </div>
@@ -110,49 +112,119 @@
             </article>
 
             <article id="re-ch2">
-                <h2>Chapter 2. [데이터 시각화] 서울시 가격 지도 그리기</h2>
-                <div class="callout" style="border-left-color: #16a34a; background: #f0fdf4;">
-                    <h4 style="color:#16a34a; margin-top:0;">🎯 24평(전용 59㎡) 최신 호가 및 실거래 기반 평당가 분석</h4>
-                    <p style="margin:0; color:#166534;">서울특별시 25개 구 지도를 블록 형태로 추상화한 타일 맵(Tile Map)입니다. 블록을 클릭하면 해당 구의 대표 동별 아파트 시세를 확인할 수 있습니다.</p>
-                </div>
+                <h2>Chapter 2. 🎯 24평(전용 59㎡) 최신 호가 및 실거래 기반 평당가 분석</h2>
                 
-                <!-- Tile Map -->
-                <div class="seoul-map-container">
-                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:1rem; font-size:0.8rem; font-weight:700;">
-                        <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:12px; height:12px; background:linear-gradient(135deg, #ef4444, #b91c1c); border-radius:3px;"></span> 1급지 (상위)</span>
-                        <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:12px; height:12px; background:linear-gradient(135deg, #f97316, #c2410c); border-radius:3px;"></span> 2급지</span>
-                        <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:12px; height:12px; background:linear-gradient(135deg, #eab308, #a16207); border-radius:3px;"></span> 3급지</span>
-                        <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:12px; height:12px; background:linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius:3px;"></span> 4급지</span>
-                        <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:12px; height:12px; background:linear-gradient(135deg, #64748b, #334155); border-radius:3px;"></span> 5급지 (하위)</span>
-                    </div>
+                <section class="seoul-maplibre-shell" aria-label="서울시 구별 평당가 MapLibre 지도">
+                    <div class="seoul-map-header map-header-slim" aria-hidden="true"></div>
 
-                    <div class="seoul-grid">
-                        <div v-for="gu in seoulData" :key="gu.id" 
-                             @click="selectedGu = gu"
-                             :class="['tile-gu', 'bg-g' + gu.grade, {active: selectedGu && selectedGu.id === gu.id}]"
-                             :style="{ gridRow: gu.row, gridColumn: gu.col }">
-                             <div class="gu-name">{{ gu.name }}</div>
-                             <div class="gu-price">{{ formatPrice(gu.pyeongPrice) }}</div>
+                    <div class="seoul-map-viewport">
+                        <div ref="seoulMap" class="seoul-map-canvas"></div>
+                        <div v-if="mapLoading" class="map-status-overlay">
+                            <span class="map-spinner"></span>
+                            <strong>서울시 가격 레이어 로딩 중</strong>
+                        </div>
+                        <div v-if="mapError" class="map-status-overlay error">
+                            <strong>{{ mapError }}</strong>
+                        </div>
+
+                        <div :class="['map-layer-panel', { 'is-collapsed': layerPanelCollapsed }]">
+                            <div class="panel-title-row">
+                                <strong>Layer control</strong>
+                                <button type="button" class="panel-collapse" @click="layerPanelCollapsed = !layerPanelCollapsed" :aria-expanded="(!layerPanelCollapsed).toString()" :title="layerPanelCollapsed ? '레이어 패널 열기' : '레이어 패널 접기'">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" :class="{open: !layerPanelCollapsed}"><path d="m6 15 6-6 6 6"></path></svg>
+                                </button>
+                            </div>
+                            <div v-show="!layerPanelCollapsed" class="panel-body">
+                                <span class="panel-section-label">Layers</span>
+                                <label class="layer-row">
+                                    <input type="checkbox" v-model="layers.price" @change="syncMapLayers">
+                                    <span>Seoul price layer</span>
+                                    <i aria-hidden="true"></i>
+                                </label>
+                                <div class="layer-gradient" aria-hidden="true">
+                                    <span></span>
+                                    <small>Low</small>
+                                    <small>High</small>
+                                </div>
+                                <label class="layer-row">
+                                    <input type="checkbox" v-model="layers.boundary" @change="syncMapLayers">
+                                    <span>District boundary</span>
+                                    <i aria-hidden="true"></i>
+                                </label>
+                                <label class="layer-row">
+                                    <input type="checkbox" v-model="layers.roads" @change="syncMapLayers">
+                                    <span>Road label</span>
+                                    <i aria-hidden="true"></i>
+                                </label>
+                                <label class="layer-row">
+                                    <input type="checkbox" v-model="layers.satellite" @change="syncMapLayers">
+                                    <span>Satellite</span>
+                                    <i aria-hidden="true"></i>
+                                </label>
+                                <div class="extrusion-row">
+                                    <span>3D extrusion</span>
+                                    <button type="button" :class="['switch', {on: extrusionEnabled}]" @click="toggleExtrusion" :aria-pressed="extrusionEnabled.toString()" title="3D 높이 켜기/끄기">
+                                        <span></span>
+                                    </button>
+                                </div>
+                                <div class="height-control">
+                                    <label for="seoul-height-range">Height</label>
+                                    <input id="seoul-height-range" type="range" min="0.1" max="0.7" step="0.05" v-model.number="heightScale" @input="syncExtrusionHeight">
+                                    <output>{{ heightScale.toFixed(2) }}</output>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div :class="['map-legend', { 'is-collapsed': priceLegendCollapsed }]">
+                            <div class="panel-title-row legend-title-row">
+                                <strong>Price layer</strong>
+                                <button type="button" class="panel-collapse" @click="priceLegendCollapsed = !priceLegendCollapsed" :aria-expanded="(!priceLegendCollapsed).toString()" :title="priceLegendCollapsed ? '가격 범례 열기' : '가격 범례 접기'">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" :class="{open: !priceLegendCollapsed}"><path d="m6 15 6-6 6 6"></path></svg>
+                                </button>
+                            </div>
+                            <div v-show="!priceLegendCollapsed" class="legend-body">
+                                <span>Price per pyeong (KRW)</span>
+                                <div v-for="stop in priceStops" :key="stop.label" class="legend-item">
+                                    <i :style="{ background: stop.color }"></i>
+                                    <em>{{ stop.label }}</em>
+                                </div>
+                                <small>(Unit: KRW / pyeong)</small>
+                            </div>
+                        </div>
+
+                        <div class="map-source-card">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3Z"></path><path d="M4 7v5c0 1.7 3.6 3 8 3s8-1.3 8-3V7"></path><path d="M4 12v5c0 1.7 3.6 3 8 3s8-1.3 8-3v-5"></path></svg>
+                            <span>Boundary: KOSTAT 2013<br>Price sample: 2024.05</span>
+                        </div>
+
+                        <div class="map-mini-card" aria-label="서울시 미니맵">
+                            <svg viewBox="0 0 160 120" role="img">
+                                <path v-for="path in miniPaths" :key="path.id" :d="path.d" :class="{active: selectedGu && selectedGu.id === path.id}"></path>
+                            </svg>
+                        </div>
+
+                        <div class="map-scale-card" aria-hidden="true">
+                            <span></span>
+                            <em>5 km</em>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- Selected Gu Data -->
-                <div v-if="selectedGu" class="dong-list-card">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #cbd5e1; padding-bottom:10px; margin-bottom:1rem;">
+                <div v-if="selectedGu" class="district-insight-card">
+                    <div class="district-insight-head">
                         <div>
-                            <span :class="['badge', 'bg-g' + selectedGu.grade]" style="color:white; margin-left:0; margin-bottom:8px; display:inline-block;">{{ selectedGu.grade }}급지</span>
-                            <h3 style="margin:0; color:var(--text-primary); font-size:1.6rem;">{{ selectedGu.name }} <span style="font-size:1rem; font-weight:600; color:var(--text-secondary);">동별 24평 대장주 시세 (추정)</span></h3>
+                            <span class="district-grade-pill" :style="{ background: selectedGu.color }">{{ selectedGu.grade }}급지 · Rank {{ selectedGu.rank }} / 25</span>
+                            <h3>{{ selectedGu.name }} <span>동별 24평 대장주 시세</span></h3>
                         </div>
-                        <div style="font-size:1.2rem; font-weight:800; color:var(--text-primary); text-align:right;">
-                            평균: <span style="color:var(--color-blue);">{{ formatPrice(selectedGu.pyeongPrice) }}</span>/평
+                        <div class="district-price-kpi">
+                            <span>평균 평당가</span>
+                            <strong>{{ formatKrw(selectedGu.pyeongPrice) }}</strong>
                         </div>
                     </div>
-                    
-                    <div>
-                        <div v-for="(dong, idx) in selectedGu.dongs" :key="idx" class="dong-item">
-                            <span class="dong-name">📍 {{ dong.name }}</span>
-                            <span class="dong-price">{{ dong.price >= 10000 ? (dong.price/10000).toFixed(1) + '억' : (dong.price/100).toFixed(1) + '억' }}</span>
+                    <div class="dong-price-grid">
+                        <div v-for="(dong, idx) in selectedGu.dongs" :key="idx" class="dong-price-item">
+                            <span>{{ dong.name }}</span>
+                            <strong>{{ formatKrw(dong.price) }}</strong>
                         </div>
                     </div>
                 </div>
