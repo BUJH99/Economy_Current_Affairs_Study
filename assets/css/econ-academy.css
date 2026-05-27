@@ -221,6 +221,733 @@
         }
         .callout h4 { margin: 0 0 0.5rem; color: var(--color-blue); font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
 
+        /* COURSE 1: SECTOR VALUATION */
+        .sector-principles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 2.25rem;
+        }
+        .sector-principle {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-card);
+        }
+        .sector-chip {
+            display: inline-flex;
+            width: fit-content;
+            padding: 4px 9px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+        .sector-chip.blue { background: #e8f3ff; color: var(--color-blue); }
+        .sector-chip.indigo { background: #eef2ff; color: var(--color-indigo); }
+        .sector-chip.green { background: #ecfdf5; color: #16a34a; }
+        .sector-chip.amber { background: #fff7ed; color: #d97706; }
+        .sector-chip.red { background: #fef2f2; color: #dc2626; }
+        .sector-chip.slate { background: #f1f5f9; color: #334155; }
+        .sector-principle strong {
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 0.35rem;
+        }
+        .sector-principle p {
+            margin: 0;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+        .sector-map-shell {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            padding: 1.35rem;
+            margin: 1.5rem 0 2.25rem;
+        }
+        .sector-map {
+            position: relative;
+            min-height: 520px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, transparent calc(50% - 1px), #cbd5e1 calc(50% - 1px), #cbd5e1 calc(50% + 1px), transparent calc(50% + 1px)),
+                linear-gradient(0deg, transparent calc(50% - 1px), #cbd5e1 calc(50% - 1px), #cbd5e1 calc(50% + 1px), transparent calc(50% + 1px)),
+                linear-gradient(135deg, rgba(88, 86, 214, 0.08), transparent 44%),
+                linear-gradient(45deg, transparent 56%, rgba(217, 119, 6, 0.08)),
+                #ffffff;
+        }
+        .sector-quad {
+            position: absolute;
+            width: 46%;
+            padding: 1rem;
+            z-index: 1;
+            color: var(--text-secondary);
+            word-break: keep-all;
+        }
+        .sector-quad strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .sector-quad span { font-size: 0.82rem; }
+        .sector-quad.q-growth-defensive { top: 0; left: 0; }
+        .sector-quad.q-growth-cyclical { top: 0; right: 0; text-align: right; }
+        .sector-quad.q-value-defensive { bottom: 0; left: 0; }
+        .sector-quad.q-value-cyclical { bottom: 0; right: 0; text-align: right; }
+        .sector-bubble {
+            position: absolute;
+            z-index: 2;
+            min-width: 92px;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.1);
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+        .sector-bubble small {
+            display: block;
+            margin-top: 2px;
+            color: var(--text-tertiary);
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+        .sector-bubble.platform { left: 16%; top: 22%; color: #7c3aed; }
+        .sector-bubble.bio { left: 10%; top: 38%; color: #dc2626; }
+        .sector-bubble.semi { left: 65%; top: 24%; color: var(--color-indigo); }
+        .sector-bubble.ship { left: 70%; top: 41%; color: var(--color-blue); }
+        .sector-bubble.consumer { left: 17%; top: 71%; color: #16a34a; }
+        .sector-bubble.finance { left: 44%; top: 76%; color: #334155; }
+        .sector-bubble.auto { left: 62%; top: 66%; color: #d97706; }
+        .sector-bubble.material { left: 75%; top: 79%; color: #92400e; }
+        .sector-axis {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            color: var(--text-tertiary);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .sector-note {
+            margin: 1rem 0 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .sector-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 2.25rem;
+        }
+        .sector-card {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+        .sector-card-head {
+            padding: 1.25rem 1.35rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+        .sector-card-head h4 {
+            margin: 0 0 0.35rem;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+        .sector-card-type {
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+        .sector-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.38rem;
+            margin-top: 0.8rem;
+        }
+        .sector-tag {
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #f2f4f6;
+            color: var(--text-secondary);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+        .sector-card-body { padding: 1.15rem 1.35rem 1.35rem; }
+        .sector-card-body p {
+            margin: 0 0 1rem;
+            font-size: 0.94rem;
+        }
+        .sector-subtopic {
+            margin: 0 0 1rem;
+            color: var(--text-primary);
+            font-size: 0.96rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+        .sector-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.7rem;
+        }
+        .sector-mini {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem;
+            background: #fcfcfd;
+        }
+        .sector-mini span {
+            display: block;
+            color: var(--text-tertiary);
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+        .sector-mini strong {
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+        .sector-point {
+            margin-top: 1rem;
+            border-left: 4px solid var(--color-blue);
+            padding: 0.85rem 1rem;
+            background: #f8fafc;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .valuation-map {
+            margin: 2.5rem 0 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* 1. FLOW CHART GUIDE */
+        .valuation-flow {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.25rem;
+            margin: 0.5rem 0 1rem;
+        }
+        .valuation-flow div {
+            position: relative;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            background: #ffffff;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .valuation-flow div:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-float);
+            border-color: var(--color-blue);
+        }
+        .valuation-flow div:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            right: -0.85rem;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1.25rem;
+            font-weight: 900;
+            z-index: 2;
+            transition: transform 0.3s;
+        }
+        .valuation-flow div:hover:not(:last-child)::after {
+            transform: translate(3px, -50%) scale(1.1);
+            color: var(--color-blue);
+        }
+        .valuation-flow span {
+            display: inline-flex;
+            width: 2.25rem;
+            height: 2.25rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--text-primary) 0%, #3e4d61 100%);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(25, 31, 40, 0.15);
+        }
+        .valuation-flow strong {
+            display: block;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+        .valuation-flow small {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.35;
+        }
+
+        /* 2. DYNAMIC FILTERS */
+        .filter-chip-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .filter-chip {
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: var(--bg-accent-subtle);
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            user-select: none;
+        }
+        .filter-chip:hover {
+            background: #e8ebed;
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+        .filter-chip.active {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+            box-shadow: 0 4px 15px rgba(25, 31, 40, 0.15);
+        }
+
+        /* 3. INTERACTIVE SIMULATOR (자가진단기) */
+        .diag-panel {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .diag-panel:hover {
+            border-color: rgba(49, 130, 246, 0.4);
+        }
+        .diag-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-blue), var(--color-indigo));
+        }
+        .diag-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .diag-title-area h4 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .diag-title-area p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        .diag-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .diag-field label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .diag-field label span.val-bubble {
+            background: #eff6ff;
+            color: var(--color-blue);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid rgba(49, 130, 246, 0.15);
+        }
+        .diag-select {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .diag-select:focus {
+            border-color: var(--color-blue);
+            box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.15);
+        }
+        
+        /* Custom Input Range styling */
+        .diag-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 99px;
+            outline: none;
+            margin: 10px 0;
+        }
+        .diag-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-blue);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(49, 130, 246, 0.4);
+            transition: transform 0.1s;
+        }
+        .diag-range::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+        }
+        .diag-range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Diagnostic Results output */
+        .diag-result {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+            position: relative;
+        }
+        .diag-badge-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .diag-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .diag-badge.risk { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+        .diag-badge.trap { background: #ffedd5; color: #d97706; border: 1px solid #fed7aa; }
+        .diag-badge.good { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+        .diag-badge.neutral { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        
+        .diag-output-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .diag-output-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            word-break: keep-all;
+        }
+        .diag-checklist {
+            border-top: 1px dashed var(--border-light);
+            padding-top: 1rem;
+        }
+        .diag-checklist-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .diag-checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 0;
+            margin: 0;
+        }
+        .diag-checklist-item {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.4;
+        }
+        .diag-checklist-item span.chk-bullet {
+            color: var(--color-blue);
+            font-weight: 800;
+        }
+
+        /* 4. SECTOR CARD GRID & CARDS */
+        .valuation-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.25rem;
+        }
+        
+        /* Glassmorphism Card Style */
+        .valuation-card {
+            --accent: var(--color-blue);
+            --accent-soft: #eff6ff;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            border-top: 4px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .valuation-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: var(--shadow-float);
+            border-color: rgba(0, 0, 0, 0.08);
+            border-top-width: 5px;
+        }
+        .valuation-card-head {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .valuation-icon {
+            display: inline-flex;
+            width: 48px;
+            height: 48px;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            border-radius: var(--radius-sm);
+            background: var(--accent-soft);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.02);
+            font-family: var(--font-emoji), var(--font-stack);
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .valuation-card:hover .valuation-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .valuation-index {
+            display: block;
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        .valuation-card h4 {
+            margin: 0.15rem 0 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.25;
+        }
+        
+        /* 5. RANGE VISUAL GAUGES */
+        .valuation-metrics-viz {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin: 0.25rem 0;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+        }
+        .gauge-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .gauge-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+        .gauge-label {
+            font-weight: 800;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .gauge-label span.metric-name {
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+        .gauge-range-txt {
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .gauge-track {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 99px;
+            position: relative;
+            overflow: visible;
+        }
+        .gauge-bar {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--accent), #a78bfa);
+            position: absolute;
+            top: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            opacity: 0.85;
+            transition: all 0.3s;
+        }
+        .valuation-card:hover .gauge-bar {
+            opacity: 1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+        .gauge-ticks {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            padding: 0 2px;
+        }
+
+        /* 6. RISK WARNING FLAGS */
+        .valuation-risk {
+            border: 1px solid #fed7aa;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 0.85rem;
+            background: #fff7ed;
+            color: #9a3412;
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            transition: all 0.25s;
+        }
+        .valuation-card:hover .valuation-risk {
+            border-color: #fdba74;
+            background: #fff8f0;
+            transform: translateY(1px);
+        }
+        .valuation-risk::before {
+            content: "⚠️";
+            font-family: var(--font-emoji);
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+
+        /* Color variations */
+        .valuation-card.accent-indigo { --accent: #5856d6; --accent-soft: #f1f0ff; }
+        .valuation-card.accent-blue { --accent: #3182f6; --accent-soft: #eff6ff; }
+        .valuation-card.accent-violet { --accent: #7c3aed; --accent-soft: #f5f3ff; }
+        .valuation-card.accent-amber { --accent: #d97706; --accent-soft: #fffbeb; }
+        .valuation-card.accent-orange { --accent: #ea580c; --accent-soft: #fff7ed; }
+        .valuation-card.accent-slate { --accent: #475569; --accent-soft: #f1f5f9; }
+        .valuation-card.accent-red { --accent: #e15241; --accent-soft: #fff1f2; }
+        .valuation-card.accent-green { --accent: #16a34a; --accent-soft: #f0fdf4; }
+        .sector-warning-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 2.25rem;
+        }
+        .sector-warning {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--text-primary);
+            border-radius: var(--radius-md);
+            padding: 1.1rem;
+            box-shadow: var(--shadow-card);
+        }
+        .sector-warning h4 {
+            margin: 0 0 0.45rem;
+            font-size: 1rem;
+        }
+        .sector-warning p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .sector-source-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0 0;
+            padding: 0;
+            list-style: none;
+        }
+        .sector-source-list li {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 0.95rem;
+            background: #fff;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .sector-source-list a {
+            color: var(--color-blue);
+            font-weight: 800;
+        }
+
         /* COMPONENT: ACCORDION ($$심화$$) */
         details.accordion {
             background: #ffffff;
@@ -295,6 +1022,35 @@
             .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-light); padding: 1rem; }
             .main-content { padding: 2rem 1.5rem; }
             h1 { font-size: 2rem; }
+            .sector-card-grid,
+            .valuation-flow,
+            .valuation-card-grid,
+            .sector-warning-grid,
+            .sector-source-list { grid-template-columns: 1fr; }
+            .valuation-flow { gap: 1.15rem; }
+            .valuation-flow div:not(:last-child)::after {
+                content: "↓";
+                top: auto;
+                right: auto;
+                bottom: -1.08rem;
+                left: 1.4rem;
+                transform: none;
+            }
+            .valuation-metrics { grid-template-columns: 1fr; }
+            .sector-map { min-height: 620px; }
+            .sector-quad { width: 49%; padding: 0.75rem; }
+            .sector-quad strong { font-size: 0.9rem; }
+            .sector-quad span { font-size: 0.74rem; }
+            .sector-bubble { min-width: 78px; padding: 0.48rem 0.62rem; font-size: 0.76rem; }
+            .sector-bubble.platform { left: 9%; top: 24%; }
+            .sector-bubble.bio { left: 7%; top: 38%; }
+            .sector-bubble.semi { left: 57%; top: 25%; }
+            .sector-bubble.ship { left: 61%; top: 41%; }
+            .sector-bubble.consumer { left: 11%; top: 72%; }
+            .sector-bubble.finance { left: 40%; top: 77%; }
+            .sector-bubble.auto { left: 55%; top: 65%; }
+            .sector-bubble.material { left: 58%; top: 85%; }
+            .sector-mini-grid { grid-template-columns: 1fr; }
         }
     
 
