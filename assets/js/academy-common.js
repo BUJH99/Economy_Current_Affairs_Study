@@ -423,9 +423,8 @@ window.mountAcademyView = function mountAcademyView(componentName) {
         template: '<active-view @go-home="goHome"></active-view>',
         methods: {
             goHome() {
-                window.location.href = '../경제시사공부자료.html';
+                window.location.href = '../index.html';
             }
         }
     }).mount('#app');
 };
-
