@@ -261,11 +261,439 @@ const GeoLectureView = {
         }, { rootMargin: '-10% 0px -70% 0px' });
 
         headers.forEach(h => observer.observe(h));
+        
+        // Wait for next tick so DOM is fully ready for Leaflet containers
+        this.$nextTick(() => {
+            this.initAllTacticalMaps();
+        });
+    },
+    beforeUnmount() {
+        if (window.EconAcademyMapControls) {
+            Object.values(window.EconAcademyMapControls.maps).forEach(map => {
+                if (map) map.remove();
+            });
+            window.EconAcademyMapControls = null;
+        }
+        if (this.mapTimers) {
+            this.mapTimers.forEach(timer => clearTimeout(timer));
+        }
     },
     methods: {
         scrollTo(id) {
             const el = document.getElementById(id);
             if(el) el.scrollIntoView({ behavior: 'smooth' });
+        },
+        
+        initAllTacticalMaps() {
+            this.mapTimers = [];
+            
+            // Define Global Map Controller Bridge
+            window.EconAcademyMapControls = {
+                maps: {},
+                layers: {},
+                defaults: {},
+                setLayer(mapId, layerType) {
+                    const map = this.maps[mapId];
+                    if (!map) return;
+                    
+                    // Remove all layers first
+                    Object.values(this.layers[mapId]).forEach(layer => {
+                        map.removeLayer(layer);
+                    });
+                    
+                    // Add selected layer
+                    const selectedLayer = this.layers[mapId][layerType];
+                    if (selectedLayer) {
+                        selectedLayer.addTo(map);
+                    }
+                    
+                    // Update button active states in DOM
+                    const buttons = document.querySelectorAll(`.${mapId}-layer-btn`);
+                    buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (layerType === 'satellite' && btn.innerText.includes('위성')) btn.classList.add('active');
+                        if (layerType === 'dark' && btn.innerText.includes('전술')) btn.classList.add('active');
+                    });
+                },
+                resetView(mapId) {
+                    const map = this.maps[mapId];
+                    const def = this.defaults[mapId];
+                    if (map && def) {
+                        map.setView(def.center, def.zoom);
+                    }
+                }
+            };
+            
+            // Define global hook functions for HTML onclick attributes
+            window.setMapLayer = function(mapId, layerType) {
+                if (window.EconAcademyMapControls && window.EconAcademyMapControls.setLayer) {
+                    window.EconAcademyMapControls.setLayer(mapId, layerType);
+                }
+            };
+            window.resetMapView = function(mapId) {
+                if (window.EconAcademyMapControls && window.EconAcademyMapControls.resetView) {
+                    window.EconAcademyMapControls.resetView(mapId);
+                }
+            };
+            
+            // Launch mapping initializations
+            this.initUkraineMap();
+            this.initIsraelMap();
+            this.initHormuzMap();
+        },
+        
+        initUkraineMap() {
+            const container = document.getElementById('ukraine-leaflet-map');
+            if (!container) return;
+            
+            const center = [48.6, 34.5];
+            const zoom = 5.8;
+            
+            const map = L.map('ukraine-leaflet-map', {
+                center: center,
+                zoom: zoom,
+                zoomControl: false,
+                attributionControl: true
+            });
+            
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            
+            const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                maxZoom: 18,
+                attribution: 'Map &copy; Google Hybrid'
+            });
+            const darkTile = L.tileLayer('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: 'Map &copy; CARTO'
+            });
+            const ukraineImageOverlay = L.imageOverlay('../assets/images/ukraine_dark_map_bg.png', [[44.0, 29.5], [51.5, 39.5]], {
+                opacity: 0.95,
+                interactive: false
+            });
+            const dark = L.layerGroup([darkTile, ukraineImageOverlay]);
+            
+            window.EconAcademyMapControls.maps['ukraine'] = map;
+            window.EconAcademyMapControls.layers['ukraine'] = { satellite, dark };
+            window.EconAcademyMapControls.defaults['ukraine'] = { center, zoom };
+            
+            satellite.addTo(map);
+            
+            // Draw Pulsating Frontline (2026 East Frontline)
+            const frontlineCoords = [
+                [50.25, 36.40],
+                [49.60, 37.85],
+                [49.00, 38.30],
+                [48.60, 37.90],
+                [48.27, 37.18],
+                [47.80, 37.55],
+                [47.51, 35.70],
+                [46.72, 33.40],
+                [46.50, 32.50]
+            ];
+            
+            L.polyline(frontlineCoords, {
+                color: '#ef4444',
+                weight: 4.5,
+                opacity: 0.85,
+                className: 'pulsating-frontline'
+            }).addTo(map).bindPopup('<strong>🚨 격전의 동부 전선 (Eastern Frontline)</strong><br>지속적 소모전과 참호전이 심화된 2026년 대치 전선');
+
+            // Clash Points (Stars)
+            const clashPoints = [
+                { coords: [50.00, 36.23], title: '하르키우 (Kharkiv)', desc: '북부 전선 국경 충돌 및 드론 요격 격전지', popupClass: 'red-popup' },
+                { coords: [48.59, 37.83], title: '차시우야르 (Chasiv Yar)', desc: '고지대 방어선 돌파를 둘러싼 혹독한 포병/참호 소모전', popupClass: 'red-popup' },
+                { coords: [48.27, 37.18], title: '포크롭스크 (Pokrovsk)', desc: '철도 물류 허브이자 우크라이나 중부 방어선의 중차대한 기점', popupClass: 'red-popup' }
+            ];
+
+            clashPoints.forEach(pt => {
+                const clashIcon = L.divIcon({
+                    html: `<div class="clash-star-marker">💥</div>`,
+                    className: '',
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+                
+                L.marker(pt.coords, { icon: clashIcon }).addTo(map)
+                    .bindPopup(`<div class="${pt.popupClass}"><strong>${pt.title}</strong><br>${pt.desc}</div>`);
+            });
+
+            // Standard Pins (Kyiv, Zaporizhzhia Plant, Crimea)
+            const anchors = [
+                { coords: [50.4501, 30.5234], title: '🇺🇦 키이우 (Kyiv)', desc: '수도. 방공 포대 집중 배치 및 국가 지휘본부 가동 중', pulseColor: 'blue-pulse', labelPos: 'label-top' },
+                { coords: [47.5112, 34.5855], title: '☢️ 자포리자 원전', desc: '러시아 통제 하에 있으며 국제 핵안보/전력 무기화 긴장 유발', pulseColor: 'yellow-pulse', labelPos: 'label-left' },
+                { coords: [44.6166, 33.5254], title: '⚓ 세바스토폴 해군기지', desc: '크림반도 흑해함대 거점. ATACMS 및 자폭 드론 보트 집중 타격 대상', pulseColor: 'red-pulse', labelPos: 'label-bottom' }
+            ];
+            
+            anchors.forEach(anc => {
+                const markerIcon = L.divIcon({
+                    html: `
+                        <div class="tactical-marker ${anc.pulseColor}">
+                            <div class="marker-dot"></div>
+                            <div class="marker-pulse"></div>
+                            <div class="tactical-marker-label ${anc.labelPos}">${anc.title.split(' ')[1] || anc.title}</div>
+                        </div>
+                    `,
+                    className: '',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+                
+                L.marker(anc.coords, { icon: markerIcon }).addTo(map)
+                    .bindPopup(`<strong>${anc.title}</strong><br>${anc.desc}`);
+            });
+
+            // Missile / Drone Trajectories
+            const launch1 = [45.1, 34.2];
+            const target1 = [50.4501, 30.5234];
+            const points1 = this.getBezierPoints(launch1, target1, 0.28, 40);
+            this.animateWeapon(map, points1, '#ef4444', '러시아 샤헤드 자폭 드론', 0);
+
+            const launch2 = [49.8, 31.5];
+            const target2 = [44.6166, 33.5254];
+            const points2 = this.getBezierPoints(launch2, target2, -0.2, 40);
+            this.animateWeapon(map, points2, '#38bdf8', '우크라이나 넵튠/스톰섀도 공습', 1200);
+        },
+        
+        initIsraelMap() {
+            const container = document.getElementById('israel-leaflet-map');
+            if (!container) return;
+            
+            const center = [31.7, 35.1];
+            const zoom = 7.0;
+            
+            const map = L.map('israel-leaflet-map', {
+                center: center,
+                zoom: zoom,
+                zoomControl: false,
+                attributionControl: true
+            });
+            
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            
+            const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                maxZoom: 18,
+                attribution: 'Map &copy; Google Hybrid'
+            });
+            const darkTile = L.tileLayer('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: 'Map &copy; CARTO'
+            });
+            const israelImageOverlay = L.imageOverlay('../assets/images/israel_dark_map_bg.png', [[29.0, 32.5], [34.5, 37.5]], {
+                opacity: 0.95,
+                interactive: false
+            });
+            const dark = L.layerGroup([darkTile, israelImageOverlay]);
+            
+            window.EconAcademyMapControls.maps['israel'] = map;
+            window.EconAcademyMapControls.layers['israel'] = { satellite, dark };
+            window.EconAcademyMapControls.defaults['israel'] = { center, zoom };
+            
+            satellite.addTo(map);
+            
+            // POIs
+            const points = [
+                { coords: [32.0853, 34.7818], title: '🇮🇱 텔아비브 (Tel Aviv)', desc: '이스라엘 총참모부 및 에어디펜스 아이언돔 핵심 사령부', pulseColor: 'blue-pulse', labelPos: 'label-left' },
+                { coords: [31.4300, 34.4300], title: '🚨 가자지구 (Gaza Strip)', desc: 'Active Combat Zone. 시가전 및 밀도 높은 공습 지속', pulseColor: 'red-pulse', labelPos: 'label-right' },
+                { coords: [31.9400, 35.2200], title: '⚠️ 요르단강 서안', desc: '군사 작전 구역. 게릴라 전술 및 경계 강화 돌입', pulseColor: 'red-pulse', labelPos: 'label-bottom' },
+                { coords: [33.2700, 35.2000], title: '🇱🇧 레바논 국경 (헤즈볼라)', desc: '레바논 남부 터널망 및 로켓 격발 발사대 대응 포격', pulseColor: 'red-pulse', labelPos: 'label-top' },
+                { coords: [33.1200, 35.7900], title: '🇸🇾 골란고원 (시리아 접경)', desc: '시리아 무장 세력 진입 봉쇄 및 미사일 기지 정밀 타격', pulseColor: 'red-pulse', labelPos: 'label-right' }
+            ];
+            
+            points.forEach(pt => {
+                const markerIcon = L.divIcon({
+                    html: `
+                        <div class="tactical-marker ${pt.pulseColor}">
+                            <div class="marker-dot"></div>
+                            <div class="marker-pulse"></div>
+                            <div class="tactical-marker-label ${pt.labelPos}">${pt.title.split(' ')[1] || pt.title}</div>
+                        </div>
+                    `,
+                    className: '',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+                
+                L.marker(pt.coords, { icon: markerIcon }).addTo(map)
+                    .bindPopup(`<strong>${pt.title}</strong><br>${pt.desc}`);
+            });
+            
+            // Missile Attack Paths
+            const pointsHezb = this.getBezierPoints([33.4, 35.4], [32.0853, 34.7818], 0.35, 30);
+            this.animateWeapon(map, pointsHezb, '#f87171', '🇱🇧 레바논 헤즈볼라 카츄샤 로켓', 0);
+            
+            const pointsHouthi = this.getBezierPoints([29.0, 34.8], [29.55, 34.95], 0.15, 30);
+            this.animateWeapon(map, pointsHouthi, '#ef4444', '🇾🇪 예멘 후티 자폭 드론/탄도탄', 900);
+            
+            const pointsIran = this.getBezierPoints([32.5, 37.8], [32.0853, 34.7818], 0.2, 45);
+            this.animateWeapon(map, pointsIran, '#ef4444', '🇮🇷 이란 본토 발사 탄도미사일', 1800);
+        },
+        
+        initHormuzMap() {
+            const container = document.getElementById('hormuz-leaflet-map');
+            if (!container) return;
+            
+            const center = [26.48, 56.28];
+            const zoom = 8.5;
+            
+            const map = L.map('hormuz-leaflet-map', {
+                center: center,
+                zoom: zoom,
+                zoomControl: false,
+                attributionControl: true
+            });
+            
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            
+            const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                maxZoom: 18,
+                attribution: 'Map &copy; Google Hybrid'
+            });
+            const darkTile = L.tileLayer('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: 'Map &copy; CARTO'
+            });
+            const hormuzImageOverlay = L.imageOverlay('../assets/images/hormuz_dark_map_bg.png', [[24.8, 54.0], [28.2, 58.5]], {
+                opacity: 0.95,
+                interactive: false
+            });
+            const dark = L.layerGroup([darkTile, hormuzImageOverlay]);
+            
+            window.EconAcademyMapControls.maps['hormuz'] = map;
+            window.EconAcademyMapControls.layers['hormuz'] = { satellite, dark };
+            window.EconAcademyMapControls.defaults['hormuz'] = { center, zoom };
+            
+            satellite.addTo(map);
+            
+            const blockadeLine = [
+                [26.88, 56.28],
+                [26.35, 56.47]
+            ];
+            
+            L.polyline(blockadeLine, {
+                color: '#ef4444',
+                weight: 5,
+                dashArray: '8, 6',
+                opacity: 0.95
+            }).addTo(map).bindPopup('<strong>❌ 호르무즈 해협 물리적 봉쇄선</strong><br>전세계 해상 원유 수송량의 20%를 통제하는 최악의 지정학적 목조르기 포인터');
+            
+            const badgeIcon = L.divIcon({
+                html: `<div class="blocked-badge" style="background:#ef4444; color:white; font-size:0.62rem; font-weight:900; padding:3px 6px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.4); white-space:nowrap; border:1px solid white;">❌ 호르무즈 해협 봉쇄</div>`,
+                className: '',
+                iconSize: [80, 20],
+                iconAnchor: [40, 10]
+            });
+            L.marker([26.63, 56.36], { icon: badgeIcon }).addTo(map);
+
+            const tankers = [
+                { coords: [26.50, 56.12], title: '🚢 VLCC 유조선 Alpha', desc: '30만톤급 초대형 원유 수송선 (VLCC) 봉쇄 수역 내 강제 정박 및 억류 상태', popupClass: 'yellow-popup' },
+                { coords: [26.35, 56.02], title: '🚢 LNG선 Polaris', desc: '천연가스(LNG) 운반선. 통행 허가 거부로 해협 서측에서 대기 정박 중', popupClass: 'yellow-popup' },
+                { coords: [26.62, 55.85], title: '🚢 일반 화물선 Orion', desc: '일반 컨테이너선. 이란 혁명수비대 해군 고속정의 위협 검문으로 우회 대기', popupClass: 'yellow-popup' }
+            ];
+
+            tankers.forEach(tk => {
+                const tankerIcon = L.divIcon({
+                    html: `
+                        <div class="blocked-ship-marker">
+                            <span class="ship-emoji">🚢</span>
+                            <span class="blocked-badge">BLOCKED</span>
+                        </div>
+                    `,
+                    className: '',
+                    iconSize: [50, 35],
+                    iconAnchor: [25, 17]
+                });
+                
+                L.marker(tk.coords, { icon: tankerIcon }).addTo(map)
+                    .bindPopup(`<div class="${tk.popupClass}"><strong>${tk.title}</strong><br>${tk.desc}</div>`);
+            });
+
+            const units = [
+                { coords: [27.18, 56.26], title: '🇮🇷 반다르아바스 미사일 기지', desc: '이란 해군 주력 미사일 사령부. 대함 탄도탄 전술 배치 완료', pulseColor: 'red-pulse', labelPos: 'label-top' },
+                { coords: [26.75, 55.85], title: '🇮🇷 케슘섬 미사일포대', desc: '고속 함대와 초음속 지대함 미사일이 밀집 배치된 해협 핵심 요새', pulseColor: 'red-pulse', labelPos: 'label-left' },
+                { coords: [25.64, 57.77], title: '🇮🇷 자스크 드론 통제소', desc: '해협 외곽 감시 자폭 드론 부대 및 레이더 감시망 가동 중', pulseColor: 'red-pulse', labelPos: 'label-bottom' },
+                { coords: [25.80, 57.05], title: '🇺🇸 미국/연합해군 연대단', desc: '5함대 소속 이지스 구축함 편대. 안전 항로 순찰 및 요격 감시 배치 중', pulseColor: 'blue-pulse', labelPos: 'label-right' }
+            ];
+
+            units.forEach(un => {
+                const markerIcon = L.divIcon({
+                    html: `
+                        <div class="tactical-marker ${un.pulseColor}">
+                            <div class="marker-dot"></div>
+                            <div class="marker-pulse"></div>
+                            <div class="tactical-marker-label ${un.labelPos}">${un.title.split(' ')[1] || un.title}</div>
+                        </div>
+                    `,
+                    className: '',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+                
+                L.marker(un.coords, { icon: markerIcon }).addTo(map)
+                    .bindPopup(`<strong>${un.title}</strong><br>${un.desc}`);
+            });
+
+            const pointsTarget1 = this.getBezierPoints([27.18, 56.26], [26.50, 56.12], 0.2, 20);
+            const pointsTarget2 = this.getBezierPoints([26.75, 55.85], [26.62, 55.85], -0.3, 20);
+            
+            L.polyline(pointsTarget1, { color: '#ef4444', weight: 1.5, opacity: 0.45, dashArray: '3, 3' }).addTo(map);
+            L.polyline(pointsTarget2, { color: '#ef4444', weight: 1.5, opacity: 0.45, dashArray: '3, 3' }).addTo(map);
+        },
+        
+        getBezierPoints(p1, p2, heightFactor = 0.25, numPoints = 40) {
+            const points = [];
+            const [lat1, lng1] = p1;
+            const [lat2, lng2] = p2;
+            const midLat = (lat1 + lat2) / 2;
+            const midLng = (lng1 + lng2) / 2;
+            const dist = Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lng2 - lng1, 2));
+            
+            const ctrlLat = midLat + dist * heightFactor + (lat1 < lat2 ? 0.3 : -0.3);
+            const ctrlLng = midLng + (lat2 - lat1) * heightFactor * 0.15;
+            
+            for (let i = 0; i <= numPoints; i++) {
+                const t = i / numPoints;
+                const lat = (1-t)*(1-t)*lat1 + 2*(1-t)*t*ctrlLat + t*t*lat2;
+                const lng = (1-t)*(1-t)*lng1 + 2*(1-t)*t*ctrlLng + t*t*lng2;
+                points.push([lat, lng]);
+            }
+            return points;
+        },
+        
+        animateWeapon(map, points, color, label, delay = 0) {
+            const trail = L.polyline(points, {
+                color: color,
+                weight: 2,
+                opacity: 0.4,
+                className: 'missile-trajectory'
+            }).addTo(map);
+
+            const dot = L.circleMarker(points[0], {
+                radius: 5.5,
+                color: '#ffffff',
+                fillColor: color,
+                fillOpacity: 1,
+                weight: 1.5,
+                className: 'glowing-missile'
+            }).addTo(map);
+
+            dot.bindPopup(`<strong>${label}</strong><br>궤적 추적 및 비행 타격 시뮬레이션 중`);
+
+            let index = 0;
+            const run = () => {
+                if (!window.EconAcademyMapControls) return;
+                
+                if (index >= points.length) {
+                    index = 0;
+                }
+                dot.setLatLng(points[index]);
+                index++;
+                
+                const timer = setTimeout(run, 45);
+                this.mapTimers.push(timer);
+            };
+            
+            const startTimer = setTimeout(run, delay);
+            this.mapTimers.push(startTimer);
         }
     }
 };
