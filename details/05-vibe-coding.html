@@ -69,8 +69,8 @@
                     </div>
                 </div>
 
-                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-2. 핵심 개념 3가지: 모델 · IDE · 에이전트</h3>
-                <p style="margin-top:1rem;">바이브코딩을 이해하려면 세 가지 층위를 구분해야 합니다.</p>
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-2. 핵심 개념 4가지: 모델 · IDE · 에이전트 · 개발자 도구 (DevTools)</h3>
+                <p style="margin-top:1rem;">바이브코딩을 이해하고 AI와 소통하려면 네 가지 층위를 구분하고 다룰 수 있어야 합니다.</p>
                 <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
                     <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #059669;">
                         <div style="font-size:2rem;">🧠</div>
@@ -83,14 +83,21 @@
                         <div style="font-size:2rem;">💻</div>
                         <div>
                             <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">IDE / 에디터 — 차량</h4>
-                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">코드를 작성·실행·디버깅하는 '개발자 전용 워드프로세서'입니다. Cursor, Antigravity 같은 AI 결합 에디터는 모델을 탑재해 프로젝트 맥락을 이해하고 파일 단위로 코드를 수정해줍니다.</p>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">코드를 작성·실행·디버깅하는 '개발자 전용 워드프로세서'입니다. VS Code, Cursor 같은 AI 결합 에디터는 모델을 탑재해 프로젝트 맥락을 이해하고 코드를 신속하게 수정해줍니다.</p>
                         </div>
                     </div>
                     <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #7c3aed;">
                         <div style="font-size:2rem;">🤖</div>
                         <div>
                             <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">에이전트 (Agent) — 자율주행 모드</h4>
-                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">모델에 '도구 사용 능력'을 부여한 형태입니다. 파일 읽기/쓰기, 터미널 실행, 웹 검색을 스스로 판단해 수행합니다. Claude Code, OpenAI Codex 등이 대표적입니다.</p>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">모델에 '도구 사용 능력'을 부여한 형태입니다. 파일 읽기/쓰기, 터미널 실행, 웹 검색을 스스로 판단해 수행합니다. Claude Code, Antigravity 등이 대표적입니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #eab308;">
+                        <div style="font-size:2rem;">🛠️</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">개발자 도구 (DevTools) — 계기판과 블랙박스</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">브라우저(F12)나 개발 환경에서 제공하는 실시간 진단 도구입니다. 🔴 <strong>콘솔(Console)</strong>의 에러 로그를 복사해 AI에게 바로 넘겨 원인을 교정받고, 🌐 <strong>네트워크(Network)</strong>에서 프론트-백엔드 간 API 패킷 송수신을 감시하며, 🎨 <strong>요소(Elements)</strong> 창을 통해 레이아웃을 실시간 수정해 볼 수 있는 개발자의 필수적인 눈과 귀입니다.</p>
                         </div>
                     </div>
                 </div>
@@ -100,38 +107,33 @@
                     <div style="display:flex; justify-content:center; gap:1.5rem; width:100%; flex-wrap:wrap;">
                         <div class="card" style="border-top: 4px solid #059669; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem;">
                             <h4 style="color: #059669; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
-                                <span style="font-size:1.5rem;">🧠</span> OpenAI Codex
+                                <span style="font-size:1.5rem;">🧠</span> Codex
                             </h4>
-                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트 (클라우드)</strong></p>
-                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">GitHub Copilot의 핵심 엔진. 코드 생성·수정을 클라우드 샌드박스에서 자율 수행합니다.</p>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트</strong></p>
+                            <div style="text-align:left; font-size:0.85rem; color:var(--text-secondary); margin-top:1rem; line-height:1.6; display:flex; flex-direction:column; gap:4px; padding-left: 0.5rem;">
+                                <div>🏢 <strong>소속 회사:</strong> OpenAI</div>
+                                <div>💪 <strong>핵심 강점:</strong> 가격, 성능</div>
+                            </div>
                         </div>
                         <div class="card" style="border-top: 4px solid #d97757; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem;">
                             <h4 style="color: #d97757; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
                                 <span style="font-size:1.5rem;">⌨️</span> Claude Code
                             </h4>
-                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트 (터미널)</strong></p>
-                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">Anthropic의 코딩 에이전트. 뛰어난 추론력과 넓은 컨텍스트로 복잡한 리팩터링에 강합니다.</p>
-                        </div>
-                    </div>
-                    <div style="display:flex; flex-direction:column; align-items:center; margin:1.2rem 0;">
-                        <div style="height:20px; border-left:2px dashed #94a3b8;"></div>
-                        <div style="background:#e2e8f0; border-radius:12px; padding:5px 16px; font-size:0.85rem; font-weight:700; color:#475569; border:1px solid #cbd5e1;">▼ 위 모델을 탑재한 에디터 ▼</div>
-                        <div style="height:20px; border-left:2px dashed #94a3b8;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:center; gap:1.5rem; width:100%; flex-wrap:wrap;">
-                        <div class="card" style="border-top: 4px solid #2563eb; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem; box-shadow:0 6px 20px rgba(37,99,235,0.08);">
-                            <h4 style="color: #2563eb; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
-                                <span style="font-size:1.5rem;">💻</span> Cursor
-                            </h4>
-                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>AI 에디터 [유료]</strong></p>
-                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">현재 가장 인기 있는 AI 에디터. 프로젝트 맥락을 파악하여 여러 파일을 동시에 수정합니다.</p>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트</strong></p>
+                            <div style="text-align:left; font-size:0.85rem; color:var(--text-secondary); margin-top:1rem; line-height:1.6; display:flex; flex-direction:column; gap:4px; padding-left: 0.5rem;">
+                                <div>🏢 <strong>소속 회사:</strong> Anthropic</div>
+                                <div>💪 <strong>핵심 강점:</strong> 하네스, 성능</div>
+                            </div>
                         </div>
                         <div class="card" style="border-top: 4px solid #7c3aed; background:#fff; flex:1; min-width:200px; max-width:350px; text-align:center; padding:1.5rem; box-shadow:0 6px 20px rgba(124,58,237,0.08);">
                             <h4 style="color: #7c3aed; margin-top:0; justify-content:center; display:flex; align-items:center; gap:8px;">
                                 <span style="font-size:1.5rem;">🚀</span> Antigravity
                             </h4>
-                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>AI 에디터 [무료]</strong></p>
-                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0; line-height:1.5;">Google 기반의 메타 에이전트 환경. 다중 파일 추론과 작업 분할(CoT) 플래닝에 강합니다.</p>
+                            <p style="margin-bottom:0.5rem; margin-top:1rem;"><strong>에이전트</strong></p>
+                            <div style="text-align:left; font-size:0.85rem; color:var(--text-secondary); margin-top:1rem; line-height:1.6; display:flex; flex-direction:column; gap:4px; padding-left: 0.5rem;">
+                                <div>🏢 <strong>소속 회사:</strong> Google</div>
+                                <div>💪 <strong>핵심 강점:</strong> 디자인, 문체</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -348,59 +350,81 @@
                 <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: AI에게 무작정 만들어달라 하지 말고, 검증된 조합(Stack)을 지정하면 결과물 품질이 크게 올라갑니다.</p>
                 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <!-- 1. 풀스택 반응형 웹 서비스 -->
                     <div class="card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-color: #bae6fd;">
                         <div style="font-size:1.5rem; margin-bottom:8px;">🌐</div>
-                        <h4 style="color:#0369a1; margin-top:0; margin-bottom:0.5rem;">1. 풀스택 반응형 웹서비스</h4>
-                        <p style="color:#0c4a6e; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Next.js + Tailwind CSS + Supabase</p>
+                        <h4 style="color:#0369a1; margin-top:0; margin-bottom:0.5rem;">1. 풀스택 반응형 웹서비스 (Modern Web)</h4>
+                        <p style="color:#0c4a6e; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Next.js + Tailwind CSS + shadcn/ui + Supabase</p>
                         <div style="font-size:0.88rem; color:#0c4a6e; line-height:1.6;">
-                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Next.js(화면+서버) / Tailwind(스타일링) / Supabase(DB/인증)</p>
-                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> SaaS, 포트폴리오, 쇼핑몰</p>
-                            <p style="margin:0 0 6px;"><strong>장점:</strong> AI 학습 레퍼런스가 풍부해 비교적 안정적인 코드 생성</p>
-                            <p style="margin:0;"><strong>주의:</strong> SSR 개념 이해 필요 | 난이도 ★★☆</p>
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> Next.js App Router (프론트+서버) / shadcn/ui (UI 컴포넌트) / Supabase (DB, 인증)</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> SaaS 창업, 비즈니스 포트폴리오, 커뮤니티, 이커머스 웹 앱</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> shadcn/ui 기반이라 AI가 컴포넌트 코드를 직접 조립하고 확장하기에 가장 친화적임</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> SSR(서버 렌더링)과 Client Component의 경계 구분 필요 | 난이도 ★★☆</p>
                         </div>
                     </div>
+                    
+                    <!-- 2. AI 에이전트 & RAG 구축 서비스 -->
+                    <div class="card" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-color: #ddd6fe;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">🤖</div>
+                        <h4 style="color:#6d28d9; margin-top:0; margin-bottom:0.5rem;">2. AI 에이전트 & RAG 시스템 (AI Service)</h4>
+                        <p style="color:#4c1d95; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + FastAPI + LangChain + Pinecone + Claude SDK</p>
+                        <div style="font-size:0.88rem; color:#4c1d95; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> Python (핵심) / FastAPI (고성능 백엔드) / LangChain (LLM 파이프라인) / Pinecone (벡터 DB)</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> 사내 맞춤 챗봇, 문서 요약 시스템, 지식 보조 자율 에이전트(Agent) 구축</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> 최신 AI 모델(GPT/Claude)의 성능을 API로 극대화하여 지능형 액션 제어 가능</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> API 호출 비용 설계 및 비동기(async) 비즈니스 로직 최적화 필요 | 난이도 ★★★</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. 인공지능 데이터 분석 & 대시보드 -->
                     <div class="card" style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-color: #a7f3d0;">
                         <div style="font-size:1.5rem; margin-bottom:8px;">📊</div>
-                        <h4 style="color:#047857; margin-top:0; margin-bottom:0.5rem;">2. 데이터 분석 & 대시보드</h4>
-                        <p style="color:#064e3b; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + Streamlit + Pandas</p>
+                        <h4 style="color:#047857; margin-top:0; margin-bottom:0.5rem;">3. 데이터 분석 & 대시보드 (Data Viz)</h4>
+                        <p style="color:#064e3b; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + Streamlit + Pandas + Plotly</p>
                         <div style="font-size:0.88rem; color:#064e3b; line-height:1.6;">
-                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Python(로직) / Streamlit(웹UI) / Pandas(데이터 처리)</p>
-                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 매출 대시보드, 설문 분석, 엑셀 자동화</p>
-                            <p style="margin:0 0 6px;"><strong>장점:</strong> 프론트엔드 지식 없이 인터랙티브 웹 앱 생성 가능</p>
-                            <p style="margin:0;"><strong>주의:</strong> 대규모 트래픽에는 부적합 | 난이도 ★☆☆</p>
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> Python / Streamlit (프론트엔드 제로 웹UI) / Pandas (데이터 핸들링) / Plotly (인터랙티브 차트)</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> 기업 매출 시각화 대시보드, 리서치 리포트, 간단한 AI 데모 웹 구현</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> CSS나 복잡한 JS 지식 없이 오직 파이썬 스크립트만으로 10분 만에 웹 앱 런칭 가능</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> 동시접속자가 많은 대규모 퍼블릭 트래픽 대응에는 미적합 | 난이도 ★☆☆</p>
                         </div>
                     </div>
-                    <div class="card" style="background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fca5a5;">
-                        <div style="font-size:1.5rem; margin-bottom:8px;">🤖</div>
-                        <h4 style="color:#b91c1c; margin-top:0; margin-bottom:0.5rem;">3. 반복 업무 자동화</h4>
-                        <p style="color:#7f1d1d; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python + Playwright (or Selenium)</p>
-                        <div style="font-size:0.88rem; color:#7f1d1d; line-height:1.6;">
-                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Python(로직) / Playwright(브라우저 제어)</p>
-                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 웹 크롤링, 자동 로그인, 정기 데이터 수집</p>
-                            <p style="margin:0 0 6px;"><strong>장점:</strong> AI가 자동화 스크립트 초안을 빠르게 생성</p>
-                            <p style="margin:0;"><strong>주의:</strong> 대상 사이트 크롤링 정책 반드시 확인 | 난이도 ★★☆</p>
-                        </div>
-                    </div>
-                    <div class="card" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fde68a;">
-                        <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
-                        <h4 style="color:#b45309; margin-top:0; margin-bottom:0.5rem;">4. 발표자료 & 문서 자동화</h4>
-                        <p style="color:#78350f; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Markdown + Python (python-pptx) + Jinja2</p>
-                        <div style="font-size:0.88rem; color:#78350f; line-height:1.6;">
-                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Markdown(원고) / python-pptx(PPTX) / Jinja2(HTML 템플릿)</p>
-                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 보고서, 제안서, 주간 리포트 자동 생성</p>
-                            <p style="margin:0 0 6px;"><strong>장점:</strong> 텍스트만 넣으면 AI가 슬라이드/리포트를 자동 생성</p>
-                            <p style="margin:0;"><strong>주의:</strong> 디자인 커스텀에 한계 | 난이도 ★☆☆</p>
-                        </div>
-                    </div>
-                    <div class="card" style="background: linear-gradient(135deg, #fdf2f8, #fce7f3); border-color: #f9a8d4; grid-column: span 2;">
+
+                    <!-- 4. 모바일 크로스 플랫폼 앱 -->
+                    <div class="card" style="background: linear-gradient(135deg, #fdf2f8, #fce7f3); border-color: #f9a8d4;">
                         <div style="font-size:1.5rem; margin-bottom:8px;">📱</div>
-                        <h4 style="color:#be185d; margin-top:0; margin-bottom:0.5rem;">5. 모바일 앱 (크로스 플랫폼)</h4>
-                        <p style="color:#831843; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Flutter + Firebase 또는 React Native + Expo + Supabase</p>
+                        <h4 style="color:#be185d; margin-top:0; margin-bottom:0.5rem;">4. 크로스플랫폼 모바일 앱 (Mobile App)</h4>
+                        <p style="color:#831843; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">React Native + Expo + Supabase (or Firebase)</p>
                         <div style="font-size:0.88rem; color:#831843; line-height:1.6;">
-                            <p style="margin:0 0 6px;"><strong>구성요소:</strong> Flutter/React Native(화면+로직) / Firebase·Supabase(인증/DB)</p>
-                            <p style="margin:0 0 6px;"><strong>추천 상황:</strong> 개인 앱, MVP, Android+iOS 동시 출시</p>
-                            <p style="margin:0 0 6px;"><strong>장점:</strong> 한 번의 코드로 두 플랫폼에 동시 배포 가능</p>
-                            <p style="margin:0;"><strong>주의:</strong> 네이티브 기능(카메라, 센서)은 별도 플러그인 필요 | 난이도 ★★★</p>
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> React Native + Expo (iOS/Android 단일 코드) / Supabase Auth & Database</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> 앱스토어/플레이스토어 동시 출시 앱, 아이폰/안드로이드용 유틸리티 앱, MVP 모바일 구축</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> Expo 덕분에 복잡한 네이티브 설정(Xcode, Android Studio) 없이 웹 표준 기술로 즉시 빌드</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> 기기 센서 제어나 블루투스 연동 등 하드웨어 제어 시 우회 설정 필요 | 난이도 ★★★</p>
+                        </div>
+                    </div>
+
+                    <!-- 5. 웹 크롤링 & 브라우저 자동화 -->
+                    <div class="card" style="background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fca5a5;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">🕷️</div>
+                        <h4 style="color:#b91c1c; margin-top:0; margin-bottom:0.5rem;">5. 크롤링 & 브라우저 자동화 (Scraping)</h4>
+                        <p style="color:#7f1d1d; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Python (or JS) + Playwright + BeautifulSoup4</p>
+                        <div style="font-size:0.88rem; color:#7f1d1d; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> Python / Playwright (최신 브라우저 제어 라이브러리) / BeautifulSoup4 (HTML 파싱)</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> 쇼핑몰 최저가 모니터링, 포털 뉴스 대량 수집, 일간 반복 로그인/양식 자동 기입</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> Playwright의 '코드젠(Codegen)' 기능과 AI 협업이 합쳐져 자동 스크립트 작성 속도가 압도적임</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> 타겟 사이트의 로봇 배제 표준(Robots.txt) 준수 및 IP 차단 대비 조치 필요 | 난이도 ★★☆</p>
+                        </div>
+                    </div>
+
+                    <!-- 6. 경량 백엔드 API 및 DB 서버 -->
+                    <div class="card" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fde68a;">
+                        <div style="font-size:1.5rem; margin-bottom:8px;">🗄️</div>
+                        <h4 style="color:#b45309; margin-top:0; margin-bottom:0.5rem;">6. 경량 백엔드 API & DB (Backend Core)</h4>
+                        <p style="color:#78350f; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem;">Node.js (NestJS) or Python (FastAPI) + PostgreSQL + Prisma</p>
+                        <div style="font-size:0.88rem; color:#78350f; line-height:1.6;">
+                            <p style="margin:0 0 6px;"><strong>🛠️ 구성요소:</strong> Node.js (or Python) / NestJS or FastAPI (프레임워크) / Prisma ORM / PostgreSQL</p>
+                            <p style="margin:0 0 6px;"><strong>🎯 추천 상황:</strong> 안전한 회원 정보 연동, 외부 앱용 REST API 설계, 관계형 데이터(RDB) 구조화</p>
+                            <p style="margin:0 0 6px;"><strong>👍 장점:</strong> Prisma ORM을 사용하면 복잡한 SQL문을 한 줄도 안 쓰고 직관적인 객체 쿼리로 데이터 완벽 핸들링</p>
+                            <p style="margin:0;"><strong>⚠️ 주의:</strong> 데이터베이스 관계 설계(1:N, N:M) 및 마이그레이션 개념 숙지 필요 | 난이도 ★★☆</p>
                         </div>
                     </div>
                 </div>
@@ -477,6 +501,126 @@
                     <div class="scenario-card" style="border-top:4px solid var(--color-blue); box-shadow:0 4px 15px rgba(49,130,246,0.1);">
                         <div class="scenario-label" style="color:var(--color-blue); font-weight:700;">✅ 효과적인 질문</div>
                         <div class="scenario-val" style="font-size:0.95rem; font-weight:400;">"원인 후보를 3개로 나눠줘" / "수정 범위가 가장 작은 해결책부터 제시해줘" / "줄 단위로 왜 이 수정이 필요한지 설명해줘"</div>
+                    </div>
+                </div>
+
+                <!-- 개발 및 프로젝트 원칙 (신규 추가) -->
+                <h3 id="coding-ch4-5" style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-5. 프로 개발자들의 코드 작성 & 프로젝트 3대 원칙</h3>
+                <p style="margin-top:1rem; color:var(--text-secondary);">바이브코딩에서 AI를 능숙하게 다루려면, 단순한 질문 요령을 넘어 현업 프로 개발자들이 고수하는 핵심 설계 철학을 프롬프트와 지시 과정에 결합해야 합니다.</p>
+                
+                <div class="grid" style="grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                    <!-- 코드 작성 9대 철학 (DRY, KISS, YAGNI, TDD, Clean Code, OOP/객체화, SRP, SOLID, Boy Scout Rule) -->
+                    <div class="card" style="border-top: 4px solid var(--color-indigo); padding:1.5rem;">
+                        <h4 style="color:var(--color-indigo); margin-top:0; display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:1.5rem;">📐</span> 코드 작성 9대 철학 (Code Principles)
+                        </h4>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; margin-top:1.5rem;">
+                            <!-- 1. DRY -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#3b82f6; margin-bottom:4px;">[중복 제거]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">DRY</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">Don't Repeat Yourself</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">♻️ 동일한 로직이나 스타일이 반복되면 AI에게 <strong>"이 코드를 재사용 가능한 공통 함수나 독립 컴포넌트로 분리해줘"</strong>라고 명확히 지시하여 중복을 원천 차단하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 2. KISS -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#10b981; margin-bottom:4px;">[단순함 유지]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">KISS</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">Keep It Simple, Stupid</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🧹 코드가 길고 복잡해지면 버그가 숨기 쉽습니다. AI에게 <strong>"이 복잡한 로직을 주니어 개발자도 직관적으로 읽을 수 있는 가장 단순하고 명료한 흐름으로 리팩터링해줘"</strong>라고 요청하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 3. YAGNI -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#ef4444; margin-bottom:4px;">[예측 구현 금지]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">YAGNI</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">You Aren't Gonna Need It</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🚫 "나중에 필요할 테니 미리 만들어둘까?"라는 생각은 절대 금물입니다. 오직 현재 필요한 핵심 로직에만 지시를 집중해 AI가 불필요한 예외 코드를 미리 생성하며 발생시키는 예기치 못한 에러를 통제하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 4. TDD -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#8b5cf6; margin-bottom:4px;">[검증 우선 개발]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">TDD</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">Test-Driven Development</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🧪 복잡하고 엄밀해야 하는 기능을 짤 때는 AI에게 <strong>"이 함수를 구현하기 전에, 정상 작동을 검증할 입출력 시나리오와 테스트 조건부터 먼저 작성해줘"</strong>라고 요구하여 빈틈없는 설계를 유도하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 5. Clean Code -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#ec4899; margin-bottom:4px;">[가독성 극대화]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">Clean Code</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">가독성 및 유지보수성 최우선</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">✨ 읽기 쉬운 코드가 최고의 코드입니다. AI에게 <strong>"모든 변수와 함수의 작명 규칙을 철저하게 직관적으로 맞추고, 한 함수는 한 가지 역할만 맡기며, 의미 없는 주석들은 깔끔히 지워줘"</strong>라고 지속적으로 주문하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 6. OOP / 객체화 -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#eab308; margin-bottom:4px;">[모듈화와 캡슐화]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">OOP / 객체화</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">Object-Oriented Programming</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">📦 한 파일에 모든 로직을 합치는 참사를 피해야 합니다. AI에게 <strong>"화면 UI를 그리는 영역과 데이터를 제어하고 계산하는 로직을 확실히 객체(Class/Module)로 분리하고 캡슐화해줘"</strong>라고 분배 지시를 내리세요.</p>
+                                </div>
+                            </div>
+                            <!-- 7. SRP (단일 책임 원칙) -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#f97316; margin-bottom:4px;">[단일 책임 원칙]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">SRP</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">Single Responsibility Principle</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🎯 하나의 함수, 컴포넌트, 모듈은 오직 **단 하나의 역할(책임)**만 가져야 합니다. AI가 한 기능 안에 데이터 정렬, 날짜 가공, 화면 렌더링을 한꺼번에 짜려고 하면, 반드시 <strong>"이 역할을 각각 별도의 단일 함수로 나누어 작성해줘"</strong>라고 단호히 통제하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 8. SOLID -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#06b6d4; margin-bottom:4px;">[5대 설계 원칙]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">SOLID</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">유지보수와 확장의 나침반</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🧱 소프트웨어 확장성을 극대화하는 5가지 객체지향 지침입니다. AI에게 <strong>"새로운 기능을 구현할 때 기존에 잘 작동하던 코드를 뜯어고치지 않고(OCP), 결합도를 낮춰서 쉽게 갈아 끼울 수 있게(DIP) 설계해줘"</strong>라고 활용하세요.</p>
+                                </div>
+                            </div>
+                            <!-- 9. Boy Scout Rule -->
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div style="font-size:0.8rem; font-weight:800; color:#14b8a6; margin-bottom:4px;">[레거시 청소 규칙]</div>
+                                    <h5 style="margin:0 0 8px 0; font-size:1.25rem;">Boy Scout Rule</h5>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; display:block; margin-bottom:8px;">보이스카우트 코딩 캠핑</span>
+                                    <p style="margin:0; font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">🏕️ "캠핑장은 머물렀던 자리보다 더 깨끗하게 치우고 떠나라"는 규칙입니다. AI에게 코드를 수정해달라고 할 때 <strong>"수정하는 파일 주변에 방치된 지저분한 레거시 코드나 경고 표시도 함께 개선해서 정비해줘"</strong>라고 영리하게 지시하세요.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 프로젝트 관리 3대 핵심 원칙 (MVP, 가로지르기, 주기적 백업) -->
+                    <div class="card" style="border-top: 4px solid var(--color-red); padding:1.5rem;">
+                        <h4 style="color:var(--color-red); margin-top:0; display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:1.5rem;">🏗️</span> 성공적인 프로젝트 실행 원칙 (Project Principles)
+                        </h4>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; margin-top:1.5rem;">
+                            <div style="background:#fffbeb; border:1px solid #fee2e2; padding:1.2rem; border-radius:8px;">
+                                <div style="font-size:2rem; margin-bottom:8px;">🎯</div>
+                                <h5 style="margin:0 0 8px 0; font-size:1.05rem; color:#c2410c;">MVP (최소 기능 구현)</h5>
+                                <p style="margin:0; font-size:0.85rem; color:#7c2d12; line-height:1.5;">처음부터 거창한 디자인과 복잡한 환경에 집착하지 마세요. 사용자가 겪는 가장 본질적인 핵심 가치 1개만 제대로 작동하는 <strong>'최소 기능 제품'</strong>을 1차 목표로 완성해야 합니다.</p>
+                            </div>
+                            <div style="background:#f0fdf4; border:1px solid #dcfce7; padding:1.2rem; border-radius:8px;">
+                                <div style="font-size:2rem; margin-bottom:8px;">🧩</div>
+                                <h5 style="margin:0 0 8px 0; font-size:1.05rem; color:#15803d;">기능 단위 점진적 구현</h5>
+                                <p style="margin:0; font-size:0.85rem; color:#14532d; line-height:1.5;">큰 코드를 한 번에 짜면 실패합니다. 뼈대 구성 ➔ A 기능 구현 ➔ 검증 ➔ B 기능 구현 ➔ 검증 순으로, 반드시 **한 스텝마다 수동 테스트를 거치며 점진적**으로 살을 붙여나가야 뇌정지를 방지합니다.</p>
+                            </div>
+                            <div style="background:#eff6ff; border:1px solid #dbeafe; padding:1.2rem; border-radius:8px;">
+                                <div style="font-size:2rem; margin-bottom:8px;">💾</div>
+                                <h5 style="margin:0 0 8px 0; font-size:1.05rem; color:#1d4ed8;">피드백 루프 & 수시 백업</h5>
+                                <p style="margin:0; font-size:0.85rem; color:#1e3a8a; line-height:1.5;">AI 코드가 가끔 멀쩡하던 기능을 깨뜨릴 수 있습니다. 하나의 이정표 기능이 성공하면 Git에 커밋하거나 코드를 따로 백업하고, 수시로 콘솔 로그를 확인하며 에러를 조기에 잡아내야 합니다.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>

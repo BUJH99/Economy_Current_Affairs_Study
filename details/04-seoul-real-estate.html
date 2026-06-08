@@ -259,7 +259,7 @@
 
                 <!-- 4대 공간 혁신 핵심 테마 (도식화 레이아웃) -->
                 <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.25rem;">🌐 2040 서울 공간 혁신 4대 기둥</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+                <div class="four-pillars-grid">
                     
                     <!-- 테마 1: 보행일상권 -->
                     <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border-top: 4px solid #4f46e5; display: flex; flex-direction: column; gap: 0.8rem;">
@@ -500,23 +500,155 @@
             </article>
 
             <article id="re-ch7">
-                <h2>Chapter 7. [개발·미래] 헌 집 줄게 새 집 다오</h2>
-                <div class="metric-grid">
-                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; box-shadow:0 2px 4px rgba(0,0,0,0.02);">
-                        <div style="color:var(--color-blue); font-size:1.5rem; margin-bottom:0.5rem;">🏗️</div>
-                        <h4 style="margin:0 0 8px 0;">재건축 사업성 분석</h4>
-                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">용적률 180% 이하, 대지지분 15평 이상 단지 필터링</p>
+                <h2>Chapter 7. [개발·미래] 헌 집 줄게 새 집 다오 (구축 재건축 투자 완전 가이드)</h2>
+                <p>구축 아파트에 진입해 재건축을 목표로 장기 존버(몸테크 또는 갭투자)할 때, 사업 실패 및 분담금 폭탄을 피하기 위해 반드시 확인해야 하는 핵심 투자 기준과 실시간 사업성 자가진단 툴입니다.</p>
+                
+                <!-- 구축 재건축 존버 5대 절대 법칙 카드 레이아웃 -->
+                <div class="four-pillars-grid">
+                    
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 4px solid #3b82f6;">
+                        <span style="font-size: 1.5rem; display:block; margin-bottom: 0.5rem;">📏</span>
+                        <h4 style="margin: 0 0 6px 0; font-size: 1rem; color: var(--text-primary); font-weight: 700;">1. 평균 대지지분 15평</h4>
+                        <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                            단지 전체 대지면적을 가구수로 나눈 평균 대지지분이 <strong>최소 15평 이상</strong>이어야 일반분양 물량이 확보되어 추가분담금이 크게 감소합니다.
+                        </p>
                     </div>
-                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; box-shadow:0 2px 4px rgba(0,0,0,0.02);">
-                        <div style="color:var(--color-indigo); font-size:1.5rem; margin-bottom:0.5rem;">🏘️</div>
-                        <h4 style="margin:0 0 8px 0;">재개발 및 뉴타운</h4>
-                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">한남, 성수, 노량진, 흑석 등 주요 뉴타운 진행 현황</p>
+
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 4px solid #db2777;">
+                        <span style="font-size: 1.5rem; display:block; margin-bottom: 0.5rem;">📉</span>
+                        <h4 style="margin: 0 0 6px 0; font-size: 1rem; color: var(--text-primary); font-weight: 700;">2. 기존 용적률 180% 이하</h4>
+                        <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                            기존 용적률이 <strong>180% 이하</strong>(최상은 150% 이하)여야 용적률 상향 시 늘어나는 면적이 커집니다. 200% 초과 단지는 사업성이 극도로 나빠집니다.
+                        </p>
                     </div>
-                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; box-shadow:0 2px 4px rgba(0,0,0,0.02);">
-                        <div style="color:var(--color-red); font-size:1.5rem; margin-bottom:0.5rem;">🗺️</div>
-                        <h4 style="margin:0 0 8px 0;">서울시 도시계획</h4>
-                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">2040 서울도시기본계획 핵심 지역 (수변 중심, 용산 정비창 등)</p>
+
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 4px solid #0d9488;">
+                        <span style="font-size: 1.5rem; display:block; margin-bottom: 0.5rem;">🏢</span>
+                        <h4 style="margin: 0 0 6px 0; font-size: 1rem; color: var(--text-primary); font-weight: 700;">3. 제3종 일반주거 선호</h4>
+                        <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                            1, 2종 일반주거지역은 용적률 상한선이 낮고 종상향 시 기부채납을 많이 뺏깁니다. <strong>제3종일반주거(상한 300%)</strong> 또는 준주거지가 베스트입니다.
+                        </p>
                     </div>
+
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 4px solid #d97706;">
+                        <span style="font-size: 1.5rem; display:block; margin-bottom: 0.5rem;">💎</span>
+                        <h4 style="margin: 0 0 6px 0; font-size: 1rem; color: var(--text-primary); font-weight: 700;">4. 대형 평형 위주 구성</h4>
+                        <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                            중대형 평형 위주 단지는 조합원의 평균 대지지분이 크고 현금 흐름이 우수한 소유주가 많아 <strong>의사결정이 빠르고 분담금 저항이 적습니다</strong>.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- 🏗️ 구축 재건축 사업성 & 추가분담금 모의 계산기 (디자인 톤 맞춤) -->
+                <div class="diag-panel" style="background:#fff; border:1px solid #cbd5e1; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.03); margin: 2rem 0; display:flex; flex-direction:column; gap:2rem;">
+                    
+                    <div style="border-bottom: 2px solid #2563eb; padding-bottom: 12px; display:flex; justify-content:space-between; align-items:flex-end;">
+                        <div>
+                            <span style="font-size:0.85rem; font-weight:800; color:#2563eb; background:#eff6ff; padding:4px 10px; border-radius:20px; text-transform:uppercase;">Reconstruction Simulator</span>
+                            <h3 style="margin:6px 0 0 0; font-size:1.5rem; font-weight:800; color:var(--text-primary);">🏗️ 실전! 구축 재건축 사업성 & 추가분담금 계산기</h3>
+                        </div>
+                        <span style="font-size:0.85rem; color:var(--text-tertiary); font-weight:600;">기여 대지지분 분석법 적용</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap:2.5rem; align-items:flex-start;">
+                        
+                        <!-- 입력부 (좌측) -->
+                        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+                            
+                            <!-- 용도지역 선택 -->
+                            <div>
+                                <label style="display:block; font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">📍 현재 용도지역</label>
+                                <div style="display:flex; background:#f1f5f9; padding:4px; border-radius:8px; gap:4px;">
+                                    <button type="button" @click="reZone = '2class'" :style="{flex:1, border:'none', padding:'8px 4px', borderRadius:'6px', fontSize:'0.82rem', fontWeight:'800', cursor:'pointer', background: reZone === '2class' ? '#fff' : 'transparent', color: reZone === '2class' ? '#2563eb' : '#64748b', boxShadow: reZone === '2class' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'}">제2종일반 (250%)</button>
+                                    <button type="button" @click="reZone = '3class'" :style="{flex:1, border:'none', padding:'8px 4px', borderRadius:'6px', fontSize:'0.82rem', fontWeight:'800', cursor:'pointer', background: reZone === '3class' ? '#fff' : 'transparent', color: reZone === '3class' ? '#2563eb' : '#64748b', boxShadow: reZone === '3class' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'}">제3종일반 (300%)</button>
+                                    <button type="button" @click="reZone = 'semi'" :style="{flex:1, border:'none', padding:'8px 4px', borderRadius:'6px', fontSize:'0.82rem', fontWeight:'800', cursor:'pointer', background: reZone === 'semi' ? '#fff' : 'transparent', color: reZone === 'semi' ? '#2563eb' : '#64748b', boxShadow: reZone === 'semi' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'}">준주거지역 (400%)</button>
+                                </div>
+                            </div>
+
+                            <!-- 희망 신청 평형 토글 -->
+                            <div>
+                                <label style="display:block; font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">🏢 희망 신청 신축 평형</label>
+                                <div style="display:flex; background:#f1f5f9; padding:4px; border-radius:8px; gap:4px;">
+                                    <button type="button" @click="reTargetSize = '25'" :style="{flex:1, border:'none', padding:'8px 4px', borderRadius:'6px', fontSize:'0.82rem', fontWeight:'800', cursor:'pointer', background: reTargetSize === '25' ? '#fff' : 'transparent', color: reTargetSize === '25' ? '#0d9488' : '#64748b', boxShadow: reTargetSize === '25' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'}">전용 59㎡ (25평형)</button>
+                                    <button type="button" @click="reTargetSize = '34'" :style="{flex:1, border:'none', padding:'8px 4px', borderRadius:'6px', fontSize:'0.82rem', fontWeight:'800', cursor:'pointer', background: reTargetSize === '34' ? '#fff' : 'transparent', color: reTargetSize === '34' ? '#0d9488' : '#64748b', boxShadow: reTargetSize === '34' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'}">전용 84㎡ (34평형)</button>
+                                </div>
+                            </div>
+
+                            <!-- 기존 용적률 슬라이더 -->
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                    <label style="font-size:0.9rem; font-weight:700; color:var(--text-primary);">📉 기존 아파트 용적률</label>
+                                    <strong style="font-size:1.1rem; color:#ef4444;">{{ reFar }}%</strong>
+                                </div>
+                                <input type="range" min="100" max="250" step="5" v-model.number="reFar" style="width:100%; height:6px; background:#e2e8f0; border-radius:3px; outline:none; cursor:pointer;">
+                                <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:0.75rem; color:var(--text-tertiary);">
+                                    <span>100% (매우 여유)</span>
+                                    <span>180% (마지노선)</span>
+                                    <span>220% (사업성 낮음)</span>
+                                    <span>250%</span>
+                                </div>
+                            </div>
+
+                            <!-- 평균 대지지분 슬라이더 -->
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                    <label style="font-size:0.9rem; font-weight:700; color:var(--text-primary);">📐 세대당 평균 대지지분</label>
+                                    <strong style="font-size:1.1rem; color:#0d9488;">{{ reLandShare }}평</strong>
+                                </div>
+                                <input type="range" min="8.0" max="25.0" step="0.5" v-model.number="reLandShare" style="width:100%; height:6px; background:#e2e8f0; border-radius:3px; outline:none; cursor:pointer;">
+                                <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:0.75rem; color:var(--text-tertiary);">
+                                    <span>8.0평</span>
+                                    <span>12.5평 (최소)</span>
+                                    <span>15.0평 (양호)</span>
+                                    <span>20.0평 이상 (최상)</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- 진단 출력부 (우측) -->
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:1.5rem; display:flex; flex-direction:column; gap:1.2rem;">
+                            
+                            <!-- 등급 진단 -->
+                            <div :style="{background: reGrade.bg, borderLeft: '4px solid ' + reGrade.color, padding: '1rem', borderRadius: '8px'}">
+                                <span style="font-size:0.78rem; font-weight:800; color:var(--text-secondary); display:block; margin-bottom:4px;">재건축 사업성 등급</span>
+                                <h4 :style="{margin: '0 0 6px 0', color: reGrade.color, fontSize: '1.4rem', fontWeight: '900'}">
+                                    {{ reGrade.name }}
+                                </h4>
+                                <p style="margin: 0; color: #475569; font-size: 0.85rem; line-height: 1.5; font-weight: 600;">
+                                    {{ reGrade.desc }}
+                                </p>
+                            </div>
+
+                            <hr style="border:0; border-top:1px solid #e2e8f0; margin:0;">
+
+                            <!-- 예상 추가분담금 결과 KPI -->
+                            <div style="background:#fff; border:1px solid #cbd5e1; padding:1.2rem; border-radius:8px;">
+                                <span style="font-size:0.8rem; font-weight:700; color:var(--text-secondary); display:block; margin-bottom:4px;">조합원 예상 추가분담금 (약식)</span>
+                                <div v-if="reEstimatedContribution > 0" style="font-size:1.8rem; font-weight:900; color:#b45309; letter-spacing:-0.5px;">
+                                    약 {{ formatKrwAmount(reEstimatedContribution * 10000) }}
+                                </div>
+                                <div v-else style="font-size:1.8rem; font-weight:900; color:#16a34a; letter-spacing:-0.5px;">
+                                    환급 가능성 높음! (약 {{ formatKrwAmount(Math.abs(reEstimatedContribution) * 10000) }} 환급)
+                                </div>
+                                <small style="display:block; margin-top:0.4rem; color:var(--text-tertiary); font-size:0.72rem; font-weight:600; line-height:1.3;">
+                                    ※ 건축원가(34평형 4.5억 / 25평형 3.5억) 및 기여대지지분의 가치를 서울 평균(평당 3,500만 원) 기준으로 산정한 간이 결과이며, 실제 분담금은 시공사 도급계약 및 분양가격에 따라 다를 수 있습니다.
+                                </small>
+                            </div>
+
+                            <!-- 사업성 팁 카드 -->
+                            <div style="background: #eff6ff; border-radius: 8px; padding: 1rem; border: 1px solid #bfdbfe;">
+                                <h5 style="margin:0 0 6px 0; color:#1e40af; font-size:0.85rem; font-weight:800;">💡 몸테크 투자 전략 제언</h5>
+                                <p style="margin:0; font-size:0.78rem; color:#1e40af; line-height:1.4; font-weight:600;">
+                                    구축에 들어가 장기 대기할 때는 <strong>대지지분 1평당 실질 매입 가격</strong>(아파트 가격 ÷ 평균 대지지분)을 계산하여 인근 아파트 평당 시세보다 저렴한지 검증하는 것이 가장 좋은 안전마진 확보 수단입니다.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </article>
 
@@ -1156,7 +1288,13 @@ lv.data = function() {
         calcSellBuyPrice: 100000,  // 취득 가액 (단위: 만 원, 기본 10억)
         calcSellSellPrice: 150000, // 양도 가액 (단위: 만 원, 기본 15억)
         calcSellPeriod: 5,         // 보유 기간 (단위: 년)
-        calcSellSingleHome: true   // 1세대 1주택 여부
+        calcSellSingleHome: true,  // 1세대 1주택 여부
+        
+        // 재건축 사업성 계산기 상태
+        reFar: 160,               // 기존 용적률 (%)
+        reLandShare: 15.5,        // 평균 대지지분 (평)
+        reTargetSize: '34',       // 희망 신청 평형 ('25' 또는 '34')
+        reZone: '3class'          // 용도지역: '2class'(2종일반), '3class'(3종일반), 'semi'(준주거)
     });
 };
 
@@ -1569,6 +1707,50 @@ lv.computed.calcSellResult = function() {
         localIncomeTax: Math.round(localIncomeTax),
         totalSellTax: Math.round(totalSellTax)
     };
+};
+
+// ==========================================
+// 🏗️ 구축 재건축 사업성 computed 속성 정의
+// ==========================================
+lv.computed.reContributionScore = function() {
+    // 용적률에 따른 점수 (낮을수록 좋음, 150% 이하 40점, 180% 이하 30점, 200% 이하 20점, 초과 10점)
+    let farScore = 10;
+    if (this.reFar <= 150) farScore = 40;
+    else if (this.reFar <= 180) farScore = 30;
+    else if (this.reFar <= 200) farScore = 20;
+
+    // 평균 대지지분에 따른 점수 (클수록 좋음, 16.5평 이상 40점, 15평 이상 30점, 12.5평 이상 20점, 미만 10점)
+    let landScore = 10;
+    if (this.reLandShare >= 16.5) landScore = 40;
+    else if (this.reLandShare >= 15.0) landScore = 30;
+    else if (this.reLandShare >= 12.5) landScore = 20;
+
+    // 용도지역에 따른 점수
+    let zoneScore = 10;
+    if (this.reZone === 'semi') zoneScore = 20;
+    else if (this.reZone === '3class') zoneScore = 15;
+    else if (this.reZone === '2class') zoneScore = 10;
+
+    return farScore + landScore + zoneScore;
+};
+
+lv.computed.reGrade = function() {
+    const score = this.reContributionScore;
+    if (score >= 85) return { name: 'S등급 (초우수)', color: '#16a34a', bg: '#f0fdf4', desc: '조합원 일반분양 기여도가 극대화되어 분담금이 최소화되거나 환급금이 발생할 수 있는 극상의 사업성입니다. 몸테크 및 장기 존버 시 확실한 수익성이 보장되는 대장주 입지입니다.' };
+    if (score >= 70) return { name: 'A등급 (우수)', color: '#2563eb', bg: '#eff6ff', desc: '안정적인 일반분양 물량을 확보할 수 있으며, 추가분담금이 합리적인 선에서 결정될 것입니다. 재건축 추진 시 조합원 간 갈등이 적고 속도감 있는 사업 추진이 기대됩니다.' };
+    if (score >= 50) return { name: 'B등급 (보통)', color: '#d97706', bg: '#fffbeb', desc: '재건축 사업성은 보통 수준이며, 조합원 분담금 감내가 필요한 곳입니다. (예상 분담금 3억~5억) 입지가 매우 뛰어나거나 분담금을 충분히 감당할 수 있는 탄탄한 자금력이 전제되어야 하는 몸테크 구간입니다.' };
+    return { name: 'C등급 (주의/리모델링 권장)', color: '#dc2626', bg: '#fef2f2', desc: '현재 용적률이 높고 대지지분이 작아 재건축 시 조합원 분담금이 극도로 커질 수 있습니다 (5억 초과 예상). 재건축보다는 리모델링 추진이나 실거주 관점에서의 접근을 권장하며, 장기 존버 시 투자비 회수가 더딜 수 있습니다.' };
+};
+
+lv.computed.reEstimatedContribution = function() {
+    const buildCost = this.reTargetSize === '34' ? 45000 : 35000;
+    const donateRate = this.reZone === 'semi' ? 0.15 : (this.reZone === '3class' ? 0.10 : 0.12);
+    const netLandShare = this.reLandShare * (1 - donateRate);
+    const requiredLand = this.reTargetSize === '34' ? 12.5 : 9.5;
+    const contributionLand = netLandShare - requiredLand;
+    const landValuePerPyeong = 3500;
+    const contributionValue = contributionLand * landValuePerPyeong;
+    return Math.round(buildCost - contributionValue);
 };
 
 // ==========================================
