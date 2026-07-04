@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인공지능(AI) 역사와 핵심 이론</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap">
+    <link rel="stylesheet" href="../assets/css/econ-academy.css">
+</head>
+<body>
+
+<div id="app"></div>
+
+<template id="theory-lecture-view-tpl">
+<div class="app-container" style="background: #ffffff; width: 100%;">
+        <nav class="sidebar" id="sidebar-theory">
+            <div @click="$emit('go-home')" class="sidebar-btn-home" style="cursor:pointer; color:var(--color-blue); font-weight:bold; margin-bottom:1rem;">
+                ← 홈으로 돌아가기
+            </div>
+            <div class="sidebar-title" style="color:#d97706; display:flex; align-items:center; gap:8px;">
+                <span>AI 역사와 이론</span> 📚
+            </div>
+            <div class="toc-list">
+                 <div v-for="(item, idx) in toc" :key="idx" :class="['toc-item', {'toc-sub': item.isSub}]">
+                     <a @click.prevent="scrollTo(item.id)" :class="{active: activeToc === item.id}">{{ item.text }}</a>
+                 </div>
+            </div>
+        </nav>
+        <main class="main-content">
+            <header>
+                <p style="color: #d97706; font-weight: 600; margin-bottom: 0.5rem;">Course 6</p>
+                <h1>인공지능(AI) 역사와 핵심 이론</h1>
+                <p style="font-size:1.15rem; color:var(--text-secondary); margin-bottom:3rem;">
+                    기계가 생각할 수 있을까에 대한 최초의 의문에서 출발하여, 딥러닝 암흑기와 부흥기를 거쳐 세상을 변화시키고 있는 거대 언어 모델(LLM)에 이르기까지의 70년 AI 역사와 핵심 이론을 한눈에 정리합니다.
+                </p>
+            </header>
+
+            <article id="theory-ch1">
+                <h2>Chapter 1. AI의 태동과 첫 번째 겨울 (1950s - 1970s)</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 인간의 논리와 뉴런을 흉내 내려는 시도로 시작된 AI는 단층 퍼셉트론의 치명적 한계(XOR)를 만나며 첫 암흑기를 맞이했습니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-1. 질문의 시작: 튜링 테스트와 다트머스 회의</h3>
+                <p>
+                    현대 컴퓨터 과학의 아버지 <strong>앨런 튜링(Alan Turing)</strong>은 1950년 논문에서 "기계가 생각할 수 있을까?"(Can Machines Think?)라는 도발적인 질문을 던지며 기계의 지능을 판별하는 <strong>튜링 테스트(Turing Test)</strong>를 제안했습니다. 
+                    이어 1956년 미국 다트머스 대학교에서 열린 워크숍에서 존 매카시(John McCarthy)가 <strong>'인공지능(Artificial Intelligence)'</strong>이라는 단어를 최초로 제정하며 정식 학문 분과로 첫걸음을 뗐습니다.
+                </p>
+
+                <!-- 1-1 Visualizations: Turing Test & Dartmouth Workshop -->
+                <div style="display:flex; gap:1.5rem; margin:2rem 0; flex-wrap:wrap;">
+                    <!-- Card 1: Turing Test (1950) -->
+                    <div style="flex:1; min-width:300px; background:#fafafa; border:1px solid #e5e8eb; border-radius:16px; padding:1.5rem; display:flex; flex-direction:column; align-items:center; box-shadow:var(--shadow-card);">
+                        <h4 style="margin:0 0 1rem 0; font-size:1.05rem; color:var(--text-primary); text-align:center; font-weight:700; display:flex; align-items:center; gap:6px;">🕵️‍♂️ 튜링 테스트 (1950)</h4>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem; text-align:center;">
+                            질문자는 보이지 않는 장막 너머의 인간과 기계에 질문하여 어떤 쪽이 진짜 기계인지 판단합니다.
+                        </p>
+                        <svg width="280" height="150" viewBox="0 0 280 150" style="overflow:visible;">
+                            <!-- Room borders -->
+                            <!-- Room A (Machine) -->
+                            <rect x="10" y="10" width="90" height="40" rx="8" fill="#f0f7ff" stroke="#3182f6" stroke-width="2"/>
+                            <text x="55" y="34" font-size="10.5" font-weight="bold" fill="#3182f6" text-anchor="middle">🤖 기계 (A)</text>
+                            
+                            <!-- Room B (Human) -->
+                            <rect x="10" y="90" width="90" height="40" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+                            <text x="55" y="114" font-size="10.5" font-weight="bold" fill="#16a34a" text-anchor="middle">👤 인간 (B)</text>
+                            
+                            <!-- Barrier / Screen -->
+                            <line x1="120" y1="5" x2="120" y2="145" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="4,4"/>
+                            <text x="125" y="15" font-size="8.5" fill="#94a3b8" font-weight="bold">차단 장막</text>
+                            
+                            <!-- Room C (Interrogator) -->
+                            <rect x="180" y="50" width="90" height="40" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+                            <text x="225" y="74" font-size="10.5" font-weight="bold" fill="#ea580c" text-anchor="middle">🕵️ 질문자 (C)</text>
+                            
+                            <!-- Message bubble paths/arrows -->
+                            <!-- Query arrow (from C pointing leftwards) -->
+                            <path d="M 180,60 L 145,60 L 100,35" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-orange)"/>
+                            <path d="M 180,60 L 145,60 L 100,105" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-orange)"/>
+                            <text x="142" y="52" font-size="8.5" fill="#ea580c" font-weight="bold" text-anchor="middle">질문</text>
+                            
+                            <!-- Response arrows (from A/B back to C) -->
+                            <path d="M 100,28 L 140,70 L 180,70" fill="none" stroke="#3182f6" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+                            <path d="M 100,112 L 140,70 L 180,70" fill="none" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+                            <text x="140" y="84" font-size="8.5" fill="#4e5968" font-weight="bold" text-anchor="middle">답변</text>
+
+                            <!-- SVG Markers -->
+                            <defs>
+                                <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#ea580c" />
+                                </marker>
+                                <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#3182f6" />
+                                </marker>
+                                <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#16a34a" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <!-- Card 2: Dartmouth Workshop (1956) -->
+                    <div style="flex:1; min-width:300px; background:#fafafa; border:1px solid #e5e8eb; border-radius:16px; padding:1.5rem; display:flex; flex-direction:column; align-items:center; box-shadow:var(--shadow-card);">
+                        <h4 style="margin:0 0 1rem 0; font-size:1.05rem; color:var(--text-primary); text-align:center; font-weight:700; display:flex; align-items:center; gap:6px;">🎓 다트머스 회의 (1956)</h4>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem; text-align:center;">
+                            존 매카시를 비롯한 초기 선구자들이 모여 '인공지능(AI)'의 학문적 지평을 선언했습니다.
+                        </p>
+                        <svg width="280" height="150" viewBox="0 0 280 150" style="overflow:visible;">
+                            <!-- Central Node: AI -->
+                            <circle cx="140" cy="75" r="28" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+                            <text x="140" y="72" font-size="10" font-weight="bold" fill="#d97706" text-anchor="middle">"Artificial</text>
+                            <text x="140" y="83" font-size="10" font-weight="bold" fill="#d97706" text-anchor="middle">Intelligence"</text>
+                            
+                            <!-- Surrounding Researchers -->
+                            <!-- McCarthy -->
+                            <line x1="140" y1="75" x2="60" y2="35" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="2,2"/>
+                            <rect x="20" y="20" width="75" height="24" rx="5" fill="#fff" stroke="#94a3b8" stroke-width="1.2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                            <text x="57.5" y="35" font-size="8.5" font-weight="bold" fill="#4e5968" text-anchor="middle">존 매카시</text>
+
+                            <!-- Minsky -->
+                            <line x1="140" y1="75" x2="60" y2="115" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="2,2"/>
+                            <rect x="20" y="105" width="75" height="24" rx="5" fill="#fff" stroke="#94a3b8" stroke-width="1.2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                            <text x="57.5" y="120" font-size="8.5" font-weight="bold" fill="#4e5968" text-anchor="middle">마빈 민스키</text>
+
+                            <!-- Shannon -->
+                            <line x1="140" y1="75" x2="220" y2="35" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="2,2"/>
+                            <rect x="185" y="20" width="75" height="24" rx="5" fill="#fff" stroke="#94a3b8" stroke-width="1.2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                            <text x="222.5" y="35" font-size="8.5" font-weight="bold" fill="#4e5968" text-anchor="middle">클로드 섀넌</text>
+
+                            <!-- Rochester -->
+                            <line x1="140" y1="75" x2="220" y2="115" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="2,2"/>
+                            <rect x="185" y="105" width="75" height="24" rx="5" fill="#fff" stroke="#94a3b8" stroke-width="1.2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                            <text x="222.5" y="120" font-size="8.5" font-weight="bold" fill="#4e5968" text-anchor="middle">네이서니엘 로체스터</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-2. 학파의 충돌: 기호주의 vs 연결주의</h3>
+                <p>
+                    초기 인공지능 연구는 인간 지능을 어떻게 모사할 것인가를 두고 두 개의 학파로 갈라섰습니다. 
+                    하나는 인간의 논리 체계를 본뜨려 한 <strong>기호주의(Symbolism, 1950년대~1980년대 주류)</strong>였고, 다른 하나는 생물학적 뇌의 신경망 구조를 모사하고자 한 <strong>연결주의(Connectionism, 1940년대 태동~현재 주류)</strong>였습니다.
+                </p>
+
+                <!-- SVG: Branch Split of Symbolism vs Connectionism -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem;">📌 인공지능 모사 방식에 따른 두 학파의 노선 갈래</div>
+                    <svg width="500" height="150" viewBox="0 0 500 150" style="overflow:visible;">
+                        <!-- Center Start: Human Intelligence -->
+                        <rect x="10" y="55" width="90" height="40" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                        <text x="55" y="73" font-size="10.5" font-weight="bold" fill="#191f28" text-anchor="middle">인간 지능</text>
+                        <text x="55" y="85" font-size="9" fill="#64748b" text-anchor="middle">(지능의 정의)</text>
+
+                        <!-- Branch Lines -->
+                        <!-- Top branch (Symbolism) -->
+                        <path d="M 100,75 C 130,75 120,30 160,30" fill="none" stroke="#3182f6" stroke-width="2" marker-end="url(#branch-arrow-blue)"/>
+                        <!-- Bottom branch (Connectionism) -->
+                        <path d="M 100,75 C 130,75 120,120 160,120" fill="none" stroke="#ea580c" stroke-width="2" marker-end="url(#branch-arrow-orange)"/>
+
+                        <!-- Top Node: Symbolism -->
+                        <rect x="165" y="10" width="135" height="40" rx="6" fill="#f0f7ff" stroke="#3182f6" stroke-width="1.5"/>
+                        <text x="232.5" y="27" font-size="10" font-weight="bold" fill="#3182f6" text-anchor="middle">🧠 기호주의 (Symbolism)</text>
+                        <text x="232.5" y="40" font-size="8.5" fill="#4e5968" text-anchor="middle">1950년대 ~ 1980년대 주도</text>
+
+                        <!-- Top Right: Rule logic flowchart -->
+                        <line x1="300" y1="30" x2="330" y2="30" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        <rect x="335" y="15" width="150" height="30" rx="4" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="410" y="33" font-size="9" fill="#4e5968" text-anchor="middle">규칙 기반: IF (조건) ➔ THEN (결과)</text>
+
+                        <!-- Bottom Node: Connectionism -->
+                        <rect x="165" y="100" width="135" height="40" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+                        <text x="232.5" y="117" font-size="10" font-weight="bold" fill="#ea580c" text-anchor="middle">🕸️ 연결주의 (Connectionism)</text>
+                        <text x="232.5" y="130" font-size="8.5" fill="#4e5968" text-anchor="middle">1940년대 태동 ~ 현대 주도</text>
+
+                        <!-- Bottom Right: Miniature neural net -->
+                        <line x1="300" y1="120" x2="330" y2="120" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        <g transform="translate(340, 105)">
+                            <!-- Layer 1 -->
+                            <circle cx="10" cy="10" r="4" fill="#64748b" />
+                            <circle cx="10" cy="25" r="4" fill="#64748b" />
+                            <!-- Layer 2 -->
+                            <circle cx="35" cy="5" r="4" fill="#ea580c" />
+                            <circle cx="35" cy="18" r="4" fill="#ea580c" />
+                            <circle cx="35" cy="30" r="4" fill="#ea580c" />
+                            <!-- Layer 3 -->
+                            <circle cx="60" cy="18" r="4" fill="#3182f6" />
+                            <!-- Connections -->
+                            <line x1="14" y1="10" x2="31" y2="5" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="14" y1="10" x2="31" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="14" y1="25" x2="31" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="14" y1="25" x2="31" y2="30" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="39" y1="5" x2="56" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="39" y1="18" x2="56" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <line x1="39" y1="30" x2="56" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+                            <!-- Label -->
+                            <text x="72" y="21" font-size="9" fill="#4e5968">가중치망 학습 (딥러닝)</text>
+                        </g>
+
+                        <!-- Defs for Markers -->
+                        <defs>
+                            <marker id="branch-arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#3182f6" />
+                            </marker>
+                            <marker id="branch-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#ea580c" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="metric-grid" style="margin-top:1.5rem;">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #3182f6;">
+                        <div class="metric-label" style="color:#3182f6;">🧠 기호주의 (Symbolism / 규칙 기반)</div>
+                        <div class="metric-value" style="font-size:1.2rem;">인간의 '이성'을 모사</div>
+                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">인간의 논리적 사고 과정을 'IF-THEN'과 같은 기호적 규칙으로 정의하여 문제를 풉니다. 전문가 시스템(Expert System)의 기반이 되었으나, 규칙이 복잡해질수록 관리할 수 없다는 한계가 있었습니다.</p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #ea580c; box-shadow:0 4px 15px rgba(234,88,12,0.08);">
+                        <div class="metric-label" style="color:#ea580c;">🕸️ 연결주의 (Connectionism / 신경망)</div>
+                        <div class="metric-value" style="font-size:1.2rem;">인간의 '두뇌'를 모사</div>
+                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">생물학적 뉴런의 연결망을 본따 가중치를 가진 수학적 구조를 형성하고, 데이터를 통해 이를 학습시킵니다. 현대 딥러닝과 인공신경망의 모태입니다.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:2rem; font-size:1.15rem; color:var(--text-primary); border-left:4px solid #3182f6; padding-left:0.5rem; margin-bottom:1rem;">1-2-1. 기호주의의 전성기: 전문가 시스템(Expert System)의 작동 방식</h3>
+                <p>
+                    초기 컴퓨터 과학자들은 인간 지능이 결국 <strong>"규칙에 따른 기호 조작"</strong>에 불과하다고 보았습니다. 이 철학은 1970~1980년대에 이르러 <strong>전문가 시스템(Expert System)</strong>이라는 형태로 꽃을 피우며 당시 AI 시장의 대규모 투자를 독식(주도)하게 되었습니다.
+                </p>
+                <p>
+                    전문가 시스템은 의사나 지질학자 등 인간 전문가가 가진 도메인 지식을 수천~수만 개의 <strong>"IF-THEN" 규칙</strong>으로 정의하여 지식베이스에 축적해 둔 뒤, 사용자의 상황(증상 등)이 입력되면 컴퓨터가 논리적인 추론 규칙을 조합해 스스로 진단과 해답을 도출하는 구조입니다. 감염병 진단 시스템인 MYCIN 등은 실제 의사 수준의 진단 능력을 보여주기도 했습니다.
+                </p>
+
+                <!-- SVG: Expert System Architecture -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem;">⚙️ 기호주의 전문가 시스템(Expert System) 아키텍처</div>
+                    <svg width="460" height="150" viewBox="0 0 460 150" style="overflow:visible;">
+                        <!-- Expert (Top Left) -->
+                        <rect x="10" y="15" width="90" height="36" rx="6" fill="#fff" stroke="#94a3b8" stroke-width="1.5" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                        <text x="55" y="37" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">👤 인간 전문가</text>
+
+                        <!-- User (Bottom Left) -->
+                        <rect x="10" y="95" width="90" height="36" rx="6" fill="#fff" stroke="#94a3b8" stroke-width="1.5" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.03));"/>
+                        <text x="55" y="117" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">👤 일반 사용자</text>
+
+                        <!-- Knowledge Base (Top Right/Center) -->
+                        <rect x="170" y="15" width="110" height="40" rx="8" fill="#f0f7ff" stroke="#3182f6" stroke-width="2"/>
+                        <text x="225" y="35" font-size="10.5" font-weight="bold" fill="#3182f6" text-anchor="middle">지식 베이스</text>
+                        <text x="225" y="48" font-size="8.5" fill="#4e5968" text-anchor="middle">(IF-THEN 규칙 사전)</text>
+
+                        <!-- Inference Engine (Bottom Right/Center) -->
+                        <rect x="170" y="93" width="110" height="40" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+                        <text x="225" y="113" font-size="10.5" font-weight="bold" fill="#0284c7" text-anchor="middle">추론 엔진</text>
+                        <text x="225" y="126" font-size="8.5" fill="#4e5968" text-anchor="middle">(논리적 규칙 해석기)</text>
+
+                        <!-- Flows -->
+                        <!-- Expert to Knowledge Base -->
+                        <line x1="100" y1="33" x2="162" y2="33" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="131" y="25" font-size="8" fill="#64748b" text-anchor="middle">지식 주입</text>
+
+                        <!-- User to Inference Engine (Question & Answer) -->
+                        <path d="M 100,105 L 162,105" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <path d="M 162,120 L 100,120" fill="none" stroke="#16a34a" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="131" y="98" font-size="8" fill="#64748b" text-anchor="middle">1. 정보/질문</text>
+                        <text x="131" y="132" font-size="8" fill="#16a34a" font-weight="bold" text-anchor="middle">4. 결론/진단</text>
+
+                        <!-- Engine <-> Base -->
+                        <path d="M 215,93 L 215,63" fill="none" stroke="#3182f6" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <path d="M 235,63 L 235,93" fill="none" stroke="#3182f6" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="195" y="78" font-size="7.5" fill="#64748b" text-anchor="middle">2. 규칙조회</text>
+                        <text x="255" y="78" font-size="7.5" fill="#64748b" text-anchor="middle">3. 논리매칭</text>
+                        
+                        <!-- Side explanation box -->
+                        <rect x="310" y="35" width="140" height="75" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                        <text x="320" y="52" font-size="8.5" font-weight="bold" fill="#191f28">⚠️ 치명적 한계:</text>
+                        <text x="320" y="67" font-size="8" fill="#4e5968">- 지식 입력의 병목현상</text>
+                        <text x="320" y="80" font-size="8" fill="#4e5968">  (의사의 지식을 코딩하기)</text>
+                        <text x="320" y="93" font-size="8" fill="#4e5968">- 예외 상황 대처 불가</text>
+                    </svg>
+                </div>
+
+                <p style="margin-bottom:2.5rem;">
+                    하지만 전문가 시스템은 <strong>"지식 획득의 병목 현상"</strong>이라는 거대한 벽에 부딪혔습니다. 분야별 전문가들의 직관을 일일이 추출해 예외 없는 기호 규칙으로 손 코딩하는 작업은 불가능에 가까웠고, 미처 다루지 못한 예외가 하나만 나와도 시스템이 먹통이 되는 취약점을 보였습니다. 결국 시스템 관리 비용이 기하급수적으로 증가하며 1980년대 말 관련 하드웨어/소프트웨어 시장이 붕괴했고, 이는 두 번째 AI 겨울을 초래하게 됩니다.
+                </p>
+
+                <h3 style="margin-top:2rem; font-size:1.15rem; color:var(--text-primary); border-left:4px solid #ea580c; padding-left:0.5rem; margin-bottom:1rem;">1-2-2. 연결주의의 철학: 상향식(Bottom-Up) 창발과 헵의 학습 규칙</h3>
+                <p>
+                    기호주의가 규칙을 위에서 주입하는 <strong>하향식(Top-Down)</strong> 접근이었다면, 연결주의는 바닥에서부터 스스로 지능이 생겨나게 하는 <strong>상향식(Bottom-Up)</strong> 접근입니다. 인간이 아기 때 규칙을 외우지 않고 수많은 경험(데이터)을 겪으며 뇌의 뉴런 가중치를 미세하게 조율해 스스로 사물을 인지하게 되는 과정과 같습니다.
+                </p>
+                <p>
+                    이 철학적 사상의 핵심 근간은 1949년 캐나다의 심리학자 도널드 헵(Donald Hebb)이 발표한 <strong>헵의 학습 규칙(Hebbian Learning Rule)</strong>입니다. 헵은 <strong>"함께 활성화되는 뉴런들은 서로 연결고리가 더 단단해진다 (Neurons that fire together, wire together)"</strong>라는 뇌 생물학적 가설을 제시했습니다. 
+                    신경망 모델에서 입력 데이터가 들어올 때 자주 같이 켜지는 가중치들을 점점 더 강하게 만들고, 그렇지 않은 가중치는 약화시키는 이 상향식 조율 방식은 현대 인공신경망 가중치 학습의 기본적 토대가 되었습니다.
+                </p>
+
+                <!-- SVG: Top-Down vs Bottom-Up Comparison -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem;">⚖️ 하향식 규칙(기호주의) vs 상향식 학습(연결주의)</div>
+                    <svg width="460" height="130" viewBox="0 0 460 130" style="overflow:visible;">
+                        <!-- Left: Top-Down (Symbolism) -->
+                        <rect x="10" y="5" width="200" height="120" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                        <text x="110" y="23" font-size="10" font-weight="bold" fill="#3182f6" text-anchor="middle">하향식 (Top-Down) — 기호주의</text>
+                        
+                        <!-- Flow Chart inside Left -->
+                        <rect x="40" y="35" width="140" height="22" rx="4" fill="#f0f7ff" stroke="#3182f6" stroke-width="1"/>
+                        <text x="110" y="49" font-size="8.5" fill="#4e5968" text-anchor="middle">인간이 논리/규칙 설계</text>
+
+                        <line x1="110" y1="57" x2="110" y2="73" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#mcp-arrow)"/>
+
+                        <rect x="40" y="78" width="140" height="22" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="110" y="92" font-size="8.5" fill="#191f28" text-anchor="middle">기계는 규칙대로 계산 수행</text>
+
+                        <text x="110" y="115" font-size="8" fill="#94a3b8" text-anchor="middle">"규칙을 주입해 지능을 구현"</text>
+
+                        <!-- Right: Bottom-Up (Connectionism) -->
+                        <rect x="250" y="5" width="200" height="120" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                        <text x="350" y="23" font-size="10" font-weight="bold" fill="#ea580c" text-anchor="middle">상향식 (Bottom-Up) — 연결주의</text>
+
+                        <!-- Flow Chart inside Right -->
+                        <rect x="280" y="35" width="140" height="22" rx="4" fill="#fff7ed" stroke="#ea580c" stroke-width="1"/>
+                        <text x="350" y="49" font-size="8.5" fill="#4e5968" text-anchor="middle">대량의 입력 데이터 주입</text>
+
+                        <line x1="350" y1="57" x2="350" y2="73" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#mcp-arrow)"/>
+
+                        <rect x="280" y="78" width="140" height="22" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="350" y="92" font-size="8.5" fill="#191f28" text-anchor="middle">네트워크 가중치 조율 (학습)</text>
+
+                        <text x="350" y="115" font-size="8" fill="#94a3b8" text-anchor="middle">"스스로 학습하여 지능을 창발"</text>
+                    </svg>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-3. 연결망의 시초: 맥컬록-피츠 뉴런과 퍼셉트론</h3>
+                <p>
+                    현대 인공신경망의 가장 깊은 조상은 1943년 신경생리학자 워런 맥컬록(Warren McCulloch)과 수학자 월터 피츠(Walter Pitts)가 제안한 <strong>맥컬록-피츠 뉴런(McCulloch-Pitts Neuron)</strong> 모델입니다. 생물학적 뉴런의 정보 전달 방식을 '켜짐/꺼짐(0 또는 1)' 형태의 단순한 이진 논리 게이트로 수식화한 최초의 시도였습니다. 
+                </p>
+
+                <!-- SVG: McCulloch-Pitts Neuron -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">🕸️ 맥컬록-피츠 뉴런 (1943) — 가중치 고정식 이진 논리 회로</div>
+                    <svg width="340" height="110" viewBox="0 0 340 110" style="overflow:visible;">
+                        <!-- Inputs -->
+                        <circle cx="40" cy="25" r="12" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+                        <text x="40" y="29" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">x1</text>
+                        <text x="40" y="9" font-size="8" fill="#94a3b8" text-anchor="middle">자극 신호</text>
+
+                        <circle cx="40" cy="85" r="12" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+                        <text x="40" y="89" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">x2</text>
+                        <text x="40" y="105" font-size="8" fill="#94a3b8" text-anchor="middle">억제 신호</text>
+
+                        <!-- Connections -->
+                        <!-- Excitatory (Arrow head) -->
+                        <line x1="52" y1="25" x2="140" y2="45" stroke="#4e5968" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <!-- Inhibitory (Circle head) -->
+                        <line x1="52" y1="85" x2="140" y2="65" stroke="#ef4444" stroke-width="1.5" marker-end="url(#mcp-dot)"/>
+                        <text x="90" y="27" font-size="7.5" fill="#4e5968" text-anchor="middle">활성화 (+1)</text>
+                        <text x="90" y="85" font-size="7.5" fill="#ef4444" text-anchor="middle">억제 (O)</text>
+
+                        <!-- Cell Body (Sum and Threshold) -->
+                        <circle cx="170" cy="55" r="25" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+                        <text x="170" y="52" font-size="10" font-weight="bold" fill="#191f28" text-anchor="middle">Σ ≥ θ</text>
+                        <text x="170" y="65" font-size="8" fill="#64748b" text-anchor="middle">임계치비교</text>
+
+                        <!-- Output -->
+                        <line x1="195" y1="55" x2="270" y2="55" stroke="#64748b" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="230" y="47" font-size="8" fill="#4e5968" text-anchor="middle">이진 출력</text>
+                        
+                        <rect x="275" y="40" width="45" height="30" rx="4" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <text x="297.5" y="59" font-size="11" font-weight="bold" fill="#191f28" text-anchor="middle">y (0/1)</text>
+
+                        <!-- Defs for Markers -->
+                        <defs>
+                            <marker id="mcp-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#64748b" />
+                            </marker>
+                            <marker id="mcp-dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <circle cx="5" cy="5" r="3" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <p>
+                    이후 1958년 프랑크 로젠블랫(Frank Rosenblatt)은 이 모델을 확장하여 연결선마다 고유한 가중치(Weights)를 부여하고, 이를 데이터로부터 스스로 학습할 수 있도록 개량한 <strong>퍼셉트론(Perceptron)</strong>을 발표했습니다. 퍼셉트론은 입력값에 가중치를 곱해 더한 뒤 임계치를 통과시켜 출력을 결정하는 최초의 구현된 기계 학습 장치였습니다.
+                </p>
+
+                <!-- SVG: Rosenblatt's Perceptron -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">🤖 로젠블랫 퍼셉트론 (1958) — 스스로 학습 가능한 가중치(Weights)의 설계</div>
+                    <svg width="360" height="120" viewBox="0 0 360 120" style="overflow:visible;">
+                        <!-- Inputs -->
+                        <circle cx="35" cy="20" r="11" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+                        <text x="35" y="23.5" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">x1</text>
+
+                        <circle cx="35" cy="60" r="11" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+                        <text x="35" y="63.5" font-size="9.5" font-weight="bold" fill="#4e5968" text-anchor="middle">x2</text>
+
+                        <circle cx="35" cy="100" r="11" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <text x="35" y="103.5" font-size="9.5" font-weight="bold" fill="#94a3b8" text-anchor="middle">+1</text>
+                        <text x="35" y="117" font-size="7.5" fill="#94a3b8" text-anchor="middle">편향(Bias)</text>
+
+                        <!-- Connections with Weights -->
+                        <line x1="46" y1="20" x2="140" y2="45" stroke="#4e5968" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="80" y="23" font-size="8.5" font-weight="bold" fill="#3182f6" text-anchor="middle">w1</text>
+
+                        <line x1="46" y1="60" x2="140" y2="60" stroke="#4e5968" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        <text x="80" y="55" font-size="8.5" font-weight="bold" fill="#3182f6" text-anchor="middle">w2</text>
+
+                        <line x1="46" y1="100" x2="140" y2="75" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#mcp-arrow)"/>
+                        <text x="80" y="93" font-size="8.5" font-weight="bold" fill="#94a3b8" text-anchor="middle">b</text>
+
+                        <!-- Summation -->
+                        <circle cx="165" cy="60" r="22" fill="#fff" stroke="#3182f6" stroke-width="2"/>
+                        <text x="165" y="63" font-size="12" font-weight="bold" fill="#3182f6" text-anchor="middle">∑</text>
+                        <text x="165" y="47" font-size="7.5" fill="#4e5968" text-anchor="middle">총합</text>
+
+                        <!-- Activation Function -->
+                        <line x1="187" y1="60" x2="218" y2="60" stroke="#64748b" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        
+                        <rect x="225" y="40" width="40" height="40" rx="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                        <!-- Step function icon -->
+                        <path d="M 230,70 L 245,70 L 245,50 L 260,50" fill="none" stroke="#16a34a" stroke-width="2"/>
+                        <text x="245" y="35" font-size="7.5" fill="#16a34a" text-anchor="middle">활성화 함수</text>
+
+                        <!-- Output -->
+                        <line x1="265" y1="60" x2="305" y2="60" stroke="#64748b" stroke-width="1.5" marker-end="url(#mcp-arrow)"/>
+                        
+                        <rect x="310" y="45" width="35" height="30" rx="4" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <text x="327.5" y="64" font-size="11" font-weight="bold" fill="#191f28" text-anchor="middle">y</text>
+                    </svg>
+                </div>
+
+                <p>
+                    그러나 1969년 마빈 민스키(Marvin Minsky)와 시모어 페퍼트(Seymour Papert)가 그들의 저서에서 <strong>"단일 계층 퍼셉트론으로는 XOR(배타적 논리합) 연산조차 해결할 수 없다"</strong>는 한계를 수학적으로 증명하며 큰 충격을 주었습니다.
+                    이로 인해 자금 지원이 끊기며 1970년대 첫 번째 <strong>AI 겨울(AI Winter)</strong>이 찾아옵니다.
+                </p>
+
+                <!-- XOR 시각화 도구 -->
+                <!-- XOR 시각화 도구 -->
+                <div class="card" style="margin-top:2rem; background:#fffbeb; border:1px solid rgba(217,119,6,0.15); padding:1.8rem; border-radius:16px;">
+                    <h4 style="color:#d97706; margin-top:0; font-size:1.15rem; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;">
+                        <span>💡 [쉽게 배우는 실험] 퍼셉트론의 한계: AND/OR vs XOR</span>
+                    </h4>
+                    <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:1.5rem; line-height:1.6;">
+                        XOR 문제가 인공지능 역사에 큰 겨울을 몰고 온 이유는 <strong>"직선 하나로 나눌 수 없는(선형 분리 불가능) 문제"</strong>였기 때문입니다. 
+                        아래 다른 게이트들과 비교해 보면 XOR의 독특한 구조를 쉽게 이해할 수 있습니다.
+                    </p>
+
+                    <!-- AND/OR/XOR Comparison Grid -->
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:2rem;">
+                        <!-- AND Gate Card -->
+                        <div style="background:#fff; border:1px solid #e5e8eb; padding:1.2rem; border-radius:12px; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-weight:700; font-size:0.88rem; color:var(--text-primary); margin-bottom:10px;">AND 게이트 (선형 분리)</div>
+                            <svg width="120" height="120" viewBox="0 0 120 120" style="overflow:visible; display:block; margin:0 auto;">
+                                <!-- Background Shading -->
+                                <polygon points="20,20 60,20 100,60 100,100 20,100" fill="rgba(49,130,246,0.03)" /> <!-- Blue zone (0) -->
+                                <polygon points="60,20 100,20 100,60" fill="rgba(225,82,65,0.05)" /> <!-- Red zone (1) -->
+                                <!-- Grid Lines -->
+                                <line x1="20" y1="100" x2="100" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <line x1="20" y1="20" x2="20" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <!-- Points -->
+                                <circle cx="35" cy="85" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (0,0): 0 -->
+                                <circle cx="35" cy="35" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (0,1): 0 -->
+                                <circle cx="85" cy="85" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (1,0): 0 -->
+                                <rect x="80" y="30" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (1,1): 1 -->
+                                <!-- Line separating -->
+                                <line x1="60" y1="20" x2="100" y2="60" stroke="#16a34a" stroke-width="1.8" />
+                            </svg>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:8px; line-height:1.4;">
+                                <strong>선형 분리 가능</strong><br>
+                                단 하나의 직선으로 빨간색(1,1)과 나머지 파란색(0) 세 개를 완벽히 나눕니다.
+                            </div>
+                        </div>
+
+                        <!-- OR Gate Card -->
+                        <div style="background:#fff; border:1px solid #e5e8eb; padding:1.2rem; border-radius:12px; text-align:center; box-shadow:var(--shadow-sm);">
+                            <div style="font-weight:700; font-size:0.88rem; color:var(--text-primary); margin-bottom:10px;">OR 게이트 (선형 분리)</div>
+                            <svg width="120" height="120" viewBox="0 0 120 120" style="overflow:visible; display:block; margin:0 auto;">
+                                <!-- Background Shading -->
+                                <polygon points="20,60 20,100 60,100" fill="rgba(49,130,246,0.04)" /> <!-- Blue zone (0) -->
+                                <polygon points="20,20 100,20 100,100 60,100 20,60" fill="rgba(225,82,65,0.04)" /> <!-- Red zone (1) -->
+                                <!-- Grid Lines -->
+                                <line x1="20" y1="100" x2="100" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <line x1="20" y1="20" x2="20" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <!-- Points -->
+                                <circle cx="35" cy="85" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (0,0): 0 -->
+                                <rect x="30" y="30" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (0,1): 1 -->
+                                <rect x="80" y="80" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (1,0): 1 -->
+                                <rect x="80" y="30" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (1,1): 1 -->
+                                <!-- Line separating -->
+                                <line x1="20" y1="60" x2="60" y2="100" stroke="#16a34a" stroke-width="1.8" />
+                            </svg>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:8px; line-height:1.4;">
+                                <strong>선형 분리 가능</strong><br>
+                                하나의 직선으로 파란색(0,0)과 나머지 세 빨간색(1)을 완벽히 나눕니다.
+                            </div>
+                        </div>
+
+                        <!-- XOR Gate Card (Limitation) -->
+                        <div style="background:#fff; border:1px solid #ea580c; padding:1.2rem; border-radius:12px; text-align:center; box-shadow:0 4px 15px rgba(234,88,12,0.05);">
+                            <div style="font-weight:700; font-size:0.88rem; color:#ea580c; margin-bottom:10px;">XOR 게이트 (선형 불가)</div>
+                            <svg width="120" height="120" viewBox="0 0 120 120" style="overflow:visible; display:block; margin:0 auto;">
+                                <!-- Background Shading (Single line attempt) -->
+                                <rect x="20" y="20" width="80" height="30" fill="rgba(225,82,65,0.03)" />
+                                <rect x="20" y="50" width="80" height="50" fill="rgba(49,130,246,0.03)" />
+                                <!-- Grid Lines -->
+                                <line x1="20" y1="100" x2="100" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <line x1="20" y1="20" x2="20" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+                                <!-- Points -->
+                                <circle cx="35" cy="85" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (0,0): 0 -->
+                                <circle cx="85" cy="35" r="5" fill="#3182f6" stroke="#fff" stroke-width="1.2" /> <!-- (1,1): 0 -->
+                                <rect x="30" y="30" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (0,1): 1 -->
+                                <rect x="80" y="80" width="10" height="10" rx="2" fill="#e15241" stroke="#fff" stroke-width="1.2" /> <!-- (1,0): 1 -->
+                                <!-- Fails to separate -->
+                                <line x1="20" y1="50" x2="100" y2="50" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+                            </svg>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:8px; line-height:1.4;">
+                                <strong>단층 분리 불가능 ❌</strong><br>
+                                대각선으로 마주 보고 있어 직선 하나로는 어떻게 그어도 무조건 실패합니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:1.5rem; line-height:1.6;">
+                        그렇다면 다층 퍼셉트론은 이 문제를 어떻게 풀었을까요? 아래 시뮬레이터에서 모드를 전환해 보며 <strong>분리선</strong>과 <strong>각 좌표별 예측 결과</strong>의 변화를 관찰해보세요.
+                    </p>
+
+                    <!-- Control Buttons -->
+                    <div style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:1.5rem;">
+                        <button @click="xorMode = 'single'" :style="{
+                            padding: '10px 20px',
+                            border: '1px solid #d97706',
+                            borderRadius: '8px',
+                            background: xorMode === 'single' ? '#d97706' : '#fff',
+                            color: xorMode === 'single' ? '#fff' : '#d97706',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontSize: '0.88rem',
+                            boxShadow: xorMode === 'single' ? '0 4px 10px rgba(217,119,6,0.2)' : 'none',
+                            transition: 'all 0.2s'
+                        }">단층 퍼셉트론 (1개의 직선)</button>
+                        <button @click="xorMode = 'multi'" :style="{
+                            padding: '10px 20px',
+                            border: '1px solid #d97706',
+                            borderRadius: '8px',
+                            background: xorMode === 'multi' ? '#d97706' : '#fff',
+                            color: xorMode === 'multi' ? '#fff' : '#d97706',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontSize: '0.88rem',
+                            boxShadow: xorMode === 'multi' ? '0 4px 10px rgba(217,119,6,0.2)' : 'none',
+                            transition: 'all 0.2s'
+                        }">다층 퍼셉트론 (은닉층 경계선 조합)</button>
+                    </div>
+
+                    <!-- Simulator Main Grid -->
+                    <div style="display:flex; justify-content:center; align-items:stretch; gap:2rem; flex-wrap:wrap;">
+                        <!-- SVG XOR Chart with Color Shading Zones -->
+                        <div style="background:#fff; border:1px solid #e5e8eb; padding:1.2rem; border-radius:12px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; align-items:center;">
+                            <svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible;">
+                                <!-- Background Shading for Regions -->
+                                <g v-if="xorMode === 'single'">
+                                    <!-- A single line: y = x-0.2 approx. Let's shade top-left as Light Red (1) and bottom-right as Light Blue (0) -->
+                                    <polygon points="20,20 20,200 200,20" fill="rgba(225,82,65,0.03)" />
+                                    <polygon points="20,200 200,200 200,20" fill="rgba(49,130,246,0.03)" />
+                                </g>
+                                <g v-else-if="xorMode === 'multi'">
+                                    <!-- Between two lines: y1 and y2. Middle band is Red (1), outer corners are Blue (0) -->
+                                    <polygon points="20,130 130,20 200,20 20,200" fill="rgba(49,130,246,0.04)" /> <!-- Top-left outer -->
+                                    <polygon points="20,130 130,20 200,20 200,90 90,200 20,200" fill="rgba(225,82,65,0.05)" /> <!-- Middle band -->
+                                    <polygon points="200,90 90,200 200,200" fill="rgba(49,130,246,0.04)" /> <!-- Bottom-right outer -->
+                                </g>
+
+                                <!-- Grid Lines -->
+                                <line x1="20" y1="200" x2="200" y2="200" stroke="#cbd5e1" stroke-width="2" />
+                                <line x1="20" y1="20" x2="20" y2="200" stroke="#cbd5e1" stroke-width="2" />
+                                <line x1="20" y1="110" x2="200" y2="110" stroke="#f1f5f9" stroke-dasharray="2,2" />
+                                <line x1="110" y1="20" x2="110" y2="200" stroke="#f1f5f9" stroke-dasharray="2,2" />
+
+                                <!-- Label axes -->
+                                <text x="210" y="205" font-size="10" fill="#64748b" font-weight="bold">X1</text>
+                                <text x="15" y="15" font-size="10" fill="#64748b" font-weight="bold">X2</text>
+
+                                <!-- Points -->
+                                <!-- 0,0: Blue Circle (Value 0) -->
+                                <circle cx="50" cy="170" r="10" fill="#3182f6" stroke="#fff" stroke-width="2" />
+                                <text x="45" y="195" font-size="9" fill="#191f28" font-weight="bold">(0,0) 결과: 0</text>
+
+                                <!-- 1,1: Blue Circle (Value 0) -->
+                                <circle cx="170" cy="50" r="10" fill="#3182f6" stroke="#fff" stroke-width="2" />
+                                <text x="165" y="38" font-size="9" fill="#191f28" font-weight="bold">(1,1) 결과: 0</text>
+
+                                <!-- 0,1: Red Square (Value 1) -->
+                                <rect x="40" y="40" width="20" height="20" rx="3" fill="#e15241" stroke="#fff" stroke-width="2" />
+                                <text x="35" y="30" font-size="9" fill="#191f28" font-weight="bold">(0,1) 결과: 1</text>
+
+                                <!-- 1,0: Red Square (Value 1) -->
+                                <rect x="160" y="160" width="20" height="20" rx="3" fill="#e15241" stroke="#fff" stroke-width="2" />
+                                <text x="155" y="195" font-size="9" fill="#191f28" font-weight="bold">(1,0) 결과: 1</text>
+
+                                <!-- Decision Boundary Lines -->
+                                <!-- Single Line: Fails to separate -->
+                                <line v-if="xorMode === 'single'" x1="10" y1="120" x2="210" y2="100" stroke="#ea580c" stroke-width="3" stroke-dasharray="4,4" />
+                                
+                                <!-- Multi Line: Successfully separates -->
+                                <g v-if="xorMode === 'multi'">
+                                    <line x1="10" y1="140" x2="160" y2="10" stroke="#16a34a" stroke-width="2.5" />
+                                    <line x1="60" y1="210" x2="210" y2="80" stroke="#16a34a" stroke-width="2.5" />
+                                </g>
+                            </svg>
+                            <div style="font-size:0.8rem; color:var(--text-tertiary); margin-top:1rem; text-align:center;">
+                                <span v-if="xorMode === 'single'">주황 점선: 단층 결정 경계선</span>
+                                <span v-else>초록 실선: 다층(은닉층) 결합 경계선</span>
+                            </div>
+                        </div>
+
+                        <!-- Real-time results and Mathematical explanation -->
+                        <div style="flex:2; min-width:280px; display:flex; flex-direction:column; justify-content:space-between;">
+                            <div>
+                                <h5 style="margin:0 0 0.75rem 0; font-size:1rem; color:var(--text-primary); font-weight:700;">
+                                    <span v-if="xorMode === 'single'">🔴 단층 모델 결과 (정확도: 50%)</span>
+                                    <span v-else>✅ 다층 모델 결과 (정확도: 100%)</span>
+                                </h5>
+
+                                <!-- Status list -->
+                                <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:1.5rem;">
+                                    <div v-for="point in [
+                                        {coords: '(0,0)', target: '0 (파랑)', singlePred: '0 (파랑)', multiPred: '0 (파랑)', singleOk: true, multiOk: true},
+                                        {coords: '(0,1)', target: '1 (빨강)', singlePred: '1 (빨강)', multiPred: '1 (빨강)', singleOk: true, multiOk: true},
+                                        {coords: '(1,0)', target: '1 (빨강)', singlePred: '0 (파랑)', multiPred: '1 (빨강)', singleOk: false, multiOk: true},
+                                        {coords: '(1,1)', target: '0 (파랑)', singlePred: '1 (빨강)', multiPred: '0 (파랑)', singleOk: false, multiOk: true}
+                                    ]" :key="point.coords" style="display:flex; align-items:center; gap:8px; font-size:0.85rem; padding:8px 12px; background:#fff; border-radius:8px; border:1px solid #e5e8eb;">
+                                        <span style="font-family:var(--font-mono); font-weight:700; width:50px;">{{ point.coords }}</span>
+                                        <span style="color:var(--text-secondary); width:80px;">목표: {{ point.target }}</span>
+                                        <span style="color:var(--text-secondary); flex-grow:1;">
+                                            예측: {{ xorMode === 'single' ? point.singlePred : point.multiPred }}
+                                        </span>
+                                        <span v-if="xorMode === 'single'" :style="{
+                                            color: point.singleOk ? '#16a34a' : '#ef4444',
+                                            fontWeight: 'bold'
+                                        }">
+                                            {{ point.singleOk ? '✅ 성공' : '❌ 오판' }}
+                                        </span>
+                                        <span v-else :style="{
+                                            color: point.multiOk ? '#16a34a' : '#ef4444',
+                                            fontWeight: 'bold'
+                                        }">
+                                            {{ point.multiOk ? '✅ 성공' : '❌ 오판' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Explanatory note -->
+                            <div style="background:rgba(217, 119, 6, 0.05); padding:1rem; border-radius:8px; border-left:3px solid #d97706; font-size:0.85rem; line-height:1.5; color:var(--text-secondary);">
+                                <div v-if="xorMode === 'single'">
+                                    <strong>🤔 왜 오판이 발생하나요?</strong><br>
+                                    직선 하나를 어떻게 기울이고 이동해봐도 (1,0)과 (1,1)을 동시에 올바른 색상 그룹으로 묶을 수 없습니다. (1,1)을 파란색(0)으로 묶으려고 선을 이동하면 (1,0)이 파란색(0) 영역에 같이 들어오면서 오차가 발생합니다.
+                                </div>
+                                <div v-if="xorMode === 'multi'">
+                                    <strong>💡 다층 뉴런은 어떻게 이를 해결하나요?</strong><br>
+                                    중간에 <strong>은닉 뉴런(Hidden Neuron)</strong> 2개를 엮습니다. 은닉층 1번 뉴런이 오른쪽 밑 경계를 긋고, 은닉층 2번 뉴런이 왼쪽 위 경계를 긋습니다. 마지막 출력 뉴런은 이 두 경계를 곱셈(AND)하듯 겹쳐서 <strong>대각선 형태의 붉은 띠(1) 영역</strong>을 성공적으로 격리해냅니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">1-4. 인공신경망의 본질: 보편적 함수 모사기와 학습의 목표</h3>
+                <p>
+                    인공신경망(Artificial Neural Network)은 본질적으로 <strong>"입력을 받아 원하는 출력을 계산해 내는 거대하고 정교한 수학적 함수(Function)"</strong>입니다. 
+                    선형 변환(\(W x + b\))과 비선형 활성화 함수(\(\sigma\))가 겹겹이 얽힌 합성함수로 구성되어 있어, 이론상 세상의 모든 복잡한 형태의 실 함수 관계를 거의 흡사하게 흉내 낼 수 있는 <strong>보편적 근사 정리(Universal Approximation Theorem)</strong> 능력을 지니고 있습니다.
+                </p>
+
+                <!-- Formula Box: Neural Network Definition as a Composite Function -->
+                <div class="formula-box" style="margin: 1.5rem 0; font-size:1rem; text-align:center; padding: 1.5rem; background:#f8f9fa; border:1px dashed var(--border-light); border-radius: var(--radius-sm);">
+                    <div style="font-weight: 700; color: var(--color-indigo); margin-bottom: 0.5rem; font-size:0.95rem;">💡 인공신경망의 수학적 정의 (합성함수 구조)</div>
+                    <div style="font-size: 1.25rem; margin: 0.75rem 0; color: var(--text-primary); font-family: 'Times New Roman', Times, serif; overflow-x: auto; white-space: nowrap; padding-bottom: 5px;">
+                        $$y = f(x; W, b) = \sigma \left( W^{(L)} \sigma \left( \dots \sigma \left( W^{(1)}x + b^{(1)} \right) \dots \right) + b^{(L)} \right)$$
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; text-align: left; max-width: 380px; margin: 0 auto;">
+                        • \(x\) : 입력 벡터 (Input)<br>
+                        • \(W^{(l)}x + b^{(l)}\) : \(l\)번째 층의 선형 변환 (Linear Transformation)<br>
+                        • \(\sigma\) : 비선형 활성화 함수 (Non-linear Activation Function)<br>
+                        • \(L\) : 총 레이어 깊이 (Layer Depth)
+                    </div>
+                </div>
+
+                <p>
+                    따라서 신경망 학습의 궁극적인 목표는 <strong>"예측 오차를 최소화하는 최적의 가중치(\(W\))와 편향(\(b\)) 조합을 찾아내는 것"</strong>입니다. 
+                    이를 위해 실제 정답과 예측치 사이의 괴리(오차)를 수치화한 <strong>손실 함수(Loss Function)</strong>를 정의하고, 경사하강법(Gradient Descent)을 사용해 마치 산골짜기에서 공을 굴려 가장 낮고 깊은 골짜기(오차 최소 지점)로 내려보내듯 가중치를 지속해서 수정해 갑니다.
+                </p>
+
+                <!-- 3D Loss Landscape Canvas Container -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card); position:relative;">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem; display:flex; align-items:center; gap:6px; justify-content:space-between; width:100%;">
+                        <span>📈 손실 함수 공간(Loss Landscape) 3D 시뮬레이션 (드래그하여 회전 / 휠로 줌)</span>
+                        <span style="font-size:0.75rem; color:#ef4444; font-weight:bold; display:flex; align-items:center; gap:4px;">
+                            <span style="display:inline-block; width:6px; height:6px; background:#ef4444; border-radius:50%; animation: pulse 1s infinite alternate;"></span>
+                            경사하강 진행 중
+                        </span>
+                    </div>
+                    
+                    <div id="loss-landscape-3d" style="width: 100%; height: 320px; outline: none; cursor: grab; background: #fafafa; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
+
+                    <!-- Mathematical Slogan as an overlay badge -->
+                    <div style="position:absolute; bottom:25px; right:25px; background:rgba(255,255,255,0.9); border:1px solid #e5e8eb; padding:0.6rem 1rem; border-radius:8px; box-shadow:var(--shadow-sm); z-index:10; pointer-events:none; backdrop-filter:blur(4px);">
+                        <div style="font-size:0.75rem; font-weight:bold; color:#191f28; margin-bottom:2px;">🎯 학습 목표 (Optimization):</div>
+                        <div style="font-size:0.85rem; font-weight:bold; color:#10b981; font-family:'Times New Roman', Times, serif;">
+                            $$\arg\min_{W, b} \text{Loss}(W, b)$$
+                        </div>
+                    </div>
+                </div>
+
+                <p style="margin-bottom:3rem;">
+                    즉, 인공신경망은 가상 공간의 경사면을 따라 오차(Loss)가 작아지는 방향으로 미끄러져 내려가는 <strong>경사하강 가중치 최적화 모델</strong>인 셈입니다. 이 기초를 마음에 새기고 2장의 다층 퍼셉트론과 오차역전파 알고리즘을 살펴보면, 이 거대한 함수가 어떻게 작동하고 학습하는지 훨씬 명확히 이해할 수 있습니다.
+                </p>
+            </article>
+
+            <article id="theory-ch2">
+                <h2>Chapter 2. 연결주의의 부활과 딥러닝의 서막 (1980s - 2000s)</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 다층 퍼셉트론과 오차역전파 알고리즘의 등장으로 신경망은 부활했지만, 학습 과정에서 '기울기 소실'이라는 새로운 절벽을 마주합니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-1. 다층 퍼셉트론(MLP)의 등장과 오차역전파(Backpropagation)</h3>
+                <p>
+                    단층 퍼셉트론의 XOR 한계를 격파한 핵심 열쇠는 입력층과 출력층 사이에 <strong>은닉층(Hidden Layer)</strong>을 끼워 넣은 <strong>다층 퍼셉트론(MLP, Multi-layer Perceptron)</strong>이었습니다. 
+                    은닉층의 뉴런들은 입력 데이터를 새로운 고차원 공간으로 매핑하고 여러 개의 선형 결정 경계를 조합하여 비선형적인 분류 영역을 형성해냅니다. 
+                </p>
+                <p>
+                    하지만 층이 늘어나자 각 층 연결선에 놓인 수많은 가중치(Weights)들을 가르칠 방법이 막막했습니다. 
+                    이를 해결한 알고리즘이 바로 1986년 데이비드 루멜하트(David Rumelhart), <strong>제프리 힌튼(Geoffrey Hinton)</strong> 등이 제안한 <strong>오차역전파(Backpropagation)</strong> 알고리즘입니다. 
+                </p>
+                <p>
+                    역전파의 작동 원리는 간단하지만 강력합니다. 
+                    먼저 데이터를 입력해 최종 예측값을 얻는 <strong>순전파(Feedforward)</strong> 과정을 거친 뒤, 출력값과 실제 정답을 대조해 오차(Loss, \(E\))를 구합니다. 
+                    그 다음 이 오차 신호를 출력층에서 입력층 방향으로 거꾸로 쏘아 보냅니다(역전파). 
+                    이 과정에서 오차가 각 뉴런의 연결선 가중치에 의해 얼마나 증폭되거나 감쇄되었는지를 수학적으로 계산하여, 오차를 줄이는 방향(경사하강법)으로 가중치들을 조율해 나갑니다.
+                </p>
+
+                <!-- SVG: MLP Architecture and Backprop flows with Math Notations -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">🧠 다층 퍼셉트론(MLP) 구조와 가중치 미분 역전파 경로</div>
+                    <svg width="440" height="230" viewBox="0 0 440 230" style="overflow:visible;">
+                        <!-- Forward Arrow (Bottom) -->
+                        <line x1="50" y1="215" x2="350" y2="215" stroke="#3182f6" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#mlp-arrow-blue)"/>
+                        <text x="200" y="210" font-size="8.5" font-weight="bold" fill="#3182f6" text-anchor="middle">순전파 (Feedforward): 입력 데이터 x ➔ 출력 y 예측</text>
+
+                        <!-- Backward Arrow (Top) -->
+                        <line x1="350" y1="18" x2="50" y2="18" stroke="#ef4444" stroke-width="2" marker-end="url(#mlp-arrow-red)"/>
+                        <text x="200" y="10" font-size="8.5" font-weight="bold" fill="#ef4444" text-anchor="middle">역전파 (Backpropagation): 출력 오차 E 역방향 전송</text>
+
+                        <!-- Layers Labels -->
+                        <text x="50" y="38" font-size="8.5" font-weight="bold" fill="#64748b" text-anchor="middle">입력층 (Input)</text>
+                        <text x="200" y="38" font-size="8.5" font-weight="bold" fill="#8b5cf6" text-anchor="middle">은닉층 (Hidden)</text>
+                        <text x="350" y="38" font-size="8.5" font-weight="bold" fill="#10b981" text-anchor="middle">출력층 (Output)</text>
+
+                        <!-- Connections -->
+                        <g stroke="#cbd5e1" stroke-width="1" opacity="0.6">
+                            <line x1="50" y1="70" x2="200" y2="60" />
+                            <line x1="50" y1="70" x2="200" y2="105" />
+                            <line x1="50" y1="70" x2="200" y2="150" />
+                            <line x1="50" y1="120" x2="200" y2="60" />
+                            <line x1="50" y1="120" x2="200" y2="105" />
+                            <line x1="50" y1="120" x2="200" y2="150" />
+                            <line x1="50" y1="170" x2="200" y2="60" stroke="#94a3b8" stroke-dasharray="2,2" />
+                            <line x1="50" y1="170" x2="200" y2="105" stroke="#94a3b8" stroke-dasharray="2,2" />
+                            <line x1="50" y1="170" x2="200" y2="150" stroke="#94a3b8" stroke-dasharray="2,2" />
+                            <line x1="200" y1="60" x2="350" y2="105" stroke-width="1.2"/>
+                            <line x1="200" y1="105" x2="350" y2="105" stroke-width="1.2"/>
+                            <line x1="200" y1="150" x2="350" y2="105" stroke-width="1.2"/>
+                            <line x1="200" y1="185" x2="350" y2="105" stroke="#94a3b8" stroke-dasharray="2,2" />
+                        </g>
+
+                        <!-- Nodes -->
+                        <!-- Input -->
+                        <circle cx="50" cy="70" r="12" fill="#f0f7ff" stroke="#3182f6" stroke-width="1.5"/>
+                        <text x="50" y="73" font-size="9" font-weight="bold" fill="#3182f6" text-anchor="middle">x1</text>
+                        <circle cx="50" cy="120" r="12" fill="#f0f7ff" stroke="#3182f6" stroke-width="1.5"/>
+                        <text x="50" y="123" font-size="9" font-weight="bold" fill="#3182f6" text-anchor="middle">x2</text>
+                        <circle cx="50" cy="170" r="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+                        <text x="50" y="173" font-size="8.5" fill="#94a3b8" text-anchor="middle">+1</text>
+
+                        <!-- Hidden -->
+                        <circle cx="200" cy="60" r="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <text x="200" y="63" font-size="9" font-weight="bold" fill="#8b5cf6" text-anchor="middle">h1</text>
+                        <circle cx="200" cy="105" r="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <text x="200" y="108" font-size="9" font-weight="bold" fill="#8b5cf6" text-anchor="middle">h2</text>
+                        <circle cx="200" cy="150" r="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <text x="200" y="153" font-size="9" font-weight="bold" fill="#8b5cf6" text-anchor="middle">h3</text>
+                        <circle cx="200" cy="185" r="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+                        <text x="200" y="188" font-size="8.5" fill="#94a3b8" text-anchor="middle">+1</text>
+
+                        <!-- Output -->
+                        <circle cx="350" cy="105" r="12" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+                        <text x="350" y="108" font-size="9" font-weight="bold" fill="#10b981" text-anchor="middle">y</text>
+
+                        <!-- Weight matrix and Derivative labels -->
+                        <rect x="105" y="138" width="40" height="15" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="125" y="148" font-size="7.5" fill="#4e5968" text-anchor="middle">W (1)</text>
+                        <text x="125" y="162" font-size="7.5" font-weight="bold" fill="#ef4444" text-anchor="middle">∂E / ∂W (1)</text>
+
+                        <rect x="265" y="138" width="40" height="15" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="285" y="148" font-size="7.5" fill="#4e5968" text-anchor="middle">W (2)</text>
+                        <text x="285" y="162" font-size="7.5" font-weight="bold" fill="#ef4444" text-anchor="middle">∂E / ∂W (2)</text>
+
+                        <!-- Derivative arrows representing Chain Rule flow on the layers -->
+                        <!-- Above W(2) -->
+                        <text x="285" y="85" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">∂E / ∂y ➔ ∂E / ∂h</text>
+                        <path d="M 330,85 L 230,85" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#mlp-arrow-red)"/>
+
+                        <!-- Above W(1) -->
+                        <text x="125" y="85" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">∂E / ∂h ➔ ∂E / ∂x</text>
+                        <path d="M 180,85 L 70,85" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#mlp-arrow-red)"/>
+
+                        <!-- Marker Defs -->
+                        <defs>
+                            <marker id="mlp-arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#3182f6" />
+                            </marker>
+                            <marker id="mlp-arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="formula-box" style="margin-top: 1.5rem; font-size:1rem; text-align:center; padding: 1.5rem; background:#f8f9fa; border:1px dashed var(--border-light); border-radius: var(--radius-sm);">
+                    <div style="font-weight: 700; color: var(--color-indigo); margin-bottom: 0.5rem; font-size:0.95rem;">💡 오차역전파 가중치 업데이트 원리</div>
+                    <div style="font-size: 1.3rem; margin: 0.75rem 0; color: var(--text-primary); font-family: 'Times New Roman', Times, serif;">
+                        $$W_{\text{new}} = W_{\text{old}} - \eta \frac{\partial E}{\partial W}$$
+                    </div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                        (출력 에러 \(E\)에 영향을 미친 방향의 반대로 학습률 \(\eta\)만큼 조정)
+                    </div>
+                </div>
+
+                <h3 style="margin-top:2.5rem; font-size:1.15rem; color:var(--text-primary); border-left:4px solid #8b5cf6; padding-left:0.5rem; margin-bottom:1rem;">2-1-1. 역전파의 수학적 심장: 미분의 연쇄 법칙 (Chain Rule)</h3>
+                <p>
+                    인공신경망은 가중치 곱셈과 활성화 함수가 겹겹이 얽혀 있는 거대한 <strong>합성함수(Composite Function)</strong>입니다. 
+                    출력단의 에러 \(E\)가 저 깊은 입력단 연결선의 가중치 \(W\)에 도달할 때까지 어떻게 각 변수의 영향력을 무너뜨리지 않고 곱해 나가는지 설명해 주는 수학적 원리가 바로 <strong>연쇄 법칙(Chain Rule)</strong>입니다.
+                </p>
+                <p>
+                    함수가 중첩되어 있을 때, 바깥쪽 함수부터 안쪽 함수까지 각각의 미분(변화율)을 구해 곱해주면 최종 미분값을 얻을 수 있습니다. 
+                    예를 들어, 어떤 출력 \(z\)가 중간값 \(y\)에 종속되고, 다시 \(y\)가 입력 \(x\)에 종속될 때 (\(z = g(y)\), \(y = f(x)\)), \(x\)의 변화가 \(z\)에 미치는 최종 미분값 \(\frac{\partial z}{\partial x}\)는 아래와 같이 나누어 곱해집니다.
+                </p>
+
+                <p style="text-align:center; font-size:1.25rem; margin:1.5rem 0; font-family:'Times New Roman', Times, serif;">
+                    $$\frac{\partial z}{\partial x} = \frac{\partial z}{\partial y} \cdot \frac{\partial y}{\partial x}$$
+                </p>
+
+                <!-- SVG: Chain Rule concept visualization -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem;">🔗 연쇄 법칙(Chain Rule) — 도미노식 미분값 전달 원리</div>
+                    <svg width="420" height="120" viewBox="0 0 420 120" style="overflow:visible;">
+                        <!-- Forward flow: x -> y -> z (Top) -->
+                        <g transform="translate(10, 5)">
+                            <!-- Nodes -->
+                            <rect x="10" y="30" width="50" height="25" rx="4" fill="#f0f7ff" stroke="#3182f6" stroke-width="1.5"/>
+                            <text x="35" y="46" font-size="9.5" font-weight="bold" fill="#3182f6" text-anchor="middle">입력 x</text>
+
+                            <rect x="160" y="30" width="80" height="25" rx="4" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+                            <text x="200" y="46" font-size="9" font-weight="bold" fill="#8b5cf6" text-anchor="middle">중간 y = f(x)</text>
+
+                            <rect x="310" y="30" width="80" height="25" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+                            <text x="350" y="46" font-size="9" font-weight="bold" fill="#10b981" text-anchor="middle">출력 z = g(y)</text>
+
+                            <!-- Forward arrows (blue) -->
+                            <path d="M 68,42 L 150,42" fill="none" stroke="#3182f6" stroke-width="1.5" marker-end="url(#chain-arrow-blue)"/>
+                            <path d="M 248,42 L 300,42" fill="none" stroke="#3182f6" stroke-width="1.5" marker-end="url(#chain-arrow-blue)"/>
+                            <text x="110" y="35" font-size="8" fill="#64748b" text-anchor="middle">순전파 계산</text>
+
+                            <!-- Backward gradient flows (red) -->
+                            <path d="M 300,55 L 248,55" fill="none" stroke="#ef4444" stroke-width="1.5" marker-end="url(#chain-arrow-red)"/>
+                            <text x="274" y="70" font-size="8.5" font-weight="bold" fill="#ef4444" text-anchor="middle">∂z / ∂y</text>
+
+                            <path d="M 150,55 L 68,55" fill="none" stroke="#ef4444" stroke-width="1.5" marker-end="url(#chain-arrow-red)"/>
+                            <text x="110" y="70" font-size="8.5" font-weight="bold" fill="#ef4444" text-anchor="middle">∂y / ∂x</text>
+
+                            <!-- Formula summation -->
+                            <text x="200" y="102" font-size="10.5" font-weight="bold" fill="#1e293b" text-anchor="middle">
+                                전체 변화율: ∂z / ∂x = (∂z / ∂y) × (∂y / ∂x)
+                            </text>
+                        </g>
+
+                        <!-- Marker Defs -->
+                        <defs>
+                            <marker id="chain-arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#3182f6" />
+                            </marker>
+                            <marker id="chain-arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                <path d="M 8 2 L 0 5 L 8 8 z" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <p style="margin-bottom:2.5rem;">
+                    이 체인 링크와 같은 수식들의 곱을 거쳐, 오차역전파는 출력층 오차부터 순차적으로 미분값을 전달하고 곱해가며 가장 첫 레이어의 연결선 가중치까지 오차 영향력을 한 단계씩 배달합니다. 
+                    즉, <strong>오차역전파는 이 연쇄 법칙(Chain Rule)을 신경망 전체 구조에 맞춰 시스템화한 일종의 자동 미분 도구</strong>인 셈입니다.
+                </p>
+
+                <h3 style="margin-top:2.5rem; font-size:1.15rem; color:var(--text-primary); border-left:4px solid #8b5cf6; padding-left:0.5rem; margin-bottom:1rem;">2-1-2. 왜 '깊은(Deep)' 신경망이어야 하는가? 계층적 특징 추출의 강력함</h3>
+                <p>
+                    이론상 단 하나의 은닉층만 있어도 뉴런의 개수가 무한하다면 어떤 연속 함수든 모사할 수 있습니다(보편적 근사 정리). 그렇다면 굳이 신경망을 '깊게(Deep)' 쌓을 필요가 있을까요? 
+                    인공지능 연구자들은 이론적인 복잡도보다 <strong>매개변수 효율성(Parameter Efficiency)</strong>과 <strong>지능의 창발성</strong>에 집중했습니다.
+                </p>
+                <p>
+                    얕고 지나치게 넓은(Wide) 신경망은 복잡한 데이터 관계를 학습할 때 뉴런 수가 <strong>기하급수적으로(지수적으로)</strong> 증가해야 하며, 일반화가 어려워 과적합(Overfitting)에 매우 취약합니다. 
+                    반면, 신경망을 깊게 쌓으면 모델은 데이터를 <strong>"계층적 특징 추출(Hierarchical Feature Extraction)"</strong> 방식으로 학습합니다. 
+                    가장 앞쪽 층(Low-level)에서는 점, 선, 면과 같은 원초적인 특징을 포착하고, 층을 거쳐 깊어질수록 이들을 조합하여 사물의 형태, 텍스처, 나아가 특정 객체의 전체 정체성(High-level)까지 점진적으로 추상화된 고도의 지능적 특징들을 적은 수의 파라미터(가중치)로도 표현해 낼 수 있게 됩니다.
+                </p>
+
+                <!-- SVG: Hierarchical Feature Learning Visualization -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">🔍 층이 깊어짐에 따른 계층적 특징 학습 흐름 (얼굴 인식 예시)</div>
+                    <svg width="440" height="150" viewBox="0 0 440 150" style="overflow:visible;">
+                        <!-- Three Feature Levels Blocks -->
+                        <!-- 1. Low-level (Edges) -->
+                        <g transform="translate(10, 20)">
+                            <rect x="0" y="0" width="110" height="85" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="1.5" />
+                            <text x="55" y="-6" font-size="8.5" font-weight="bold" fill="#64748b" text-anchor="middle">1단계: 저수준 특징</text>
+                            <!-- Visualizing Edges -->
+                            <line x1="20" y1="20" x2="40" y2="20" stroke="#94a3b8" stroke-width="2" />
+                            <line x1="70" y1="20" x2="70" y2="40" stroke="#94a3b8" stroke-width="2" />
+                            <line x1="30" y1="50" x2="50" y2="70" stroke="#94a3b8" stroke-width="2" />
+                            <line x1="80" y1="65" x2="60" y2="45" stroke="#94a3b8" stroke-width="2" />
+                            <text x="55" y="80" font-size="8.5" font-weight="bold" fill="#94a3b8" text-anchor="middle">선 / 경계면 (Edges)</text>
+                        </g>
+
+                        <!-- Plus Sign 1 -->
+                        <text x="142" y="72" font-size="16" font-weight="bold" fill="#64748b" text-anchor="middle">+</text>
+                        <path d="M 152,65 L 165,65" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#feat-arrow)"/>
+
+                        <!-- 2. Mid-level (Parts) -->
+                        <g transform="translate(180, 20)">
+                            <rect x="0" y="0" width="110" height="85" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="1.5" />
+                            <text x="55" y="-6" font-size="8.5" font-weight="bold" fill="#8b5cf6" text-anchor="middle">2단계: 중수준 특징</text>
+                            <!-- Visualizing parts: Eye, Nose, Mouth outlines -->
+                            <path d="M 25,35 Q 35,22 45,35 Q 35,42 25,35" fill="none" stroke="#8b5cf6" stroke-width="2" />
+                            <circle cx="35" cy="32" r="3.5" fill="#8b5cf6" />
+                            <path d="M 75,25 L 82,42 L 72,42" fill="none" stroke="#8b5cf6" stroke-width="2" />
+                            <path d="M 45,65 Q 55,75 65,65" fill="none" stroke="#8b5cf6" stroke-width="2" />
+                            <text x="55" y="80" font-size="8.5" font-weight="bold" fill="#8b5cf6" text-anchor="middle">부분 형태 (Parts)</text>
+                        </g>
+                        <!-- Plus Sign 2 -->
+                        <text x="312" y="72" font-size="16" font-weight="bold" fill="#8b5cf6" text-anchor="middle">+</text>
+                        <path d="M 322,65 L 335,65" fill="none" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#feat-arrow)"/>
+
+                        <!-- 3. High-level (Object) -->
+                        <g transform="translate(350, 20)">
+                            <rect x="0" y="0" width="110" height="85" rx="8" fill="#fff" stroke="#10b981" stroke-width="2" />
+                            <text x="55" y="-6" font-size="8.5" font-weight="bold" fill="#10b981" text-anchor="middle">3단계: 고수준 특징</text>
+                            <circle cx="55" cy="42" r="22" fill="none" stroke="#10b981" stroke-width="1.8" />
+                            <ellipse cx="46" cy="36" rx="3" ry="1.5" fill="#10b981" />
+                            <ellipse cx="64" cy="36" rx="3" ry="1.5" fill="#10b981" />
+                            <path d="M 55,39 L 57,48 L 53,48" fill="none" stroke="#10b981" stroke-width="1.5" />
+                            <path d="M 47,51 Q 55,59 63,51" fill="none" stroke="#10b981" stroke-width="1.5" />
+                            <text x="55" y="80" font-size="8.5" font-weight="bold" fill="#10b981" text-anchor="middle">전체 객체 (Faces)</text>
+                        </g>
+
+                        <!-- Arrow Marker Def -->
+                        <defs>
+                            <marker id="feat-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#64748b" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <p style="margin-bottom:2.5rem;">
+                    이와 같은 계층적 융합 방식은 고수준 정보를 표현하기 위한 경우의 수를 뉴런이 기하급수적으로 다 외우게 만드는 대신, <strong>특징들을 효과적으로 재활용하고 조합(Feature Reuse)</strong>하게 함으로써 매개변수 폭증 문제를 효율적으로 돌파할 수 있게 만듭니다. 
+                    이것이 오늘날 층을 깊게 쌓는 <strong>'딥러닝(Deep Learning)'</strong> 혁명의 강력한 이론적 배경입니다.
+                </p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-2. 두 번째 겨울과 통계적 머신러닝의 시대 (기울기 소실의 난제)</h3>
+                <p>
+                    오차역전파 알고리즘은 혁신적이었으나, 신경망을 3층, 4층 이상으로 깊게 쌓으려 하자(Deep Neural Network) 예상치 못한 수학적 난관에 부딪혔습니다. 바로 <strong>기울기 소실(Vanishing Gradient)</strong> 문제입니다. 
+                </p>
+
+                <!-- Formula Box: Sigmoid Function and its Derivative -->
+                <div class="formula-box" style="margin: 1.5rem 0; font-size:1rem; text-align:center; padding: 1.5rem; background:#f8f9fa; border:1px dashed var(--border-light); border-radius: var(--radius-sm);">
+                    <div style="font-weight: 700; color: var(--color-indigo); margin-bottom: 0.5rem; font-size:0.95rem;">💡 시그모이드(Sigmoid) 함수와 미분</div>
+                    <div style="font-size: 1.25rem; margin: 0.75rem 0; color: var(--text-primary); font-family: 'Times New Roman', Times, serif;">
+                        $$\sigma(x) = \frac{1}{1 + e^{-x}}$$
+                        $$\sigma'(x) = \sigma(x)(1 - \sigma(x)) \quad (\le 0.25)$$
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; text-align: left; max-width: 380px; margin: 0 auto;">
+                        • 미분값인 \(\sigma'(x)\)는 오직 \(x = 0\)일 때 최댓값인 <strong>\(0.25\)</strong>를 가집니다.<br>
+                        • 입력 \(x\)의 절댓값이 커질수록(즉, 뉴런이 강하게 반응하거나 억제될수록) 미분값은 <strong>\(0\)에 무한히 수렴</strong>합니다(Gradient Saturation).
+                    </div>
+                </div>
+
+                <p>
+                    당시 뉴런의 활성화 함수로 사용되던 시그모이드(Sigmoid) 함수는 미분했을 때의 최댓값이 오직 \(0.25\)에 불과합니다. 역전파 과정에서 미분의 연쇄 법칙(Chain Rule)에 의해 각 층의 활성화 함수 미분값이 계속 곱해지는데, 4개 층만 거쳐도 곱해지는 값이 \(0.25^4 \approx 0.0039\)로 급격히 줄어들게 됩니다. 
+                    결과적으로 입력층에 가까운 앞쪽 가중치들에는 오차 정보가 거의 0에 수렴하여 도달(전파)되므로, 앞쪽 뉴런들은 학습을 전혀 수행하지 못하고 멈춰버리는 현상이 발생했습니다. 
+                </p>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-3. 제프리 힌튼과 암흑기 속의 돌파구 (현대 딥러닝의 4대 구원투수)</h3>
+                <p>
+                    모두가 신경망 연구를 떠나며 비웃을 때도, 제프리 힌튼 교수와 캐나다 연구팀은 묵묵히 신경망의 한계들을 극복할 무기들을 개발해 나갔습니다. 그 결과 2000년대 중후반부터 2010년대 중반에 이르러 겨울을 녹일 네 가지 핵심 돌파구가 완성되었습니다.
+                </p>
+                <p>
+                    첫째는 <strong>ReLU(Rectified Linear Unit)</strong> 활성화 함수의 채택입니다. 시그모이드와 달리 ReLU는 \(f(x) = \max(0, x)\)의 단순한 꺾인 직선 형태로, <strong>양수 영역의 미분(기울기)이 항상 \(1.0\)으로 일정</strong>합니다. 
+                    연쇄 법칙에 의해 아무리 많은 층을 거슬러 올라가도 \(1 \times 1 \times 1 = 1\)이 곱해지므로, 기울기 소실을 물리적으로 차단하는 해결사가 되었습니다.
+                </p>
+                <p>
+                    둘째는 <strong>드롭아웃(Dropout)</strong> 기법의 도입입니다. 학습 과정에서 무작위로 일정 비율의 뉴런 연결을 차단하여(꺼버려서) 남은 뉴런들만으로 학습을 강제하는 정규화 기법입니다. 
+                    특정 뉴런들의 조합에 과도하게 의존하여 훈련 데이터만 암기해버리는 <strong>과적합(Overfitting)</strong> 문제를 근본적으로 해결해 주었습니다.
+                </p>
+                <p>
+                    셋째는 <strong>가중치 초기화(Weight Initialization) 기법의 발견</strong>입니다. 
+                    이전에는 가중치를 무작위 난수로 초기화하여 신호가 뒤로 갈수록 죽거나 너무 튀는 문제가 빈발했습니다. 2010년 자비에 글로럿(Xavier Glorot)과 2015년 카이밍 헤(Kaiming He)는 각 층의 입력 및 출력 뉴런 수에 맞게 초기 가중치의 통계적 분산을 설계하는 **Xavier 초기화** 및 **He 초기화** 기법을 개발하여 신경망 내부 신호 세기를 최초부터 끝까지 흔들림 없이 전파하는 데 성공했습니다.
+                </p>
+                <p>
+                    넷째는 <strong>배치 정규화(Batch Normalization)의 도입</strong>입니다. 
+                    2015년 구글 연구진이 제안한 이 기법은 학습 과정에서 각 층의 데이터 분포가 시시각각 뒤틀어지는 현상(Internal Covariate Shift)을 방지하기 위해, 미니배치 단위로 평균을 0, 분산을 1로 실시간 강제 통일하여 층 사이에 끼워 넣습니다. 
+                    이를 통해 학습 속도가 수 배 이상 도약했고, 가중치 값의 급격한 편향을 막아 학습 안정성을 원천적으로 격상시켰습니다.
+                </p>
+
+                <!-- SVG: 4 Modern DL Breakthroughs Grid Dashboard -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">🛠️ 현대 딥러닝의 4대 수학적·구조적 구원투수 (Breakthroughs)</div>
+                    <svg width="460" height="265" viewBox="0 0 460 265" style="overflow:visible;">
+                        <!-- Panel A: ReLU (Top-Left) -->
+                        <g transform="translate(5, 5)">
+                            <rect x="0" y="0" width="220" height="120" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="110" y="18" font-size="8.5" font-weight="bold" fill="#16a34a" text-anchor="middle">📈 ReLU (미분=1 기울기 보존)</text>
+                            
+                            <!-- Graph representation -->
+                            <line x1="30" y1="85" x2="190" y2="85" stroke="#cbd5e1" stroke-width="1"/>
+                            <line x1="110" y1="35" x2="110" y2="95" stroke="#cbd5e1" stroke-width="1"/>
+                            
+                            <!-- Negative flat, Positive linear -->
+                            <path d="M 40,85 L 110,85 L 180,45" fill="none" stroke="#16a34a" stroke-width="2"/>
+                            <text x="155" y="42" font-size="7.5" font-weight="bold" fill="#16a34a">기울기 1.0</text>
+                            <text x="110" y="108" font-size="7.5" fill="#64748b" text-anchor="middle">음수 구역 차단 ➔ 양수 구역 보존</text>
+                        </g>
+
+                        <!-- Panel B: Dropout (Top-Right) -->
+                        <g transform="translate(235, 5)">
+                            <rect x="0" y="0" width="220" height="120" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="110" y="18" font-size="8.5" font-weight="bold" fill="#ea580c" text-anchor="middle">🕸️ 드롭아웃 (과적합 방지)</text>
+                            
+                            <!-- Small network with disabled node -->
+                            <circle cx="45" cy="50" r="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+                            <circle cx="45" cy="75" r="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+                            
+                            <circle cx="110" cy="40" r="7" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
+                            <!-- Disabled Node -->
+                            <circle cx="110" cy="62" r="7" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="2,2"/>
+                            <line x1="107" y1="59" x2="113" y2="65" stroke="#94a3b8" stroke-width="1.2"/>
+                            <line x1="113" y1="59" x2="107" y2="65" stroke="#94a3b8" stroke-width="1.2"/>
+                            
+                            <circle cx="110" cy="85" r="7" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
+                            
+                            <circle cx="175" cy="62" r="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+                            
+                            <!-- Lines -->
+                            <line x1="52" y1="50" x2="103" y2="40" stroke="#ea580c" stroke-width="0.8"/>
+                            <line x1="52" y1="75" x2="103" y2="85" stroke="#ea580c" stroke-width="0.8"/>
+                            <line x1="117" y1="40" x2="168" y2="62" stroke="#ea580c" stroke-width="0.8"/>
+                            <line x1="117" y1="85" x2="168" y2="62" stroke="#ea580c" stroke-width="0.8"/>
+                            
+                            <text x="110" y="108" font-size="7.5" fill="#64748b" text-anchor="middle">일부 뉴런 무작위 Off ➔ 협동 강제</text>
+                        </g>
+
+                        <!-- Panel C: Weight Init (Bottom-Left) -->
+                        <g transform="translate(5, 135)">
+                            <rect x="0" y="0" width="220" height="120" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="110" y="18" font-size="8.5" font-weight="bold" fill="#3182f6" text-anchor="middle">⚖️ 가중치 초기화 (Xavier & He)</text>
+                            
+                            <!-- Bad vs Good -->
+                            <path d="M 20,60 Q 35,40 50,60 T 80,60 T 100,60" fill="none" stroke="#f87171" stroke-width="1.5"/>
+                            <text x="55" y="85" font-size="7" fill="#ef4444" text-anchor="middle">무작위: 신호 소실 ❌</text>
+                            
+                            <line x1="110" y1="35" x2="110" y2="90" stroke="#f1f5f9" stroke-width="1.5"/>
+                            
+                            <path d="M 120,60 Q 135,40 150,60 T 180,60 T 200,60" fill="none" stroke="#3182f6" stroke-width="1.5"/>
+                            <text x="165" y="85" font-size="7" fill="#3182f6" text-anchor="middle">He/Xavier: 신호 보존 ✅</text>
+                            
+                            <text x="110" y="108" font-size="7.5" fill="#64748b" text-anchor="middle">입력 수에 맞춘 분산 조율 ➔ 전파 안정화</text>
+                        </g>
+
+                        <!-- Panel D: Batch Normalization (Bottom-Right) -->
+                        <g transform="translate(235, 135)">
+                            <rect x="0" y="0" width="220" height="120" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="110" y="18" font-size="8.5" font-weight="bold" fill="#8b5cf6" text-anchor="middle">🔄 배치 정규화 (Batch Normalization)</text>
+                            
+                            <!-- Skewed Bell Curve to Normalized Bell Curve -->
+                            <path d="M 25,80 Q 45,40 55,80" fill="none" stroke="#f87171" stroke-width="1.5"/>
+                            <path d="M 50,80 Q 60,55 75,80" fill="none" stroke="#fb923c" stroke-width="1.2"/>
+                            <text x="50" y="90" font-size="7" fill="#e11d48" text-anchor="middle">분포 뒤틀림 (Shift)</text>
+                            
+                            <!-- Arrow in middle -->
+                            <path d="M 98,60 L 122,60" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#feat-arrow-sub)"/>
+                            
+                            <!-- Right: Centered standard curve -->
+                            <path d="M 140,80 Q 165,35 190,80" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                            <text x="165" y="90" font-size="7" fill="#8b5cf6" text-anchor="middle">정규화 (μ=0, σ²=1)</text>
+                            
+                            <text x="110" y="108" font-size="7.5" fill="#64748b" text-anchor="middle">미니배치 평균/분산 통일 ➔ 고속 학습</text>
+                        </g>
+                        
+                        <!-- Marker definition inside SVG -->
+                        <defs>
+                            <marker id="feat-arrow-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#64748b" />
+                            </marker>
+                            <marker id="back-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                <path d="M 8 2 L 0 5 L 8 8 Z" fill="#16a34a" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #ef4444;">
+                        <div style="font-size:2rem;">📉</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">시그모이드(Sigmoid)의 함정</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">출력이 0~1 사이로 극도로 압축되어 있어, 역전파 과정에서 미분값을 곱하면 곱할수록 0에 가까워집니다. 층이 깊어지면 깊어질수록 학습이 완전히 멈춰버리는 기울기 소실의 주범입니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start; background:#fff; padding:1.5rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.05); border:1px solid #e2e8f0; border-left:4px solid #16a34a;">
+                        <div style="font-size:2rem;">📈</div>
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.05rem; color:var(--text-primary);">ReLU(Linear Rectifier)의 극복</h4>
+                            <p style="margin:0; font-size:0.95rem; color:var(--text-secondary); line-height:1.5;">입력이 0보다 크면 기울기가 항상 1로 온전히 전달되어, 신경망의 깊이를 수십, 수백 층으로 쌓아 올려도 가중치 오차가 앞쪽까지 안정적으로 도달할 수 있게 만들어 주었습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="theory-ch3">
+                <h2>Chapter 3. 딥러닝 빅뱅과 인식 혁명 (2010s)</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 대용량 데이터(ImageNet)와 강력한 컴퓨팅 엔진(GPU), 그리고 개선된 알고리즘이 결합하며 바야흐로 '딥러닝 빅뱅'의 서막이 올랐습니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">3-1. 2012년 이미지넷과 AlexNet의 압승</h3>
+                <p>
+                    2012년은 AI 역사에서 가장 극적인 해 중 하나입니다. 컴퓨터가 대량의 이미지를 분류하는 대회인 <strong>ImageNet Challenge (ILSVRC)</strong>에서 제프리 힌튼 교수 팀의 대학원생 알렉스 크리제프스키(Alex Krizhevsky)가 설계한 심층 신경망 <strong>AlexNet</strong>이 등장했습니다. 
+                    AlexNet은 에러율을 무려 기존의 26% 수준에서 16%로 떨어뜨리며 압도적인 1위를 차지했습니다. 
+                    당시 AlexNet은 <strong>NVIDIA GPU</strong> 2대를 엮어 행렬 병렬 연산을 가속화함으로써 컴퓨터 과학자들에게 "인공지능을 구현하기 위해선 GPU 연산 엔진이 해답"이라는 새로운 패러다임을 확립해 주었습니다.
+                </p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">3-2. 이미지의 지배자 CNN vs 시퀀스의 지배자 RNN</h3>
+                <p>2010년대 딥러닝 부흥기를 이끈 두 가지 핵심 구조는 데이터의 형태에 따라 나뉘었습니다.</p>
+
+                <div class="metric-grid" style="margin-top:1.5rem;">
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #5856d6;">
+                        <div class="metric-label" style="color:#5856d6;">📷 CNN (합성곱 신경망)</div>
+                        <div class="metric-value" style="font-size:1.2rem;">공간 정보 패턴 추출</div>
+                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">
+                            이미지를 격자로 보고 필터(커널)를 씌워 <strong>로컬 특징(선, 면, 윤곽 등)</strong>을 추출하는 신경망입니다. 위치에 구애받지 않고 특징을 포착하는 능력이 뛰어나 이미지 인식, 자율주행 센서 처리에 독보적입니다.
+                        </p>
+                    </div>
+                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #3182f6;">
+                        <div class="metric-label" style="color:#3182f6;">📜 RNN (순환 신경망)</div>
+                        <div class="metric-value" style="font-size:1.2rem;">시간적 흐름 반영</div>
+                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">
+                            이전 은닉 상태의 값을 순환적으로 가져와 <strong>시간 순서(텍스트, 시계열 등)</strong>가 있는 데이터를 학습합니다. 그러나 텍스트가 조금만 길어져도 과거 정보를 잊는 고질적인 장기 의존성(Long-term Dependency) 문제가 있으며, 순차적으로 연산해야 하므로 GPU 병렬 처리를 활용하기 어렵다는 치명적인 한계가 있었습니다.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article id="theory-ch4">
+                <h2>Chapter 4. 트랜스포머(Transformer)와 LLM의 시대 (2017 - 현재)</h2>
+                <p style="color:var(--text-tertiary); font-size:0.95rem; margin-bottom:2rem;">핵심 한 줄: 단어를 순차적으로 분석하던 한계에서 탈피하여 문장 전체를 한번에 처리하는 Attention이 등장하면서 AI는 스케일링의 우주로 나아가게 되었습니다.</p>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-1. 패러다임 시프트: Attention Is All You Need</h3>
+                <p>
+                    2017년 Google 연구진은 RNN을 완전히 제외한 채 오로지 어텐션 메커니즘으로만 구성된 새로운 아키텍처, <strong>Transformer</strong>를 발표했습니다.
+                    핵심은 <strong>Self-Attention(셀프 어텐션)</strong>입니다. 
+                    문장 안의 각 단어가 문맥적으로 어떤 단어와 깊게 연관되어 있는지를 행렬 연산 한 번으로 찾아냅니다. 
+                    단어를 순차적으로 입력받던 RNN과 달리, 문장 내 전체 단어를 한꺼번에 병렬로 연산하기 때문에 <strong>대규모 컴퓨팅 자원(GPU)의 연산 한계를 극한까지</strong> 밀어붙여 무한대에 가까운 텍스트 데이터를 통째로 쏟아부을 수 있게 되었습니다.
+                </p>
+
+                <!-- Self-Attention 시각화 도구 -->
+                <div class="card" style="margin-top:2rem; background:#eff6ff; border:1px solid rgba(37,99,235,0.15); padding:1.8rem; border-radius:16px;">
+                    <h4 style="color:#2563eb; margin-top:0; font-size:1.1rem; margin-bottom:1rem; display:flex; align-items:center; gap:8px;">
+                        <span>🔬 [어텐션 시뮬레이터] 단어 간 가중치의 동적 연결성</span>
+                    </h4>
+                    <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:1.5rem;">
+                        아래 영어 문장에서 강조된 핵심 지칭 대명사들을 <strong>터치/마우스 호버</strong>해 보세요. 해당 단어와 문맥적으로 강하게 연결된 단어들(어텐션 가중치)이 실시간으로 하이라이트됩니다.
+                    </p>
+
+                    <!-- Interactive Word Board -->
+                    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:2rem; padding:1.5rem 1rem; background:#fff; border-radius:12px; border:1px solid #e2e8f0; min-height:80px; align-items:center;">
+                        <span v-for="(word, wIdx) in words" :key="wIdx" 
+                              @mouseenter="['it', 'tired'].includes(word) ? hoveredWord = word : null"
+                              @mouseleave="hoveredWord = null"
+                              :style="{
+                                  fontSize: '1.1rem',
+                                  fontWeight: ['it', 'tired'].includes(word) ? '800' : '500',
+                                  padding: '6px 12px',
+                                  borderRadius: '6px',
+                                  cursor: ['it', 'tired'].includes(word) ? 'pointer' : 'default',
+                                  border: ['it', 'tired'].includes(word) ? '2px solid #ea580c' : '1px solid transparent',
+                                  background: word === hoveredWord ? '#fff3eb' : (hoveredWord ? `rgba(49, 130, 246, ${getAttentionOpacity(word)})` : 'transparent'),
+                                  color: getAttentionColor(word),
+                                  transition: 'all 0.2s ease'
+                              }">
+                            {{ word }}
+                        </span>
+                    </div>
+
+                    <!-- Simulator Legend -->
+                    <div style="font-size:0.85rem; color:var(--text-secondary); line-height:1.6; display:flex; flex-direction:column; gap:4px; padding-left: 0.5rem; border-left: 3px solid #3182f6;">
+                        <div v-if="!hoveredWord" style="color:var(--text-tertiary);">
+                            💡 <strong>it</strong> 또는 <strong>tired</strong>에 마우스 커서를 올리면 어텐션 메커니즘을 시각화합니다.
+                        </div>
+                        <div v-else-if="hoveredWord === 'it'">
+                            🔍 대명사 <strong>"it"</strong>은 문맥상 다른 장소가 아니라 <strong>"animal"</strong>(가중치 62%)과 가장 높은 연관성을 가짐을 스스로 잡아냅니다.
+                        </div>
+                        <div v-else-if="hoveredWord === 'tired'">
+                            🔍 형용사 <strong>"tired"</strong>는 지치게 만든 주체인 <strong>"animal"</strong>(가중치 45%)과 강한 의미적 어텐션을 맺고 있습니다.
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-2. GPT vs BERT: 디코더와 인코더의 갈림길</h3>
+                <p>트랜스포머의 구조적 변형은 대형 모델의 방향성을 둘러싸고 두 가지 거대한 흐름을 만들어 냈습니다.</p>
+
+                <div style="display:flex; gap: 1.5rem; margin: 2rem 0; flex-wrap: wrap;">
+                    <!-- BERT -->
+                    <div style="flex:1; background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm); min-width: 280px;">
+                        <div style="font-size:2.5rem; margin-bottom:0.5rem;">🔎</div>
+                        <h4 style="color: #3182f6; font-size:1.2rem; margin-top:0; margin-bottom:0.5rem;">BERT (인코더 기반)</h4>
+                        <p style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:1rem;"><strong>Bidirectional Encoder Representations from Transformers</strong></p>
+                        <p style="text-align:left; font-size:0.9rem; color:var(--text-secondary); line-height:1.6; margin-bottom:0;">
+                            문맥의 좌우 양방향을 동시에 들여다봅니다. 문장 내 마스킹된 단어를 빈칸 채우기 식으로 학습하기 때문에 <strong>텍스트 분류, 감성 분석, 질문 답변</strong> 등 텍스트의 '깊은 이해'에 뛰어난 성능을 발휘합니다.
+                        </p>
+                    </div>
+
+                    <!-- GPT -->
+                    <div style="flex:1; background:#fff; border:1px solid #ea580c; border-radius:var(--radius-lg); padding:1.5rem; text-align:center; box-shadow:var(--shadow-card); min-width: 280px; position:relative;">
+                        <div style="position:absolute; top:-12px; right:20px; background:#ea580c; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:10px;">글로벌 트렌드</div>
+                        <div style="font-size:2.5rem; margin-bottom:0.5rem;">✍️</div>
+                        <h4 style="color: #ea580c; font-size:1.2rem; margin-top:0; margin-bottom:0.5rem;">GPT (디코더 기반)</h4>
+                        <p style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:1rem;"><strong>Generative Pre-trained Transformer</strong></p>
+                        <p style="text-align:left; font-size:0.9rem; color:var(--text-secondary); line-height:1.6; margin-bottom:0;">
+                            이전까지 생성된 모든 단어를 기반으로 '다음 단어를 예측(Autoregressive)'하며 순방향으로 흘러갑니다. 문장 잇기 학습을 엄청난 스케일로 수행하여 <strong>스토리 작성, 대화 응답, 코드 자동 완성</strong> 등 고도의 '텍스트 생성' 영역에서 주도권을 잡았습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-3. 스케일링 법칙(Scaling Law)과 창발적 능력(Emergent Ability)</h3>
+                <p>
+                    OpenAI는 GPT-1(1.1억 개 파라미터), GPT-2(15억 개)를 거쳐 2020년 <strong>GPT-3(1,750억 개)</strong>를 발표하며 인공지능 학계를 송두리째 흔들었습니다.
+                    이와 함께 <strong>스케일링 법칙(Scaling Law)</strong>이 증명되었습니다. 
+                    모델 크기(Parameters), 학습 데이터 크기(Tokens), 그리고 소모되는 컴퓨터 연산량(Compute)이 정비례적으로 늘어날수록 에러율은 지수 함수 그래프를 따라 매끄럽게 감소한다는 성질입니다.
+                </p>
+                <p>
+                    특히 파라미터 수가 특정 임계점(보통 1,000억 개 내외)을 돌파하는 순간, 이전의 작은 모델에서는 전혀 불가능했던 <strong>산술 연산, 논리 추론, 프로그래밍 코드 작성</strong> 등의 기묘한 지능들이 갑작스럽게 발현되는 <strong>창발적 능력(Emergent Abilities)</strong>이 나타남이 밝혀졌습니다. 
+                    이로써 AI는 복잡하고 어려운 특정 기능용 모델을 각각 설계하던 시대에서 벗어나, 거대하고 범용적인 LLM을 하나 만든 뒤 이를 튜닝(Fine-tuning / Alignment)하여 사용하는 거대 모델 독주 시대로 전환하게 되었습니다.
+                </p>
+
+                <!-- AI History Timeline Summary -->
+                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-4. AI 역사 요약 타임라인</h3>
+                <div style="position:relative; margin-top:2rem; padding-left:1.5rem; border-left: 3px solid #e5e8eb;">
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1943</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">인공신경망의 조상 제안</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">맥컬록과 피츠(McCulloch-Pitts), 최초의 수학적 생물학적 뉴런 모델 제안</p>
+                    </div>
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1950 - 1956</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">AI의 태동기</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">튜링 테스트 제안, 다트머스 학술회의 개최 (Artificial Intelligence 탄생)</p>
+                    </div>
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1969</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">1차 암흑기 돌입</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">민스키 교수의 단층 퍼셉트론 XOR 한계 수학적 증명으로 학계 침체</p>
+                    </div>
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#3182f6; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem;">1986</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">다층 신경망과 오차역전파 부활</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">은닉층 추가 및 오차 역전파 학습법 도입 (기울기 소실로 다시 2차 침체)</p>
+                    </div>
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#5856d6; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#5856d6; font-size:0.9rem;">2012</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">AlexNet과 딥러닝 빅뱅</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">이미지넷 대회에서 압도적 우승, GPU 가속 학습 및 딥러닝 혁명 촉발</p>
+                    </div>
+                    <div style="margin-bottom:0; position:relative;">
+                        <div style="position:absolute; left:-29px; top:4px; width:12px; height:12px; border-radius:50%; background:#ea580c; border:2px solid #fff;"></div>
+                        <div style="font-weight:700; color:#ea580c; font-size:0.9rem;">2017 - 현재</div>
+                        <h4 style="margin:4px 0; font-size:1rem;">Transformer 및 LLM 대중화</h4>
+                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">Google Self-Attention(Transformer) 발표, 스케일링 법칙 증명, 생성형 AI(ChatGPT) 대혁명 시대</p>
+                    </div>
+                </div>
+            </article>
+
+            <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border-light); color:var(--text-tertiary); text-align:center; font-size:0.9rem;">
+                <p>AI Theory Academy &copy; 2026</p>
+            </footer>
+        </main>
+    </div>
+</template>
+
+<script src="../assets/js/academy-common.js"></script>
+<script>
+mountAcademyView('TheoryLectureView');
+</script>
+
+</body>
+</html>

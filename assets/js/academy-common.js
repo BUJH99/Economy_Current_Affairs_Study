@@ -1284,6 +1284,265 @@ const CodingLectureView = {
     }
 };
 
+const TheoryLectureView = {
+    template: '#theory-lecture-view-tpl',
+    emits: ['go-home'],
+    data() {
+        return {
+            toc: [],
+            activeToc: '',
+            hoveredWord: null,
+            xorMode: 'single', // 'single' or 'multi'
+            words: ["The", "animal", "didn't", "cross", "the", "street", "because", "it", "was", "too", "tired"],
+            attentionWeights: {
+                "it": { "The": 0.02, "animal": 0.62, "didn't": 0.01, "cross": 0.05, "the": 0.03, "street": 0.15, "because": 0.04, "it": 0.05, "was": 0.01, "too": 0.01, "tired": 0.01 },
+                "tired": { "The": 0.01, "animal": 0.45, "didn't": 0.03, "cross": 0.02, "the": 0.01, "street": 0.02, "because": 0.08, "it": 0.05, "was": 0.12, "too": 0.05, "tired": 0.16 }
+            }
+        };
+    },
+    mounted() {
+        const headers = this.$el.querySelectorAll('h2, h3');
+        const tocList = [];
+        headers.forEach((h, index) => {
+            const id = h.id || `theory-section-${index}`;
+            h.id = id;
+            tocList.push({
+                id: id,
+                text: h.textContent.replace(/^Chapter \d+: /, '').split('(')[0].trim(),
+                isSub: h.tagName === 'H3'
+            });
+        });
+        this.toc = tocList;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.activeToc = entry.target.id;
+                }
+            });
+        }, { rootMargin: '-10% 0px -70% 0px' });
+
+        headers.forEach(h => observer.observe(h));
+
+        this.$nextTick(() => {
+            this.initLossLandscape3D();
+            if (window.renderMathInElement) {
+                window.renderMathInElement(this.$el, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    },
+    unmounted() {
+        this.cleanupLossLandscape3D();
+    },
+    methods: {
+        scrollTo(id) {
+            const el = document.getElementById(id);
+            if(el) el.scrollIntoView({ behavior: 'smooth' });
+        },
+        getAttentionOpacity(word) {
+            if (!this.hoveredWord) return 0.15;
+            const weights = this.attentionWeights[this.hoveredWord];
+            if (!weights) return 0.15;
+            const w = weights[word] || 0;
+            return Math.max(0.1, w);
+        },
+        getAttentionColor(word) {
+            if (!this.hoveredWord) return 'var(--text-secondary)';
+            if (word === this.hoveredWord) return '#ea580c'; // Highlight focus word in orange
+            const weights = this.attentionWeights[this.hoveredWord];
+            if (!weights) return 'var(--text-secondary)';
+            const w = weights[word] || 0;
+            if (w > 0.4) return '#3182f6'; // Strong attention in Toss Blue
+            if (w > 0.1) return '#5856d6'; // Medium attention in Indigo
+            return 'var(--text-tertiary)';
+        },
+        initLossLandscape3D() {
+            const container = document.getElementById('loss-landscape-3d');
+            if (!container) return;
+
+            // 1. Scene & Camera
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xfafafa);
+
+            const width = container.clientWidth || 400;
+            const height = container.clientHeight || 320;
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(15, 12, 15);
+
+            // 2. Renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // 3. OrbitControls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2.2; // Don't go below ground
+            controls.minDistance = 8;
+            controls.maxDistance = 40;
+
+            // 4. Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(10, 20, 10);
+            scene.add(dirLight);
+
+            // Grid Helper (Subtle bottom reference plane)
+            const gridHelper = new THREE.GridHelper(16, 16, 0xe2e8f0, 0xf1f5f9);
+            gridHelper.position.y = -2.1;
+            scene.add(gridHelper);
+
+            // 5. Geometry generating function
+            const size = 14;
+            const segments = 40;
+            const geometry = new THREE.PlaneGeometry(size, size, segments, segments);
+            geometry.rotateX(-Math.PI / 2);
+
+            const position = geometry.attributes.position;
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const z = position.getZ(i);
+                const y = 1.5 * Math.sin(x * 0.4) * Math.cos(z * 0.4) + 0.035 * (x * x + z * z) - 1.5;
+                position.setY(i, y);
+            }
+            geometry.computeVertexNormals();
+
+            // 6. Mesh & Wireframe
+            const surfaceMat = new THREE.MeshPhongMaterial({
+                color: 0x3182f6,
+                transparent: true,
+                opacity: 0.12,
+                side: THREE.DoubleSide,
+                shininess: 60
+            });
+            const mesh = new THREE.Mesh(geometry, surfaceMat);
+            scene.add(mesh);
+
+            const wireframeMat = new THREE.MeshBasicMaterial({
+                color: 0x3182f6,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.2
+            });
+            const wireframeMesh = new THREE.Mesh(geometry, wireframeMat);
+            scene.add(wireframeMesh);
+
+            // 7. Path of Gradient Descent
+            const points = [];
+            const steps = 100;
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const angle = t * Math.PI * 3.5;
+                const radius = 5.5 * (1 - t);
+                const px = radius * Math.cos(angle);
+                const pz = radius * Math.sin(angle);
+                const py = 1.5 * Math.sin(px * 0.4) * Math.cos(pz * 0.4) + 0.035 * (px * px + pz * pz) - 1.5;
+                points.push(new THREE.Vector3(px, py, pz));
+            }
+
+            const pathCurve = new THREE.CatmullRomCurve3(points);
+            const pathGeometry = new THREE.TubeGeometry(pathCurve, 64, 0.1, 8, false);
+            const pathMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+            const pathMesh = new THREE.Mesh(pathGeometry, pathMat);
+            scene.add(pathMesh);
+
+            // 8. Ball
+            const ballGeo = new THREE.SphereGeometry(0.3, 16, 16);
+            const ballMat = new THREE.MeshPhongMaterial({ color: 0xef4444, shininess: 80 });
+            const ball = new THREE.Mesh(ballGeo, ballMat);
+            scene.add(ball);
+
+            // 9. Minimum Point Marker
+            const minGeo = new THREE.SphereGeometry(0.35, 16, 16);
+            const minMat = new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x064e3b, shininess: 80 });
+            const minMesh = new THREE.Mesh(minGeo, minMat);
+            minMesh.position.copy(points[points.length - 1]); // Global minimum
+            scene.add(minMesh);
+
+            // 10. Animation Loop
+            let progress = 0;
+            const animate = () => {
+                this.animationFrameId = requestAnimationFrame(animate);
+
+                progress += 0.004;
+                if (progress > 1) progress = 0;
+
+                const pos = pathCurve.getPointAt(progress);
+                ball.position.copy(pos);
+
+                controls.update();
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            // 11. Resize
+            const handleResize = () => {
+                if (!container || !renderer || !camera) return;
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            };
+            window.addEventListener('resize', handleResize);
+
+            this.threeResources = {
+                renderer,
+                geometry,
+                surfaceMat,
+                wireframeMat,
+                pathGeometry,
+                pathMat,
+                ballGeo,
+                ballMat,
+                minGeo,
+                minMat,
+                controls,
+                handleResize
+            };
+        },
+        cleanupLossLandscape3D() {
+            if (this.animationFrameId) {
+                cancelAnimationFrame(this.animationFrameId);
+                this.animationFrameId = null;
+            }
+            if (this.threeResources) {
+                const r = this.threeResources;
+                window.removeEventListener('resize', r.handleResize);
+                r.controls.dispose();
+                r.renderer.dispose();
+                r.geometry.dispose();
+                r.surfaceMat.dispose();
+                r.wireframeMat.dispose();
+                r.pathGeometry.dispose();
+                r.pathMat.dispose();
+                r.ballGeo.dispose();
+                r.ballMat.dispose();
+                r.minGeo.dispose();
+                r.minMat.dispose();
+                
+                const container = document.getElementById('loss-landscape-3d');
+                if (container) {
+                    container.innerHTML = '';
+                }
+                this.threeResources = null;
+            }
+        }
+    }
+};
+
 window.EconAcademy = {
     formatNum,
     vizData,
@@ -1296,7 +1555,8 @@ window.EconAcademy = {
     AiLectureView,
     GeoLectureView,
     ReLectureView,
-    CodingLectureView
+    CodingLectureView,
+    TheoryLectureView
 };
 
 window.mountAcademyView = function mountAcademyView(componentName) {
