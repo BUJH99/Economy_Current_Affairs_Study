@@ -1131,7 +1131,7 @@
             
                 <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-4. 데이터 특화형 아키텍처의 선구적 출현: 시퀀스를 위한 RNN과 공간을 위한 CNN</h3>
                 <p>
-                    신경망이 단순 다층 퍼셉트론(MLP)의 일차원적 구조를 탈피하면서, 데이터의 고유한 차원적 특징에 특화된 두 갈래 of 독창적인 아키텍처가 선구적으로 고안되었습니다. 
+                    신경망이 단순 다층 퍼셉트론(MLP)의 일차원적 구조를 탈피하면서, 데이터의 고유한 차원적 특징에 특화된 두 갈래의 독창적인 아키텍처가 선구적으로 고안되었습니다. 
                     하나는 시간적 순서가 있는 데이터를 위해 앞선 기억을 수평 순환시키는 <strong>RNN 계열</strong>이며, 다른 하나는 격자 형태의 공간 데이터를 커널 필터로 요약하는 <strong>CNN 계열</strong>입니다.
                 </p>
 
@@ -1376,7 +1376,7 @@
                             
                             <text x="105" y="125" font-size="7.5" fill="#1e293b" font-weight="bold" text-anchor="middle">격자 훑기 ➔ 특징 추출 (Feature Map)</text>
                             <text x="105" y="137" font-size="7" fill="#64748b" text-anchor="middle">위치가 바뀌어도 동일 특징 검출 가능</text>
-                            <text x="105" y="147" font-size="7" fill="#64748b" text-anchor="middle">(Translation Invariance)</text>
+                            <text x="105" y="147" font-size="64748b" text-anchor="middle">(Translation Invariance)</text>
                         </g>
 
                         <!-- Right Panel: RNN Unfolding -->
@@ -2296,9 +2296,7 @@
                         <!-- Panel Right -->
                         <g transform="translate(360, 20)">
                             <rect x="0" y="0" width="270" height="160" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
-                            <foreignObject x="10" y="8" width="250" height="20">
-                                <div style="font-family: inherit; font-size: 8.5px; color: #ea580c; font-weight: bold; text-align: center;">⚡ 창발적 능력 (임계점 상전이 그래프)</div>
-                            </foreignObject>
+                            <text x="155" y="16" font-size="9" font-weight="bold" fill="#ea580c" text-anchor="middle">⚡ 창발적 능력 (임계점 상전이 그래프)</text>
                             
                             <line x1="40" y1="130" x2="240" y2="130" stroke="#cbd5e1" stroke-width="1" />
                             <line x1="40" y1="30" x2="40" y2="135" stroke="#cbd5e1" stroke-width="1" />
@@ -2440,7 +2438,175 @@
                         </defs>
                     </svg>
                 </div>
-<h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-5. AI 역사 요약 타임라인 (세부 사건 리스트)</h3>
+
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-5. 효율성의 혁신: 혼합 전문가(MoE, Mixture of Experts) 아키텍처</h3>
+                <p>
+                    스케일링 법칙에 따라 모델의 성능을 극대화하려면 파라미터 수를 아득히 늘려야 하지만, 이는 기하급수적인 연산 비용(Compute Cost)과 메모리 대역폭 한계를 초래합니다. 
+                    이 딜레마를 돌파하기 위해 도입된 핵심 아키텍처가 바로 <strong>혼합 전문가(MoE, Mixture of Experts)</strong>입니다. 
+                    기존의 조밀한(Dense) 모델이 모든 토큰을 처리할 때 신경망의 모든 가중치를 가동했다면, MoE는 입력되는 토큰마다 필요한 일부 파라미터만 활성화시키는 <strong>희소성(Sparsity)</strong>을 극대화합니다.
+                </p>
+                <p>
+                    MoE 아키텍처는 크게 <strong>게이팅 네트워크(Gating Network / Router)</strong>와 다수의 <strong>전문가(Experts)</strong>들로 구성됩니다. 
+                    입력 토큰이 레이어에 진입하면 라우터가 토큰의 특징을 파악해 가장 적합한 특정 전문가들(예: 8개의 전문가 FFN 중 상위 2개인 Top-2 Experts)에게 토큰을 분배(Routing)합니다. 
+                    이후 선택된 전문가들만 가동하여 연산을 수행하고, 나머지 비활성화된 전문가들은 휴면 상태를 유지하여 연산 비용을 획기적으로 절감합니다. 
+                    결과적으로 모델 전체 파라미터는 수천억~수조 개 수준으로 확보해 모델의 지능(표현력)을 극대화하면서도, 실제 토큰당 연산량은 아주 작게 유지하여 실시간 서비스(Inference) 효율을 혁신적으로 달성했습니다.
+                </p>
+
+                <!-- SVG: Mixture of Experts (MoE) Architecture Dashboard -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">⚙️ Dense 모델 vs Sparse MoE 구조 대조 및 토큰별 동적 라우팅 메커니즘 (Top-2 Routing)</div>
+                    <svg width="660" height="230" viewBox="0 0 660 230" style="overflow:visible;">
+                        <!-- Left Panel: Dense vs Sparse MoE Concept -->
+                        <g transform="translate(10, 10)">
+                            <rect x="0" y="0" width="300" height="210" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="150" y="16" font-size="9" font-weight="bold" fill="#3b82f6" text-anchor="middle">⚖️ 조밀(Dense) 모델 vs 희소(Sparse) MoE 대조</text>
+                            
+                            <!-- Dense Model flow -->
+                            <g transform="translate(15, 30)">
+                                <rect x="0" y="0" width="270" height="65" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.8"/>
+                                <text x="10" y="12" font-size="6.5" fill="#1e3a8a" font-weight="bold">조밀(Dense) 모델 레이어: 100% 뉴런 풀가동</text>
+                                
+                                <rect x="20" y="25" width="40" height="15" rx="2" fill="#fff" stroke="#3b82f6" stroke-width="1"/>
+                                <text x="40" y="34" font-size="6" fill="#1d4ed8" font-weight="bold" text-anchor="middle">Input x</text>
+                                
+                                <path d="M 60,32.5 L 90,32.5" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#moe-arrow-blue)"/>
+                                
+                                <!-- Active heavy FFN -->
+                                <rect x="90" y="22" width="90" height="22" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.2"/>
+                                <text x="135" y="31" font-size="6.5" fill="#fff" font-weight="bold" text-anchor="middle">Single Heavy FFN</text>
+                                <text x="135" y="39" font-size="5" fill="#dbeafe" text-anchor="middle">전체 파라미터 항시 가동</text>
+                                
+                                <path d="M 180,32.5 L 210,32.5" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#moe-arrow-blue)"/>
+                                
+                                <rect x="210" y="25" width="40" height="15" rx="2" fill="#fff" stroke="#3b82f6" stroke-width="1"/>
+                                <text x="230" y="34" font-size="6" fill="#1d4ed8" font-weight="bold" text-anchor="middle">Output y</text>
+                                
+                                <text x="135" y="58" font-size="5.5" fill="#ef4444" font-weight="bold" text-anchor="middle">단점: 모델 확장 시 연산 비용(FLOPs) 정비례 폭증</text>
+                            </g>
+                            
+                            <!-- Sparse MoE flow -->
+                            <g transform="translate(15, 110)">
+                                <rect x="0" y="0" width="270" height="85" rx="4" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="0.8"/>
+                                <text x="10" y="12" font-size="6.5" fill="#065f46" font-weight="bold">희소(Sparse) MoE 레이어: 필요한 부분만 동적 가동</text>
+                                
+                                <rect x="15" y="25" width="35" height="15" rx="2" fill="#fff" stroke="#10b981" stroke-width="1"/>
+                                <text x="32.5" y="34" font-size="6" fill="#047857" font-weight="bold" text-anchor="middle">Input x</text>
+                                
+                                <path d="M 50,32.5 L 65,32.5" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#moe-arrow-green)"/>
+                                
+                                <!-- Router -->
+                                <circle cx="80" cy="32.5" r="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+                                <text x="80" y="35" font-size="5.5" fill="#fff" font-weight="bold" text-anchor="middle">Router</text>
+                                
+                                <!-- Small active FFNs -->
+                                <rect x="110" y="20" width="40" height="12" rx="1.5" fill="#10b981" stroke="#047857" stroke-width="1"/>
+                                <text x="130" y="28" font-size="5" fill="#fff" font-weight="bold" text-anchor="middle">Expert 1 (Active)</text>
+                                
+                                <rect x="110" y="35" width="40" height="12" rx="1.5" fill="#fff" stroke="#94a3b8" stroke-width="0.5" opacity="0.6"/>
+                                <text x="130" y="43" font-size="5" fill="#94a3b8" text-anchor="middle" opacity="0.6">Expert 2 (Idle)</text>
+                                
+                                <rect x="110" y="50" width="40" height="12" rx="1.5" fill="#10b981" stroke="#047857" stroke-width="1"/>
+                                <text x="130" y="58" font-size="5" fill="#fff" font-weight="bold" text-anchor="middle">Expert 3 (Active)</text>
+                                
+                                <path d="M 92,32.5 L 110,26" fill="none" stroke="#10b981" stroke-width="0.8" marker-end="url(#moe-arrow-green-sub)"/>
+                                <path d="M 92,32.5 L 110,56" fill="none" stroke="#10b981" stroke-width="0.8" marker-end="url(#moe-arrow-green-sub)"/>
+                                
+                                <!-- Merge -->
+                                <circle cx="175" cy="38" r="7.5" fill="#fff" stroke="#10b981" stroke-width="1"/>
+                                <text x="175" y="40.5" font-size="7" fill="#047857" font-weight="bold" text-anchor="middle">+</text>
+                                
+                                <path d="M 150,26 Q 165,26 168.5,32" fill="none" stroke="#10b981" stroke-width="0.8"/>
+                                <path d="M 150,56 Q 165,56 168.5,44" fill="none" stroke="#10b981" stroke-width="0.8"/>
+                                
+                                <path d="M 182.5,38 L 220,38" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#moe-arrow-green)"/>
+                                
+                                <rect x="220" y="30" width="35" height="15" rx="2" fill="#fff" stroke="#10b981" stroke-width="1"/>
+                                <text x="237.5" y="39" font-size="6" fill="#047857" font-weight="bold" text-anchor="middle">Output y</text>
+                                
+                                <text x="135" y="78" font-size="5.5" fill="#16a34a" font-weight="bold" text-anchor="middle">장점: 연산량(FLOPs)을 보존한 채 가중치 크기만 무제한 확대</text>
+                            </g>
+                        </g>
+
+                        <!-- Right Panel: Detailed Routing Mechanism (Top-2 Expert Routing) -->
+                        <g transform="translate(340, 10)">
+                            <rect x="0" y="0" width="310" height="210" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="155" y="16" font-size="9" font-weight="bold" fill="#0f766e" text-anchor="middle">🥞 MoE 라우터 분배 및 도메인 전문가 구조 (Top-2)</text>
+                            
+                            <!-- Input Token -->
+                            <rect x="15" y="90" width="40" height="20" rx="2" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                            <text x="35" y="102" font-size="6.5" fill="#475569" font-weight="bold" text-anchor="middle">Token ("코딩")</text>
+                            
+                            <!-- Router -->
+                            <rect x="75" y="75" width="60" height="50" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2"/>
+                            <text x="105" y="87" font-size="7" fill="#1d4ed8" font-weight="bold" text-anchor="middle">Router (Gating)</text>
+                            <text x="105" y="98" font-size="5" fill="#1e3a8a" text-anchor="middle">소프트맥스 가중치</text>
+                            <text x="105" y="108" font-size="5" fill="#ea580c" font-weight="bold" text-anchor="middle">Top-2 Expert 선택</text>
+                            <text x="105" y="118" font-size="4.5" fill="#64748b" text-anchor="middle">\( G(x) = \text{softmax}(x W_g) \)</text>
+                            
+                            <path d="M 55,100 L 71,100" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#moe-arrow-blue)"/>
+                            
+                            <!-- Experts List (Expert 1~4) -->
+                            <!-- Expert 1 (Active Code Expert) -->
+                            <rect x="175" y="30" width="105" height="28" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+                            <text x="180" y="42" font-size="6.5" fill="#065f46" font-weight="bold">Expert 1: 코딩 특화</text>
+                            <text x="180" y="52" font-size="5" fill="#059669">활성 가중치: 0.82 (FFN_1)</text>
+                            
+                            <!-- Expert 2 (Active Math Expert) -->
+                            <rect x="175" y="70" width="105" height="28" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+                            <text x="180" y="82" font-size="6.5" fill="#065f46" font-weight="bold">Expert 2: 논리/수학</text>
+                            <text x="180" y="92" font-size="5" fill="#059669">활성 가중치: 0.15 (FFN_2)</text>
+                            
+                            <!-- Expert 3 (Idle Language Expert) -->
+                            <rect x="175" y="110" width="105" height="28" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.5" opacity="0.5"/>
+                            <text x="180" y="122" font-size="6.5" fill="#94a3b8" opacity="0.5">Expert 3: 인문/언어</text>
+                            <text x="180" y="132" font-size="5" fill="#94a3b8" opacity="0.5">비활성 (Idle)</text>
+                            
+                            <!-- Expert 4 (Idle Science Expert) -->
+                            <rect x="175" y="150" width="105" height="28" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.5" opacity="0.5"/>
+                            <text x="180" y="162" font-size="6.5" fill="#94a3b8" opacity="0.5">Expert 4: 물리/화학</text>
+                            <text x="180" y="172" font-size="5" fill="#94a3b8" opacity="0.5">비활성 (Idle)</text>
+                            
+                            <!-- Routing Paths -->
+                            <path d="M 135,90 Q 155,75 170,48" fill="none" stroke="#10b981" stroke-width="1.5" marker-end="url(#moe-arrow-green-sub)"/>
+                            <path d="M 135,100 L 170,84" fill="none" stroke="#10b981" stroke-width="1.2" marker-end="url(#moe-arrow-green-sub)"/>
+                            <path d="M 135,110 Q 155,120 170,120" fill="none" stroke="#94a3b8" stroke-width="0.6" stroke-dasharray="1.5,1.5" opacity="0.5"/>
+                            <path d="M 135,115 Q 150,150 170,155" fill="none" stroke="#94a3b8" stroke-width="0.6" stroke-dasharray="1.5,1.5" opacity="0.5"/>
+                            
+                            <!-- Aggregator -->
+                            <circle cx="230" cy="195" r="7" fill="#fff" stroke="#ea580c" stroke-width="1.2"/>
+                            <text x="230" y="197.5" font-size="8" fill="#ea580c" font-weight="bold" text-anchor="middle">+</text>
+                            
+                            <!-- Math Formula -->
+                            <foreignObject x="15" y="145" width="135" height="30">
+                                <div style="font-family: inherit; font-size: 6px; color: #ea580c; font-weight: bold;">\( y = \sum_{i \in Top2} G(x)_i E_i(x) \)</div>
+                                <div style="font-family: inherit; font-size: 4.5px; color: #ca8a04;">가중합 결합 연산</div>
+                            </foreignObject>
+                            
+                            <path d="M 280,44 L 290,44 L 290,195 L 240,195" fill="none" stroke="#10b981" stroke-width="1"/>
+                            <path d="M 280,84 L 285,84 L 285,192 L 240,192" fill="none" stroke="#10b981" stroke-width="1"/>
+                            
+                            <path d="M 230,202 L 230,215 L 260,215" fill="none" stroke="#ea580c" stroke-width="1.2" marker-end="url(#moe-arrow-orange)"/>
+                            <text x="265" y="217" font-size="6" fill="#ca8a04" font-weight="bold">Output</text>
+                        </g>
+
+                        <!-- Common Markers -->
+                        <defs>
+                            <marker id="moe-arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#3b82f6" />
+                            </marker>
+                            <marker id="moe-arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#10b981" />
+                            </marker>
+                            <marker id="moe-arrow-green-sub" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#10b981" />
+                            </marker>
+                            <marker id="moe-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ea580c" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+<h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-6. AI 역사 요약 타임라인 (세부 사건 리스트)</h3>
                 <div style="position:relative; margin-top:2.5rem; padding-left:1.8rem; border-left: 2px solid #e2e8f0;">
                     <!-- Era 1: 1943 -->
                     <div style="margin-bottom:1.5rem; position:relative;">
