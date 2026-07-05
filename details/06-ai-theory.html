@@ -1128,6 +1128,345 @@
                         </div>
                     </div>
                 </div>
+            
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">2-4. 데이터 특화형 아키텍처의 선구적 출현: 시퀀스를 위한 RNN과 공간을 위한 CNN</h3>
+                <p>
+                    신경망이 단순 다층 퍼셉트론(MLP)의 일차원적 구조를 탈피하면서, 데이터의 고유한 차원적 특징에 특화된 두 갈래의 독창적인 아키텍처가 선구적으로 고안되었습니다. 
+                    하나는 시간적 순서가 있는 데이터를 위해 앞선 기억을 수평 순환시키는 <strong>RNN 계열</strong>이며, 다른 하나는 격자 형태의 공간 데이터를 커널 필터로 요약하는 <strong>CNN 계열</strong>입니다.
+                </p>
+
+                <!-- Part 1: RNN & LSTM/GRU -->
+                <h4 style="margin-top:1.5rem; font-size:1.1rem; color:var(--text-primary);">A. 시간의 흐름을 학습하는 순환 신경망 (RNN, LSTM, GRU)</h4>
+                <p>
+                    <strong>순환 신경망(RNN, Recurrent Neural Network)</strong>은 시계열이나 자연어 등 데이터의 순차적 문맥을 이해하기 위해 기억 저장소를 내부에 삽입한 형태입니다. 
+                    그 역사는 <strong>1982년 존 홉필드(John Hopfield)의 Hopfield Network(연상 기억)</strong>로 출발하여, <strong>1986년 마이클 조던(Michael I. Jordan)의 Jordan Network</strong>(출력층 피드백 모델)를 거쳐, <strong>1990년 제프리 엘만(Jeffrey Elman)의 Elman Network(Simple Recurrent Network)</strong>에 이르러 완성되었습니다. 
+                    은닉층의 신호가 가중치 \(W_{hh}\)를 통해 다음 시점으로 끝없이 순환하게 만듦으로써 가변 길이 데이터를 성공적으로 읽어내기 시작했습니다 (\(h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h)\)).
+                </p>
+                <p>
+                    하지만 고전 RNN은 시퀀스가 조금만 길어져도 과거 기억이 전량 소실되는 기울기 소실 절벽에 부딪혔습니다. 
+                    이를 격파하고자 <strong>1997년 제프 슈미트후버(Jürgen Schmidhuber)와 제프 호프라이터(Sepp Hochreiter)</strong>가 컨베이어 벨트 모양의 셀 상태(\(C_t\))와 3대 문지기 게이트를 결합한 <strong>LSTM(Long Short-Term Memory)</strong>을 제안했습니다. 
+                    이후 현대적 AI 빅뱅이 시작된 <strong>2014년 조경현 교수 연구팀</strong>이 셀 상태와 은닉 상태를 통합하여 연산 효율을 높인 경량 버전인 <strong>GRU(Gated Recurrent Unit)</strong>를 내놓으며 시퀀스 처리 기술을 완성 단계로 인도했습니다.
+                </p>
+
+                <!-- SVG: LSTM vs GRU Gate Architecture Diagram -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">⚙️ LSTM의 3대 게이트 구조 (1997) vs GRU의 경량화 2대 게이트 구조 (2014)</div>
+                    <svg width="450" height="200" viewBox="0 0 450 200" style="overflow:visible;">
+                        <!-- Left Panel: LSTM cell -->
+                        <g transform="translate(5, 5)">
+                            <rect x="0" y="0" width="210" height="180" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="105" y="18" font-size="9" font-weight="bold" fill="#0284c7" text-anchor="middle">🔒 LSTM Cell (Cell State & 3 Gates)</text>
+                            
+                            <!-- Conveyor belt (Cell State Flow) -->
+                            <line x1="20" y1="50" x2="190" y2="50" stroke="#0284c7" stroke-width="2" />
+                            <text x="25" y="44" font-size="6.5" fill="#0284c7" font-weight="bold">C_{t-1}</text>
+                            <text x="180" y="44" font-size="6.5" fill="#0284c7" font-weight="bold">C_t</text>
+                            
+                            <!-- Gate multipliers & adders -->
+                            <circle cx="55" cy="50" r="5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+                            <text x="55" y="52" font-size="6.5" fill="#ca8a04" font-weight="bold" text-anchor="middle">×</text>
+                            <text x="55" y="38" font-size="6.5" fill="#ca8a04" font-weight="bold" text-anchor="middle">f_t (망각)</text>
+                            
+                            <circle cx="105" cy="50" r="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+                            <text x="105" y="52" font-size="6.5" fill="#16a34a" font-weight="bold" text-anchor="middle">+</text>
+                            <text x="105" y="38" font-size="6.5" fill="#16a34a" font-weight="bold" text-anchor="middle">i_t (입력)</text>
+                            
+                            <circle cx="155" cy="70" r="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+                            <text x="155" y="72" font-size="6.5" fill="#dc2626" font-weight="bold" text-anchor="middle">×</text>
+                            <text x="175" y="73" font-size="6.5" fill="#dc2626" font-weight="bold" text-anchor="middle">o_t (출력)</text>
+                            
+                            <line x1="20" y1="120" x2="40" y2="120" stroke="#64748b" stroke-width="1"/>
+                            <text x="25" y="114" font-size="6.5" fill="#64748b" font-weight="bold">h_{t-1}</text>
+                            
+                            <line x1="105" y1="160" x2="105" y2="140" stroke="#64748b" stroke-width="1"/>
+                            <text x="105" y="169" font-size="6.5" fill="#64748b" font-weight="bold" text-anchor="middle">x_t (현재입력)</text>
+                            
+                            <path d="M 40,120 L 55,55" fill="none" stroke="#ca8a04" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            <path d="M 105,140 L 105,55" fill="none" stroke="#16a34a" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            <path d="M 105,140 L 150,70" fill="none" stroke="#dc2626" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            
+                            <path d="M 155,50 L 155,65" fill="none" stroke="#0284c7" stroke-width="1" />
+                            <path d="M 155,75 L 155,120 L 190,120" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#net-arrow-sub)"/>
+                            <text x="180" y="114" font-size="6.5" fill="#475569" font-weight="bold">h_t</text>
+                            
+                            <text x="105" y="142" font-size="6" fill="#475569" text-anchor="middle">게이트 연산 유닛</text>
+                        </g>
+
+                        <!-- Right Panel: GRU cell -->
+                        <g transform="translate(235, 5)">
+                            <rect x="0" y="0" width="210" height="180" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="105" y="18" font-size="9" font-weight="bold" fill="#0d9488" text-anchor="middle">🔓 GRU Cell (Simplified 2 Gates)</text>
+                            
+                            <line x1="20" y1="70" x2="190" y2="70" stroke="#0d9488" stroke-width="1.8" />
+                            <text x="25" y="64" font-size="6.5" fill="#0d9488" font-weight="bold">h_{t-1}</text>
+                            <text x="180" y="64" font-size="6.5" fill="#0d9488" font-weight="bold">h_t</text>
+                            
+                            <circle cx="65" cy="70" r="5" fill="#fee2e2" stroke="#ea580c" stroke-width="1"/>
+                            <text x="65" y="72" font-size="6.5" fill="#ea580c" font-weight="bold" text-anchor="middle">×</text>
+                            <text x="65" y="58" font-size="6.5" fill="#ea580c" font-weight="bold" text-anchor="middle">r_t (리셋)</text>
+                            
+                            <circle cx="125" cy="70" r="5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+                            <text x="125" y="72" font-size="6.5" fill="#0284c7" font-weight="bold" text-anchor="middle">×</text>
+                            <text x="125" y="58" font-size="6.5" fill="#0284c7" font-weight="bold" text-anchor="middle">z_t (업데이트)</text>
+                            
+                            <line x1="105" y1="160" x2="105" y2="140" stroke="#64748b" stroke-width="1"/>
+                            <text x="105" y="169" font-size="6.5" fill="#64748b" font-weight="bold" text-anchor="middle">x_t (현재입력)</text>
+                            
+                            <path d="M 105,140 L 65,75" fill="none" stroke="#ea580c" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            <path d="M 105,140 L 125,75" fill="none" stroke="#0284c7" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            
+                            <text x="105" y="125" font-size="7" fill="#475569" text-anchor="middle">이전 상태 & 입력 혼합</text>
+                            <text x="105" y="137" font-size="6.5" fill="#0d9488" font-weight="bold" text-anchor="middle">Cell State 제거 ➔ 경량화</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Part 2: CNN & LeNet-5 -->
+                <h4 style="margin-top:2.5rem; font-size:1.1rem; color:var(--text-primary);">B. 공간 정보를 추출하는 합성곱 신경망 (CNN & LeNet-5)</h4>
+                <p>
+                    이미지와 같이 인접한 픽셀 간의 밀접한 관계를 가진 격자형 데이터를 처리하기 위해 개발된 것이 <strong>합성곱 신경망(CNN, Convolutional Neural Network)</strong>. 
+                    그 기원은 <strong>1980년 후쿠시마 구니히코(Kunihiko Fukushima)가 생물학의 시각 피질 세포 구조에서 힌트를 얻어 제안한 Neocognitron</strong>으로 거슬러 올라갑니다.
+                </p>
+                <p>
+                    이후 <strong>1998년 얀 르쿤(Yann LeCun) 교수 연구팀</strong>이 오차역전파 학습이 가능한 현대적 아키텍처로 완성시킨 것이 바로 <strong>LeNet-5</strong>입니다. 
+                    LeNet-5는 입력 이미지 위로 일정한 크기의 격자 필터를 미끄러뜨리며 특징을 검출해내는 <strong>합성곱(Convolution)</strong> 레이어와 해상도를 줄여 이동 불변성을 획득하는 <strong>서브샘플링(Subsampling/풀링)</strong> 레이어, 그리고 1차원으로 합치는 <strong>전결합(Fully Connected)</strong> 레이어를 순차적으로 적층하여 수표 번호 인식 등에 큰 족적을 남겼습니다.
+                </p>
+
+                <!-- SVG: LeNet-5 Architecture (1998) -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.2rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1rem; display:flex; align-items:center; gap:6px;">📝 최초의 표준 합성곱 신경망 LeNet-5 아키텍처 (Yann LeCun, 1998)</div>
+                    <svg width="430" height="110" viewBox="0 0 430 110" style="overflow:visible;">
+                        <!-- Input Layer (32x32) -->
+                        <g transform="translate(10, 20)">
+                            <rect x="0" y="5" width="30" height="30" fill="#f8fafc" stroke="#64748b" stroke-width="1" />
+                            <line x1="10" y1="5" x2="10" y2="35" stroke="#cbd5e1" stroke-width="0.5"/>
+                            <line x1="20" y1="5" x2="20" y2="35" stroke="#cbd5e1" stroke-width="0.5"/>
+                            <line x1="0" y1="15" x2="30" y2="15" stroke="#cbd5e1" stroke-width="0.5"/>
+                            <line x1="0" y1="25" x2="30" y2="25" stroke="#cbd5e1" stroke-width="0.5"/>
+                            <path d="M 8,10 Q 22,10 18,20 Q 24,28 10,28" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                            <text x="15" y="47" font-size="6.5" fill="#64748b" font-weight="bold" text-anchor="middle">Input (32x32)</text>
+                        </g>
+
+                        <!-- Arrow 1 -->
+                        <path d="M 47,38 L 65,38" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#lenet-arrow)"/>
+                        <text x="56" y="32" font-size="6" fill="#3b82f6" font-weight="bold" text-anchor="middle">Conv</text>
+
+                        <!-- C1 Layer (6 maps @ 28x28) -->
+                        <g transform="translate(73, 10)">
+                            <rect x="15" y="0" width="24" height="24" fill="#e0e7ff" stroke="#3730a3" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="10" y="5" width="24" height="24" fill="#e0e7ff" stroke="#3730a3" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="5" y="10" width="24" height="24" fill="#e0e7ff" stroke="#3730a3" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="0" y="15" width="24" height="24" fill="#e0e7ff" stroke="#3730a3" stroke-width="0.8" fill-opacity="0.8"/>
+                            <text x="19" y="52" font-size="6" fill="#3730a3" font-weight="bold" text-anchor="middle">C1: 6 @ 28x28</text>
+                        </g>
+
+                        <!-- Arrow 2 -->
+                        <path d="M 120,38 L 138,38" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#lenet-arrow)"/>
+                        <text x="129" y="32" font-size="5.5" fill="#059669" font-weight="bold" text-anchor="middle">Subsample</text>
+
+                        <!-- S2 Layer (6 maps @ 14x14) -->
+                        <g transform="translate(145, 17)">
+                            <rect x="12" y="0" width="16" height="16" fill="#d1fae5" stroke="#065f46" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="8" y="4" width="16" height="16" fill="#d1fae5" stroke="#065f46" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="4" y="8" width="16" height="16" fill="#d1fae5" stroke="#065f46" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="0" y="12" width="16" height="16" fill="#d1fae5" stroke="#065f46" stroke-width="0.8" fill-opacity="0.8"/>
+                            <text x="14" y="39" font-size="6" fill="#065f46" font-weight="bold" text-anchor="middle">S2: 6 @ 14x14</text>
+                        </g>
+
+                        <!-- Arrow 3 -->
+                        <path d="M 183,38 L 201,38" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#lenet-arrow)"/>
+                        <text x="192" y="32" font-size="6" fill="#3b82f6" font-weight="bold" text-anchor="middle">Conv</text>
+
+                        <!-- C3 Layer (16 maps @ 10x10) -->
+                        <g transform="translate(208, 12)">
+                            <rect x="16" y="0" width="14" height="14" fill="#fee2e2" stroke="#991b1b" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="12" y="4" width="14" height="14" fill="#fee2e2" stroke="#991b1b" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="8" y="8" width="14" height="14" fill="#fee2e2" stroke="#991b1b" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="4" y="12" width="14" height="14" fill="#fee2e2" stroke="#991b1b" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="0" y="16" width="14" height="14" fill="#fee2e2" stroke="#991b1b" stroke-width="0.8" fill-opacity="0.8"/>
+                            <text x="15" y="45" font-size="6" fill="#991b1b" font-weight="bold" text-anchor="middle">C3: 16 @ 10x10</text>
+                        </g>
+
+                        <!-- Arrow 4 -->
+                        <path d="M 246,38 L 264,38" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#lenet-arrow)"/>
+                        <text x="255" y="32" font-size="5.5" fill="#059669" font-weight="bold" text-anchor="middle">Subsample</text>
+
+                        <!-- S4 Layer (16 maps @ 5x5) -->
+                        <g transform="translate(271, 20)">
+                            <rect x="12" y="0" width="10" height="10" fill="#fef3c7" stroke="#92400e" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="8" y="3" width="10" height="10" fill="#fef3c7" stroke="#92400e" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="4" y="6" width="10" height="10" fill="#fef3c7" stroke="#92400e" stroke-width="0.8" fill-opacity="0.8"/>
+                            <rect x="0" y="9" width="10" height="10" fill="#fef3c7" stroke="#92400e" stroke-width="0.8" fill-opacity="0.8"/>
+                            <text x="11" y="31" font-size="6" fill="#92400e" font-weight="bold" text-anchor="middle">S4: 16 @ 5x5</text>
+                        </g>
+
+                        <!-- Arrow 5 -->
+                        <path d="M 302,38 L 320,38" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#lenet-arrow)"/>
+                        <text x="311" y="32" font-size="6" fill="#ea580c" font-weight="bold" text-anchor="middle">Flatten</text>
+
+                        <!-- C5 & F6 & Output layers (Dense) -->
+                        <g transform="translate(331, 10)">
+                            <rect x="0" y="10" width="6" height="40" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="0.8" />
+                            <text x="3" y="58" font-size="5" fill="#475569" text-anchor="middle" font-weight="bold">C5 (120)</text>
+
+                            <rect x="20" y="15" width="6" height="30" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="0.8" />
+                            <text x="23" y="58" font-size="5" fill="#475569" text-anchor="middle" font-weight="bold">F6 (84)</text>
+
+                            <rect x="40" y="20" width="6" height="20" rx="2" fill="#f1f5f9" stroke="#1e293b" stroke-width="1" />
+                            <text x="43" y="58" font-size="5" fill="#1e293b" text-anchor="middle" font-weight="bold">Out (10)</text>
+                            
+                            <path d="M 6,30 L 20,30" fill="none" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="1,1"/>
+                            <path d="M 26,30 L 40,30" fill="none" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="1,1"/>
+                        </g>
+
+                        <!-- Arrow Marker -->
+                        <defs>
+                            <marker id="lenet-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#94a3b8" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Part 3: Architecture Core Comparative Diagram -->
+                <h4 style="margin-top:2.5rem; font-size:1.1rem; color:var(--text-primary);">C. 두 구조의 데이터 가공 매커니즘 대조</h4>
+                <p>
+                    격자 형태의 국소 영역을 중첩 요약하는 합성곱 기법과, 시간적 메모리를 다음 유닛에 루프로 물려받아 연계하는 순환 기법은 서로 데이터 취급 관점의 차이를 보이며 독립 발전했습니다.
+                </p>
+
+                <!-- SVG: CNN Feature Map Extraction vs RNN Time Unfolding -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">📷 CNN의 공간 특징 필터링 vs 📜 RNN의 시간 전개 기억 전달</div>
+                    <svg width="450" height="200" viewBox="0 0 450 200" style="overflow:visible;">
+                        <!-- Left Panel: CNN sliding filter -->
+                        <g transform="translate(5, 5)">
+                            <rect x="0" y="0" width="210" height="180" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="105" y="18" font-size="9" font-weight="bold" fill="#5856d6" text-anchor="middle">📷 CNN (Locality & Feature Map)</text>
+                            
+                            <!-- Input Image Grid (5x5) -->
+                            <g stroke="#cbd5e1" stroke-width="0.8" fill="#f8fafc">
+                                <rect x="25" y="45" width="60" height="60" rx="2" />
+                                <line x1="37" y1="45" x2="37" y2="105" />
+                                <line x1="49" y1="45" x2="49" y2="105" />
+                                <line x1="61" y1="45" x2="61" y2="105" />
+                                <line x1="73" y1="45" x2="73" y2="105" />
+                                <line x1="25" y1="57" x2="85" y2="57" />
+                                <line x1="25" y1="69" x2="85" y2="69" />
+                                <line x1="25" y1="81" x2="85" y2="81" />
+                                <line x1="25" y1="93" x2="85" y2="93" />
+                            </g>
+                            
+                            <!-- Sliding Kernel Highlight (3x3 on Top-Left) -->
+                            <rect x="25" y="45" width="36" height="36" fill="#5856d6" fill-opacity="0.15" stroke="#5856d6" stroke-width="1.5" />
+                            <text x="43" y="65" font-size="6" fill="#5856d6" font-weight="bold">Filter (3x3)</text>
+                            
+                            <!-- Feature Map Grid (3x3) -->
+                            <g stroke="#cbd5e1" stroke-width="0.8" fill="#f8fafc">
+                                <rect x="135" y="55" width="40" height="40" rx="2" />
+                                <line x1="148" y1="55" x2="148" y2="95" />
+                                <line x1="161" y1="55" x2="161" y2="95" />
+                                <line x1="135" y1="68" x2="175" y2="68" />
+                                <line x1="135" y1="81" x2="175" y2="81" />
+                            </g>
+                            
+                            <!-- Mapping lines -->
+                            <path d="M 61,45 L 135,55" fill="none" stroke="#5856d6" stroke-width="0.8" stroke-dasharray="1.5,1.5" opacity="0.6"/>
+                            <path d="M 61,81 L 135,68" fill="none" stroke="#5856d6" stroke-width="0.8" stroke-dasharray="1.5,1.5" opacity="0.6"/>
+                            <rect x="135" y="55" width="13" height="13" fill="#5856d6" stroke="#5856d6" stroke-width="1"/>
+                            
+                            <text x="105" y="125" font-size="7.5" fill="#1e293b" font-weight="bold" text-anchor="middle">격자 훑기 ➔ 특징 추출 (Feature Map)</text>
+                            <text x="105" y="137" font-size="7" fill="#64748b" text-anchor="middle">위치가 바뀌어도 동일 특징 검출 가능</text>
+                            <text x="105" y="147" font-size="7" fill="#64748b" text-anchor="middle">(Translation Invariance)</text>
+                        </g>
+
+                        <!-- Right Panel: RNN Unfolding -->
+                        <g transform="translate(235, 5)">
+                            <rect x="0" y="0" width="210" height="180" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="105" y="18" font-size="9" font-weight="bold" fill="#3182f6" text-anchor="middle">📜 RNN (Time-Unfolded Memory Loop)</text>
+                            
+                            <!-- Folded Model -->
+                            <g transform="translate(15, 35)">
+                                <circle cx="15" cy="50" r="7.5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+                                <text x="15" y="53" font-size="7.5" fill="#1e293b" text-anchor="middle">x_t</text>
+                                
+                                <rect x="35" y="42" width="20" height="16" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
+                                <text x="45" y="52" font-size="7.5" fill="#ea580c" font-weight="bold" text-anchor="middle">A</text>
+                                
+                                <circle cx="70" cy="50" r="7.5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+                                <text x="70" y="53" font-size="7.5" fill="#1e293b" text-anchor="middle">h_t</text>
+                                
+                                <path d="M 22.5,50 L 35,50" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#net-arrow)"/>
+                                <path d="M 55,50 L 62.5,50" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#net-arrow)"/>
+                                
+                                <path d="M 45,39 A 6,6 0 1,1 50,39" fill="none" stroke="#ea580c" stroke-width="1" marker-end="url(#net-arrow-orange)"/>
+                            </g>
+                            
+                            <line x1="105" y1="35" x2="105" y2="90" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="2,2"/>
+                            
+                            <!-- Unfolded Model -->
+                            <g transform="translate(112, 38)">
+                                <rect x="5" y="42" width="16" height="14" rx="2" fill="#fff7ed" stroke="#ea580c" stroke-width="1"/>
+                                <text x="13" y="51" font-size="6.5" fill="#ea580c" font-weight="bold" text-anchor="middle">A</text>
+                                <circle cx="13" cy="70" r="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                                <text x="13" y="72.5" font-size="6" fill="#64748b" text-anchor="middle">x_{t-1}</text>
+                                <circle cx="13" cy="25" r="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                                <text x="13" y="27.5" font-size="6" fill="#64748b" text-anchor="middle">h_{t-1}</text>
+                                <path d="M 13,64 L 13,56" fill="none" stroke="#64748b" stroke-width="0.8" marker-end="url(#net-arrow-sub)"/>
+                                <path d="M 13,42 L 13,31" fill="none" stroke="#64748b" stroke-width="0.8" marker-end="url(#net-arrow-sub)"/>
+                                
+                                <rect x="38" y="42" width="16" height="14" rx="2" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
+                                <text x="46" y="51" font-size="6.5" fill="#ea580c" font-weight="bold" text-anchor="middle">A</text>
+                                <circle cx="46" cy="70" r="6" fill="#f0f7ff" stroke="#3182f6" stroke-width="1"/>
+                                <text x="46" y="72.5" font-size="6" fill="#3182f6" text-anchor="middle">x_t</text>
+                                <circle cx="46" cy="25" r="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1"/>
+                                <text x="46" y="27.5" font-size="6" fill="#10b981" text-anchor="middle">h_t</text>
+                                <path d="M 46,64 L 46,56" fill="none" stroke="#3182f6" stroke-width="1" marker-end="url(#net-arrow-blue-sub)"/>
+                                <path d="M 46,42 L 46,31" fill="none" stroke="#10b981" stroke-width="1" marker-end="url(#net-arrow-green-sub)"/>
+                                
+                                <rect x="71" y="42" width="16" height="14" rx="2" fill="#fff7ed" stroke="#ea580c" stroke-width="1"/>
+                                <text x="79" y="51" font-size="6.5" fill="#ea580c" font-weight="bold" text-anchor="middle">A</text>
+                                <circle cx="79" cy="70" r="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                                <text x="79" y="72.5" font-size="6" fill="#64748b" text-anchor="middle">x_{t+1}</text>
+                                <circle cx="79" cy="25" r="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+                                <text x="79" y="27.5" font-size="6" fill="#64748b" text-anchor="middle">h_{t+1}</text>
+                                <path d="M 79,64 L 79,56" fill="none" stroke="#64748b" stroke-width="0.8" marker-end="url(#net-arrow-sub)"/>
+                                <path d="M 79,42 L 79,31" fill="none" stroke="#64748b" stroke-width="0.8" marker-end="url(#net-arrow-sub)"/>
+                                
+                                <path d="M 21,49 L 34,49" fill="none" stroke="#ea580c" stroke-width="1.2" marker-end="url(#net-arrow-orange-sub)"/>
+                                <path d="M 54,49 L 67,49" fill="none" stroke="#ea580c" stroke-width="1.2" marker-end="url(#net-arrow-orange-sub)"/>
+                                <text x="27" y="45" font-size="5" fill="#ea580c" font-weight="bold">h_{t-1}</text>
+                                <text x="60" y="45" font-size="5" fill="#ea580c" font-weight="bold">h_t</text>
+                            </g>
+                            
+                            <text x="105" y="125" font-size="7.5" fill="#1e293b" font-weight="bold" text-anchor="middle">시간 시퀀스 전개 ➔ 기억 순환 흐름</text>
+                            <text x="105" y="137" font-size="7" fill="#64748b" text-anchor="middle">이전 시점 기억(\(\text{h}_{\text{t}-1}\))을 현재로 전달</text>
+                            <text x="105" y="147" font-size="7" fill="#ef4444" font-weight="bold" text-anchor="middle">단점: 길어지면 과거 정보 유실 (기울기 소실)</text>
+                        </g>
+                        
+                        <!-- Common Markers -->
+                        <defs>
+                            <marker id="net-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#64748b" />
+                            </marker>
+                            <marker id="net-arrow-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#64748b" />
+                            </marker>
+                            <marker id="net-arrow-orange" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ea580c" />
+                            </marker>
+                            <marker id="net-arrow-orange-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ea580c" />
+                            </marker>
+                            <marker id="net-arrow-blue-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#3182f6" />
+                            </marker>
+                            <marker id="net-arrow-green-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#10b981" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
             </article>
 
             <article id="theory-ch3">
@@ -1140,27 +1479,516 @@
                     AlexNet은 에러율을 무려 기존의 26% 수준에서 16%로 떨어뜨리며 압도적인 1위를 차지했습니다. 
                     당시 AlexNet은 <strong>NVIDIA GPU</strong> 2대를 엮어 행렬 병렬 연산을 가속화함으로써 컴퓨터 과학자들에게 "인공지능을 구현하기 위해선 GPU 연산 엔진이 해답"이라는 새로운 패러다임을 확립해 주었습니다.
                 </p>
+                <!-- SVG: ImageNet & AlexNet Dual GPU Paradigm Shift Diagram -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">📈 이미지넷 빅데이터와 AlexNet의 2-GPU 병렬 아키텍처 및 에러율 충격 (2012)</div>
+                <h3 style="margin-top:2rem; font-size:1.15rem; color:var(--text-primary); border-bottom:1px dashed #cbd5e1; padding-bottom:0.3rem;">3-1-A. AlexNet의 5대 알고리즘적 혁신과 기법</h3>
+                <p>
+                    AlexNet이 ImageNet 대회에서 타 모델들을 가차 없이 무너뜨린 비결은 병렬 GPU 연산 외에도, 현대 딥러닝 학습 규격의 기반을 마련한 <strong>5가지 알고리즘적 혁신</strong>에 있습니다. 
+                    단순히 층을 쌓은 것을 넘어, 깊은 망이 안정적으로 수렴하고 오버피팅에 걸리지 않도록 고안된 장치들입니다.
+                </p>
+                <p>
+                    첫째는 <strong>ReLU 활성화 함수의 전면적 채택</strong>입니다. 기존의 Sigmoid나 Tanh 대신 \(f(x) = \max(0, x)\) 형태의 선형 램프 함수를 활용함으로써, 기울기 소실을 예방하고 학습 수렴 속도를 무려 <strong>6배 이상 가속</strong>시켰습니다. 
+                    둘째는 <strong>드롭아웃(Dropout, 50% 비율)</strong> 기법의 탑재입니다. 학습 시 매 단계마다 무작위로 절반의 뉴런을 연결선에서 비활성화하여, 신경망이 특정한 소수 뉴런에만 병적으로 의존하는 동조(Co-adaptation) 현상을 완전히 원천 차단했습니다.
+                </p>
+                <p>
+                    셋째는 <strong>중첩 맥스 풀링(Overlapping Max Pooling)</strong>입니다. 윈도우 크기와 보폭을 동일하게 설정해 데이터를 건너뛰며 필터링하던 기존 격자 풀링과 달리, 윈도우 크기 3, 보폭 2로 겹쳐 풀링함으로써 특징의 기하학적 정보 유실을 억제하고 오버피팅을 약 0.4%p 낮추었습니다. 
+                    넷째는 <strong>이미지 데이터 증강(Data Augmentation)</strong>입니다. 학습셋 이미지를 좌우 대칭 반전시키고 무작위로 위치를 자르거나(Crop), RGB 채널 별로 주성분 분석(PCA) 기반 노이즈를 섞어 학습 데이터를 물리적으로 수배 이상 부풀려 과대적합을 정복했습니다.
+                </p>
+                <p>
+                    다섯째는 <strong>로컬 반응 정규화(LRN, Local Response Normalization)</strong>입니다. 뇌 시각 신경세포의 '측면 억제(Lateral Inhibition)' 메커니즘을 모사하여, 인접한 특정 피처 맵 채널에서 한 활성화 강도가 매우 높으면 주변 채널의 강도를 상대적으로 눌러주어 망 전반의 특징적 대비(Contrast)를 고르게 유지시켰습니다 (이는 현대의 BatchNorm 레이어로 발전하는 시초가 됨).
+                </p>
 
-                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">3-2. 이미지의 지배자 CNN vs 시퀀스의 지배자 RNN</h3>
-                <p>2010년대 딥러닝 부흥기를 이끈 두 가지 핵심 구조는 데이터의 형태에 따라 나뉘었습니다.</p>
+                <!-- SVG: AlexNet 5 Algorithmic Innovations Grid -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">⚙️ AlexNet을 우승으로 이끈 5대 핵심 알고리즘 혁신 대시보드</div>
+                    <svg width="450" height="235" viewBox="0 0 450 235" style="overflow:visible;">
+                        <!-- Panel A: ReLU -->
+                        <g transform="translate(5, 5)">
+                            <rect x="0" y="0" width="135" height="100" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="67" y="16" font-size="8" font-weight="bold" fill="#3b82f6" text-anchor="middle">⚡ ReLU 활성화</text>
+                            <line x1="20" y1="80" x2="115" y2="80" stroke="#cbd5e1" stroke-width="0.8" />
+                            <line x1="67" y1="85" x2="67" y2="25" stroke="#cbd5e1" stroke-width="0.8" />
+                            <line x1="20" y1="80" x2="67" y2="80" stroke="#3b82f6" stroke-width="2" />
+                            <line x1="67" y1="80" x2="110" y2="37" stroke="#3b82f6" stroke-width="2" />
+                            <text x="67" y="93" font-size="6.5" fill="#475569" text-anchor="middle" font-weight="bold">f(x) = max(0, x)</text>
+                        </g>
 
-                <div class="metric-grid" style="margin-top:1.5rem;">
-                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #5856d6;">
-                        <div class="metric-label" style="color:#5856d6;">📷 CNN (합성곱 신경망)</div>
-                        <div class="metric-value" style="font-size:1.2rem;">공간 정보 패턴 추출</div>
-                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">
-                            이미지를 격자로 보고 필터(커널)를 씌워 <strong>로컬 특징(선, 면, 윤곽 등)</strong>을 추출하는 신경망입니다. 위치에 구애받지 않고 특징을 포착하는 능력이 뛰어나 이미지 인식, 자율주행 센서 처리에 독보적입니다.
-                        </p>
-                    </div>
-                    <div class="metric-card" style="background:#fff; border:1px solid #e2e8f0; border-top:4px solid #3182f6;">
-                        <div class="metric-label" style="color:#3182f6;">📜 RNN (순환 신경망)</div>
-                        <div class="metric-value" style="font-size:1.2rem;">시간적 흐름 반영</div>
-                        <p class="metric-desc" style="font-size:0.9rem; margin-top:8px;">
-                            이전 은닉 상태의 값을 순환적으로 가져와 <strong>시간 순서(텍스트, 시계열 등)</strong>가 있는 데이터를 학습합니다. 그러나 텍스트가 조금만 길어져도 과거 정보를 잊는 고질적인 장기 의존성(Long-term Dependency) 문제가 있으며, 순차적으로 연산해야 하므로 GPU 병렬 처리를 활용하기 어렵다는 치명적인 한계가 있었습니다.
-                        </p>
-                    </div>
+                        <!-- Panel B: Dropout -->
+                        <g transform="translate(150, 5)">
+                            <rect x="0" y="0" width="140" height="100" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="70" y="16" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">🚫 드롭아웃 (50%)</text>
+                            <g transform="translate(25, 25)">
+                                <circle cx="15" cy="15" r="4.5" fill="#3b82f6"/>
+                                <circle cx="15" cy="35" r="4.5" fill="#cbd5e1"/>
+                                <line x1="15" y1="31" x2="15" y2="39" stroke="#ef4444" stroke-width="1.5"/>
+                                <line x1="11" y1="35" x2="19" y2="35" stroke="#ef4444" stroke-width="1.5"/>
+                                <circle cx="15" cy="55" r="4.5" fill="#3b82f6"/>
+                                <circle cx="75" cy="15" r="4.5" fill="#cbd5e1"/>
+                                <line x1="75" y1="11" x2="75" y2="19" stroke="#ef4444" stroke-width="1.5"/>
+                                <line x1="71" y1="15" x2="79" y2="15" stroke="#ef4444" stroke-width="1.5"/>
+                                <circle cx="75" cy="35" r="4.5" fill="#ef4444"/>
+                                <circle cx="75" cy="55" r="4.5" fill="#cbd5e1"/>
+                                <line x1="75" y1="51" x2="75" y2="59" stroke="#ef4444" stroke-width="1.5"/>
+                                <line x1="71" y1="55" x2="79" y2="55" stroke="#ef4444" stroke-width="1.5"/>
+                                <line x1="19.5" y1="15" x2="70.5" y2="35" stroke="#94a3b8" stroke-width="0.8" opacity="0.6"/>
+                                <line x1="19.5" y1="55" x2="70.5" y2="35" stroke="#94a3b8" stroke-width="0.8" opacity="0.6"/>
+                            </g>
+                            <text x="70" y="93" font-size="6.5" fill="#475569" text-anchor="middle" font-weight="bold">뉴런 무작위 연결 제거</text>
+                        </g>
+
+                        <!-- Panel C: Overlapping Pooling -->
+                        <g transform="translate(300, 5)">
+                            <rect x="0" y="0" width="145" height="100" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="72" y="16" font-size="8" font-weight="bold" fill="#059669" text-anchor="middle">🧩 중첩 맥스 풀링</text>
+                            <g transform="translate(30, 25)" stroke="#cbd5e1" stroke-width="0.8" fill="none">
+                                <rect x="0" y="5" width="40" height="40" />
+                                <line x1="10" y1="5" x2="10" y2="45" />
+                                <line x1="20" y1="5" x2="20" y2="45" />
+                                <line x1="30" y1="5" x2="30" y2="45" />
+                                <line x1="0" y1="15" x2="40" y2="15" />
+                                <line x1="0" y1="25" x2="40" y2="25" />
+                                <line x1="0" y1="35" x2="40" y2="35" />
+                                <rect x="0" y="5" width="30" height="30" stroke="#059669" stroke-width="1.8" fill="#d1fae5" fill-opacity="0.2"/>
+                                <rect x="20" y="5" width="20" height="30" stroke="#d97706" stroke-width="1.2" stroke-dasharray="2,1" fill="#fef3c7" fill-opacity="0.1"/>
+                            </g>
+                            <text x="72" y="93" font-size="6.5" fill="#475569" text-anchor="middle" font-weight="bold">윈도우 3x3 / 스트라이드 2</text>
+                        </g>
+
+                        <!-- Panel D: Data Augmentation -->
+                        <g transform="translate(5, 115)">
+                            <rect x="0" y="0" width="215" height="110" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="107" y="16" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">🖼️ 이미지 데이터 증강 (Augmentation)</text>
+                            <g transform="translate(15, 30)">
+                                <rect x="0" y="0" width="40" height="40" rx="2" fill="#fff" stroke="#64748b" stroke-width="1"/>
+                                <polygon points="8,10 15,10 10,18" fill="#64748b"/>
+                                <polygon points="32,10 25,10 30,18" fill="#64748b"/>
+                                <circle cx="20" cy="22" r="10" fill="#64748b"/>
+                                <text x="20" y="49" font-size="6.5" fill="#64748b" text-anchor="middle" font-weight="bold">Original</text>
+                            </g>
+                            <path d="M 65,50 L 85,50" fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#alg-arrow)"/>
+                            <g transform="translate(98, 25)">
+                                <rect x="0" y="0" width="32" height="32" rx="2" fill="#fff" stroke="#ea580c" stroke-width="0.8"/>
+                                <polygon points="24,8 17,8 22,14.4" fill="#ea580c"/>
+                                <polygon points="4.8,8 10.4,8 6.4,14.4" fill="#ea580c"/>
+                                <circle cx="16" cy="17.6" r="8" fill="#ea580c"/>
+                                <text x="16" y="42" font-size="5" fill="#ea580c" text-anchor="middle">좌우 대칭</text>
+                            </g>
+                            <g transform="translate(150, 25)">
+                                <rect x="0" y="0" width="32" height="32" rx="2" fill="#fff" stroke="#ea580c" stroke-width="0.8"/>
+                                <circle cx="10" cy="13" r="10" fill="#ea580c"/>
+                                <text x="16" y="42" font-size="5" fill="#ea580c" text-anchor="middle">무작위 크롭</text>
+                            </g>
+                            <text x="107" y="102" font-size="6.5" fill="#475569" text-anchor="middle" font-weight="bold">학습 데이터를 물리적으로 수배 증폭</text>
+                        </g>
+
+                        <!-- Panel E: LRN -->
+                        <g transform="translate(230, 115)">
+                            <rect x="0" y="0" width="215" height="110" rx="6" fill="#fff" stroke="#e5e8eb" stroke-width="1"/>
+                            <text x="107" y="16" font-size="8" font-weight="bold" fill="#8b5cf6" text-anchor="middle">🔬 로컬 반응 정규화 (LRN / 측면 억제)</text>
+                            <g transform="translate(50, 25)">
+                                <polygon points="0,35 15,10 55,10 40,35" fill="#c084fc" fill-opacity="0.4" stroke="#8b5cf6" stroke-width="0.8"/>
+                                <text x="32" y="30" font-size="6" fill="#8b5cf6" font-weight="bold">Map 3</text>
+                                <polygon points="15,45 30,20 70,20 55,45" fill="#c084fc" fill-opacity="0.6" stroke="#8b5cf6" stroke-width="0.8"/>
+                                <text x="47" y="40" font-size="6" fill="#8b5cf6" font-weight="bold">Map 2 (강한 자극)</text>
+                                <polygon points="30,55 45,30 85,30 70,55" fill="#c084fc" fill-opacity="0.3" stroke="#8b5cf6" stroke-width="0.8"/>
+                                <text x="62" y="50" font-size="5.5" fill="#8b5cf6" font-weight="bold">Map 1 (억제됨)</text>
+                                <path d="M 50,32 L 65,47" fill="none" stroke="#ef4444" stroke-width="1.2" marker-end="url(#inhibit-arrow)"/>
+                                <path d="M 50,32 L 35,22" fill="none" stroke="#ef4444" stroke-width="1.2" marker-end="url(#inhibit-arrow)"/>
+                            </g>
+                            <text x="107" y="93" font-size="6.5" fill="#475569" text-anchor="middle" font-weight="bold">강한 뉴런이 인접 채널 활성을 억제</text>
+                            <text x="107" y="102" font-size="5.5" fill="#94a3b8" text-anchor="middle">측면 대비 강조 (현대 BatchNorm의 효시)</text>
+                        </g>
+
+                        <!-- Common Markers -->
+                        <defs>
+                            <marker id="alg-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#64748b" />
+                            </marker>
+                            <marker id="inhibit-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                    </svg>
                 </div>
-            </article>
+
+                    <svg width="460" height="230" viewBox="0 0 460 230" style="overflow:visible;">
+                        <!-- Panel Left: ImageNet database stack -->
+                        <g transform="translate(5, 10)">
+                            <rect x="0" y="0" width="105" height="195" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="52.5" y="16" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">📦 ImageNet 데이터</text>
+                            
+                            <!-- Stacked image sheets -->
+                            <g transform="translate(18, 30)">
+                                <rect x="16" y="16" width="50" height="45" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.8"/>
+                                <text x="41" y="55" font-size="5.5" fill="#94a3b8" text-anchor="middle">Car</text>
+                                
+                                <rect x="8" y="8" width="50" height="45" rx="3" fill="#f8fafc" stroke="#64748b" stroke-width="0.8"/>
+                                <text x="33" y="47" font-size="5.5" fill="#64748b" text-anchor="middle">Ship</text>
+                                
+                                <rect x="0" y="0" width="50" height="45" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.2"/>
+                                <circle cx="16" cy="16" r="3.5" fill="#ca8a04"/>
+                                <circle cx="30" cy="16" r="3.5" fill="#ca8a04"/>
+                                <rect x="14" y="18" width="17" height="10" rx="1.5" fill="#ca8a04"/>
+                                <text x="25" y="38" font-size="6" fill="#1e293b" font-weight="bold" text-anchor="middle">Leopard</text>
+                            </g>
+                            
+                            <text x="52.5" y="112" font-size="7.5" fill="#475569" font-weight="bold" text-anchor="middle">1,400만 장 데이터</text>
+                            <text x="52.5" y="124" font-size="6.5" fill="#64748b" text-anchor="middle">22,000개 클래스</text>
+                            <text x="52.5" y="134" font-size="6" fill="#94a3b8" text-anchor="middle">사람의 수동 라벨링</text>
+                            
+                            <path d="M 52.5,147 L 52.5,180" fill="none" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+                            <path d="M 52.5,180 L 118,150" fill="none" stroke="#3182f6" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#alex-arrow)"/>
+                        </g>
+
+                        <!-- Panel Center: Highly Detailed AlexNet 2-GPU Parallelism -->
+                        <g transform="translate(120, 10)">
+                            <rect x="0" y="0" width="225" height="195" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="112.5" y="16" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">🎮 AlexNet 2-GPU 병렬 아키텍처 상세</text>
+                            
+                            <rect x="8" y="85" width="20" height="20" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="1"/>
+                            <text x="18" y="97" font-size="5" fill="#475569" font-weight="bold" text-anchor="middle">Input</text>
+                            
+                            <path d="M 28,90 L 40,55" fill="none" stroke="#3b82f6" stroke-width="1" marker-end="url(#alex-arrow-blue)"/>
+                            <path d="M 28,100 L 40,135" fill="none" stroke="#ef4444" stroke-width="1" marker-end="url(#alex-arrow-red)"/>
+
+                            <rect x="42" y="26" width="175" height="63" rx="4" fill="#f0f7ff" stroke="#3b82f6" stroke-width="0.8" stroke-dasharray="1,1"/>
+                            <text x="47" y="34" font-size="5.5" fill="#3b82f6" font-weight="bold">GPU 1 (GTX 580 - 1.5GB VRAM)</text>
+                            
+                            <polygon points="45,65 52,50 64,50 57,65" fill="#93c5fd" fill-opacity="0.7" stroke="#2563eb" stroke-width="0.5"/>
+                            <text x="54" y="73" font-size="4.5" fill="#1e3a8a" font-weight="bold" text-anchor="middle">C1 (48m)</text>
+                            
+                            <polygon points="70,65 77,50 89,50 82,65" fill="#93c5fd" fill-opacity="0.7" stroke="#2563eb" stroke-width="0.5"/>
+                            <text x="79" y="73" font-size="4.5" fill="#1e3a8a" font-weight="bold" text-anchor="middle">C2 (128m)</text>
+                            
+                            <polygon points="105,65 112,50 124,50 117,65" fill="#93c5fd" fill-opacity="0.8" stroke="#1d4ed8" stroke-width="0.7"/>
+                            <text x="114" y="73" font-size="4.5" fill="#1d4ed8" font-weight="bold" text-anchor="middle">C3 (192m)</text>
+                            
+                            <polygon points="130,65 137,50 149,50 142,65" fill="#93c5fd" fill-opacity="0.7" stroke="#2563eb" stroke-width="0.5"/>
+                            <text x="139" y="73" font-size="4.5" fill="#1e3a8a" font-weight="bold" text-anchor="middle">C4 (192m)</text>
+                            
+                            <polygon points="155,65 162,50 174,50 167,65" fill="#93c5fd" fill-opacity="0.7" stroke="#2563eb" stroke-width="0.5"/>
+                            <text x="164" y="73" font-size="4.5" fill="#1e3a8a" font-weight="bold" text-anchor="middle">C5 (128m)</text>
+
+                            <rect x="185" y="44" width="5" height="24" rx="1.5" fill="#3b82f6"/>
+                            <text x="187.5" y="74" font-size="4" fill="#3b82f6" font-weight="bold" text-anchor="middle">FC6/7</text>
+
+                            <rect x="42" y="106" width="175" height="63" rx="4" fill="#fff5f5" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="1,1"/>
+                            <text x="47" y="114" font-size="5.5" fill="#ef4444" font-weight="bold">GPU 2 (GTX 580 - 1.5GB VRAM)</text>
+                            
+                            <polygon points="45,145 52,130 64,130 57,145" fill="#fca5a5" fill-opacity="0.7" stroke="#dc2626" stroke-width="0.5"/>
+                            <text x="54" y="153" font-size="4.5" fill="#7f1d1d" font-weight="bold" text-anchor="middle">C1 (48m)</text>
+                            
+                            <polygon points="70,145 77,130 89,130 82,145" fill="#fca5a5" fill-opacity="0.7" stroke="#dc2626" stroke-width="0.5"/>
+                            <text x="79" y="153" font-size="4.5" fill="#7f1d1d" font-weight="bold" text-anchor="middle">C2 (128m)</text>
+                            
+                            <polygon points="105,145 112,130 124,130 117,145" fill="#fca5a5" fill-opacity="0.8" stroke="#b91c1c" stroke-width="0.7"/>
+                            <text x="114" y="153" font-size="4.5" fill="#b91c1c" font-weight="bold" text-anchor="middle">C3 (192m)</text>
+                            
+                            <polygon points="130,145 137,130 149,130 142,145" fill="#fca5a5" fill-opacity="0.7" stroke="#dc2626" stroke-width="0.5"/>
+                            <text x="139" y="153" font-size="4.5" fill="#7f1d1d" font-weight="bold" text-anchor="middle">C4 (192m)</text>
+                            
+                            <polygon points="155,145 162,130 174,130 167,145" fill="#fca5a5" fill-opacity="0.7" stroke="#dc2626" stroke-width="0.5"/>
+                            <text x="164" y="153" font-size="4.5" fill="#7f1d1d" font-weight="bold" text-anchor="middle">C5 (128m)</text>
+
+                            <rect x="185" y="124" width="5" height="24" rx="1.5" fill="#ef4444"/>
+                            <text x="187.5" y="154" font-size="4" fill="#ef4444" font-weight="bold" text-anchor="middle">FC6/7</text>
+
+                            <path d="M 82,57 L 105,138" fill="none" stroke="#6366f1" stroke-width="0.8" stroke-dasharray="1.5,1.5" opacity="0.8"/>
+                            <path d="M 82,137 L 105,58" fill="none" stroke="#6366f1" stroke-width="0.8" stroke-dasharray="1.5,1.5" opacity="0.8"/>
+                            <line x1="82" y1="57" x2="105" y2="58" stroke="#3b82f6" stroke-width="0.6"/>
+                            <line x1="82" y1="137" x2="105" y2="138" stroke="#ef4444" stroke-width="0.6"/>
+
+                            <line x1="117" y1="57" x2="130" y2="58" stroke="#3b82f6" stroke-width="0.6"/>
+                            <line x1="142" y1="57" x2="155" y2="58" stroke="#3b82f6" stroke-width="0.6"/>
+                            <line x1="117" y1="137" x2="130" y2="138" stroke="#ef4444" stroke-width="0.6"/>
+                            <line x1="142" y1="137" x2="155" y2="138" stroke="#ef4444" stroke-width="0.6"/>
+
+                            <path d="M 167,57 L 185,136" fill="none" stroke="#6366f1" stroke-width="0.8" opacity="0.7"/>
+                            <path d="M 167,137 L 185,56" fill="none" stroke="#6366f1" stroke-width="0.8" opacity="0.7"/>
+                            <line x1="167" y1="57" x2="185" y2="56" stroke="#3b82f6" stroke-width="0.6"/>
+                            <line x1="167" y1="137" x2="185" y2="136" stroke="#ef4444" stroke-width="0.6"/>
+
+                            <path d="M 190,56 L 205,100" fill="none" stroke="#6366f1" stroke-width="0.8"/>
+                            <path d="M 190,136 L 205,100" fill="none" stroke="#6366f1" stroke-width="0.8"/>
+                            
+                            <circle cx="208" cy="100" r="5" fill="#10b981" stroke="#047857" stroke-width="1"/>
+                            <text x="208" y="113" font-size="4" fill="#047857" font-weight="bold" text-anchor="middle">FC8 (Out)</text>
+                            
+                            <text x="112.5" y="180" font-size="5" fill="#64748b" text-anchor="middle" font-weight="bold">교차 점선(Conv3, FC6/7/8): GPU 상호 데이터 교환 통로 (이외 독립 연산)</text>
+                        </g>
+
+                        <!-- Panel Right -->
+                        <g transform="translate(350, 10)">
+                            <rect x="0" y="0" width="105" height="195" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="52.5" y="16" font-size="9" font-weight="bold" fill="#ef4444" text-anchor="middle">🏆 2012 대회 에러율</text>
+                            
+                            <line x1="15" y1="140" x2="95" y2="140" stroke="#cbd5e1" stroke-width="1"/>
+                            
+                            <rect x="25" y="55" width="20" height="85" fill="#94a3b8" />
+                            <text x="35" y="49" font-size="7.5" fill="#475569" font-weight="bold" text-anchor="middle">26.2%</text>
+                            <text x="35" y="151" font-size="6" fill="#64748b" text-anchor="middle">기존 ML</text>
+                            <text x="35" y="158" font-size="5" fill="#94a3b8" text-anchor="middle">(SIFT)</text>
+                            
+                            <rect x="60" y="87" width="20" height="53" fill="#ef4444" />
+                            <text x="70" y="81" font-size="7.5" fill="#ef4444" font-weight="bold" text-anchor="middle">16.4%</text>
+                            <text x="70" y="151" font-size="6" fill="#1e293b" font-weight="bold" text-anchor="middle">AlexNet</text>
+                            <text x="70" y="158" font-size="5" fill="#ef4444" text-anchor="middle">(딥러닝)</text>
+                            
+                            <path d="M 40,70 C 48,70 48,95 56,95" fill="none" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="1.5,1.5"/>
+                            <text x="48" y="86" font-size="7" fill="#ea580c" font-weight="bold" text-anchor="middle">▼ 9.8%p</text>
+                            <text x="52.5" y="178" font-size="7" fill="#ef4444" font-weight="bold" text-anchor="middle">역사적 대격차 압승</text>
+                        </g>
+
+                        <!-- Arrow Markers -->
+                        <defs>
+                            <marker id="alex-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#475569" />
+                            </marker>
+                            <marker id="alex-arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#3b82f6" />
+                            </marker>
+                            <marker id="alex-arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+
+                
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">3-2. 딥러닝 인프라 빅뱅: 대용량 데이터와 GPU 병렬 연산의 시너지</h3>
+                <p>
+                    AlexNet이 일으킨 기적의 이면에는 알고리즘의 고도화뿐만 아니라 <strong>인프라 하드웨어의 패러다임 시프트</strong>가 결정적인 역할을 했습니다. 
+                    과거 CPU 기반 싱글 코어 순차 연산 중심의 학습 환경은 신경망 가중치가 수백만 개만 되어도 연산 시간이 수 주 이상 걸리는 물리적 한계에 부딪혔습니다.
+                </p>
+                <p>
+                    AlexNet은 수천 개의 미세 코어가 동시에 단순 산술 연산을 수행하는 <strong>GPU(Graphic Processing Unit)의 대규모 병렬성</strong>을 신경망 훈련에 이식했습니다. 
+                    NVIDIA GPU 2대를 가동하여 모델 가중치를 절반씩 나누어 분산 연산함으로써 학습 속도를 수십 배 이상 단축시켰고, <strong>CUDA 플랫폼</strong>을 통한 하드웨어 제어가 딥러닝 엔지니어링의 표준 문법으로 정착하는 계기를 마련했습니다.
+                </p>
+                <p>
+                    여기에 인터넷 보급으로 폭증한 디지털 데이터 자원인 <strong>ImageNet(1,400만 장 이상의 라벨링 이미지 데이터셋)</strong>이 인풋으로 결합하면서, 심층 신경망이 고질적으로 겪던 데이터 부족으로 인한 오버피팅(Overfitting)을 물리적으로 해소했습니다. 
+                    결국 <strong>"빅데이터 + GPU 병렬 하드웨어 + 오차역전파 신경망"</strong>의 삼위일체가 합치되면서 현대 딥러닝의 부흥기가 공식 개막한 것입니다.
+                </p>
+
+                <!-- SVG: CPU vs GPU & Deep Learning Infrastructure Synergy Flywheel -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">⚙️ 하드웨어 마이크로 아키텍처 비교(CPU vs GPU) 및 딥러닝 플라이휠 시너지 효과</div>
+                <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">3-3. 기울기 소실 장벽을 깨부순 152층의 기적: ResNet (2015)</h3>
+                <p>
+                    AlexNet 이후 딥러닝 연구자들은 모델의 층(Depth)을 더 깊게 쌓을수록 표현력이 기하급수적으로 증가한다는 사실을 깨달았습니다. 
+                    그러나 20층 이상 깊어지자 심각한 장벽에 부딪혔습니다. 
+                    단순히 기울기 소실이나 오버피팅 때문이 아니라, 레이어가 너무 많아지면 오히려 훈련 에러가 더 나빠지는 <strong>망의 퇴화 문제(Degradation Problem)</strong>가 발생한 것입니다. 
+                    아무리 역전파를 해도 미분값이 무수히 겹곱해지는 과정에서 정보가 왜곡되어 최적화 난이도가 한계에 달했습니다.
+                </p>
+                <p>
+                    이 교착 상태를 일거에 파괴한 돌파구가 바로 <strong>2015년 카이밍 허(Kaiming He) 연구팀이 제안한 ResNet(Residual Network)</strong>입니다. 
+                    ResNet은 입력 레이어의 값을 가중치 연산 레이어들을 건너뛰어 출력에 직접 더해버리는 <strong>잔차 연결(Residual Connection / Skip Connection)</strong>을 도입했습니다. 
+                    기존의 레이어가 입력 \(x\)에 대해 완전한 최적 타깃 매핑 \(H(x)\)를 직접 학습했다면, ResNet은 출력과 입력의 차이인 잔차 \(F(x) = H(x) - x\)만을 학습하도록 매커니즘을 수정했습니다 (\(H(x) = F(x) + x\)).
+                </p>
+                <p>
+                    이 설계는 수학적으로 강력한 기울기 보증 수표 역할을 합니다. 
+                    역전파 과정에서 \(H(x)\)를 미분하면 \(\frac{\partial H}{\partial x} = \frac{\partial F}{\partial x} + 1\)이 됩니다. 
+                    이 뒤쪽의 <strong>\(+1\)이라는 상수 항</strong> 덕분에 가중치 레이어의 미분값(\(\frac{\partial F}{\partial x}\))이 설령 0에 가깝게 소실(Vanishing)되더라도, 에러 신호는 어떠한 장애물도 없이 이전 레이어로 온전히 100% 흘러 들어가는 <strong>"그라디언트 고속도로"</strong>가 개통됩니다. 
+                    이혁신을 바탕으로 인공지능은 종전 19층 수준(VGG-19)에 머물던 한계를 부수고, <strong>152층(ResNet-152)</strong>을 넘어 1000층 이상의 심층 모델도 막힘없이 훈련시키는 기적을 달성했습니다.
+                </p>
+
+                <!-- SVG: ResNet Residual Block with Gradient Highway -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">🛠️ ResNet 잔차 블록(Residual Block) 작동 메커니즘 및 역전파 고속도로 (KaTeX 수식 렌더링)</div>
+                    <svg width="660" height="200" viewBox="0 0 660 200" style="overflow:visible;">
+                        <!-- Forward path (Blue) - Left Panel -->
+                        <g transform="translate(30, 20)">
+                            <circle cx="60" cy="140" r="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
+                            <foreignObject x="40" y="148" width="40" height="20">
+                                <div style="font-family: inherit; font-size: 8px; color: #475569; text-align: center;">\(x\)</div>
+                            </foreignObject>
+                            
+                            <rect x="25" y="90" width="70" height="20" rx="3" fill="#fff" stroke="#3b82f6" stroke-width="1" />
+                            <foreignObject x="25" y="91" width="70" height="18">
+                                <div style="font-family: inherit; font-size: 6px; color: #3b82f6; text-align: center; font-weight: bold; line-height: 18px;">Weight (Conv)</div>
+                            </foreignObject>
+                            
+                            <rect x="30" y="65" width="60" height="14" rx="2" fill="#eff6ff" stroke="#3b82f6" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
+                            <foreignObject x="30" y="66" width="60" height="12">
+                                <div style="font-family: inherit; font-size: 5px; color: #2563eb; text-align: center; font-weight: bold; line-height: 12px;">ReLU</div>
+                            </foreignObject>
+                            
+                            <rect x="25" y="35" width="70" height="20" rx="3" fill="#fff" stroke="#3b82f6" stroke-width="1" />
+                            <foreignObject x="25" y="36" width="70" height="18">
+                                <div style="font-family: inherit; font-size: 6px; color: #3b82f6; text-align: center; font-weight: bold; line-height: 18px;">Weight (Conv)</div>
+                            </foreignObject>
+                            
+                            <path d="M 60,134 L 60,113" fill="none" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#res-arrow-blue)"/>
+                            <path d="M 60,90 L 60,82" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+                            <path d="M 60,65 L 60,58" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+                            <path d="M 60,35 L 60,18" fill="none" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#res-arrow-blue)"/>
+                            
+                            <path d="M 66,140 Q 180,140 180,75 T 69,12" fill="none" stroke="#ca8a04" stroke-width="2" stroke-dasharray="3,1" marker-end="url(#res-arrow-orange)"/>
+                            <foreignObject x="185" y="65" width="130" height="30">
+                                <div style="font-family: inherit; font-size: 7px; color: #ca8a04; font-weight: bold;">\( \text{Skip Connection } (x) \)</div>
+                            </foreignObject>
+                            
+                            <circle cx="60" cy="12" r="6.5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
+                            <text x="60" y="14.5" font-size="9" fill="#d97706" font-weight="bold" text-anchor="middle">+</text>
+                            
+                            <foreignObject x="0" y="2" width="50" height="20">
+                                <div style="font-family: inherit; font-size: 7px; color: #d97706; text-align: right; font-weight: bold;">\( F(x) + x \)</div>
+                            </foreignObject>
+                            
+                            <path d="M 60,5 L 60,0" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+                            <foreignObject x="10" y="-22" width="100" height="20">
+                                <div style="font-family: inherit; font-size: 8px; color: #1e293b; text-align: center; font-weight: bold;">\( H(x) = F(x) + x \)</div>
+                            </foreignObject>
+                        </g>
+
+                        <!-- Backward Gradient Path (Green/Red) - Right Panel -->
+                        <g transform="translate(360, 20)">
+                            <circle cx="60" cy="0" r="5" fill="#fee2e2" stroke="#ef4444" stroke-width="1" />
+                            <foreignObject x="70" y="-8" width="110" height="20">
+                                <div style="font-family: inherit; font-size: 7.5px; color: #ef4444; font-weight: bold;">\( \text{Gradient } \frac{\partial E}{\partial y} \)</div>
+                            </foreignObject>
+                            
+                            <circle cx="60" cy="12" r="6.5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+                            <text x="60" y="14.5" font-size="7.5" fill="#16a34a" font-weight="bold" text-anchor="middle">1</text>
+                            
+                            <path d="M 66,12 Q 180,75 180,140 T 66,140" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#res-arrow-green)"/>
+                            <foreignObject x="185" y="95" width="130" height="35">
+                                <div style="font-family: inherit; font-size: 7.5px; color: #16a34a; font-weight: bold;">\( \text{Highway } (+1) \)</div>
+                                <div style="font-family: inherit; font-size: 6px; color: #16a34a;">감쇄 없는 역전파 전달</div>
+                            </foreignObject>
+                            
+                            <path d="M 60,18.5 L 60,32" fill="none" stroke="#ea580c" stroke-width="1.2" marker-end="url(#res-arrow-orange-sub)"/>
+                            <path d="M 60,55 L 60,62" fill="none" stroke="#ea580c" stroke-width="1.2"/>
+                            <path d="M 60,90 L 60,132" fill="none" stroke="#ea580c" stroke-width="1.2" marker-end="url(#res-arrow-orange-sub)"/>
+                            
+                            <foreignObject x="-65" y="65" width="120" height="35">
+                                <div style="font-family: inherit; font-size: 6.5px; color: #ea580c; text-align: right; font-weight: bold;">\( \frac{\partial F}{\partial x} \)</div>
+                                <div style="font-family: inherit; font-size: 5.5px; color: #ca8a04; text-align: right;">(소실 가능성 존재)</div>
+                            </foreignObject>
+
+                            <circle cx="60" cy="140" r="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
+                            <foreignObject x="10" y="148" width="100" height="35">
+                                <div style="font-family: inherit; font-size: 7px; color: #16a34a; text-align: center; font-weight: bold;">\( \text{Total: } \frac{\partial F}{\partial x} + 1 \)</div>
+                            </foreignObject>
+                        </g>
+
+                        <!-- Common Markers -->
+                        <defs>
+                            <marker id="res-arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#3b82f6" />
+                            </marker>
+                            <marker id="res-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ca8a04" />
+                            </marker>
+                            <marker id="res-arrow-orange-sub" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#ea580c" />
+                            </marker>
+                            <marker id="res-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#16a34a" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                    <svg width="660" height="230" viewBox="0 0 660 230" style="overflow:visible;">
+                        <!-- Panel Left: CPU vs GPU Microarchitecture Comparison -->
+                        <g transform="translate(10, 10)">
+                            <rect x="0" y="0" width="310" height="210" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="155" y="16" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">💻 코어 레이아웃 & 마이크로 아키텍처 대조</text>
+                            
+                            <!-- Left Sub-panel: CPU Architecture -->
+                            <g transform="translate(12, 25)">
+                                <rect x="0" y="0" width="135" height="155" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <text x="67.5" y="12" font-size="7" fill="#475569" font-weight="bold" text-anchor="middle">CPU (직렬 제어 특화)</text>
+                                
+                                <rect x="8" y="20" width="60" height="25" rx="2" fill="#fee2e2" stroke="#ef4444" stroke-width="0.8"/>
+                                <text x="38" y="35" font-size="6" fill="#991b1b" font-weight="bold" text-anchor="middle">Control (제어)</text>
+                                
+                                <rect x="73" y="20" width="54" height="25" rx="2" fill="#eff6ff" stroke="#3b82f6" stroke-width="0.8"/>
+                                <text x="100" y="35" font-size="6" fill="#1d4ed8" font-weight="bold" text-anchor="middle">Cache (캐시)</text>
+                                
+                                <rect x="8" y="52" width="119" height="70" rx="3" fill="#f1f5f9" stroke="#64748b" stroke-width="1"/>
+                                <text x="67.5" y="62" font-size="6" fill="#475569" font-weight="bold" text-anchor="middle">강력한 ALU 코어 (Sequential)</text>
+                                
+                                <path d="M 18,92 L 118,92" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#infra-arrow-gray)"/>
+                                <circle cx="35" cy="92" r="4.5" fill="#f87171" stroke="#b91c1c" stroke-width="0.5"/>
+                                <circle cx="68" cy="92" r="4.5" fill="#fb923c" stroke="#c2410c" stroke-width="0.5"/>
+                                <circle cx="101" cy="92" r="4.5" fill="#cbd5e1" stroke="#475569" stroke-width="0.5"/>
+                                <text x="67.5" y="112" font-size="5" fill="#64748b" text-anchor="middle">무겁고 복잡한 연산 연속 처리</text>
+                                
+                                <text x="67.5" y="142" font-size="6" fill="#94a3b8" text-anchor="middle" font-weight="bold">수 개의 고성능 코어로 순차 가동</text>
+                            </g>
+                            
+                            <!-- Right Sub-panel: GPU Architecture -->
+                            <g transform="translate(162, 25)">
+                                <rect x="0" y="0" width="135" height="155" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="0.8"/>
+                                <text x="67.5" y="12" font-size="7" fill="#16a34a" font-weight="bold" text-anchor="middle">GPU (대규모 병렬 특화)</text>
+                                
+                                <rect x="8" y="20" width="119" height="10" rx="1.5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="0.5"/>
+                                <text x="67.5" y="27" font-size="5" fill="#475569" text-anchor="middle">Control & Cache (극소화)</text>
+                                
+                                <rect x="8" y="35" width="119" height="87" rx="3" fill="#fff" stroke="#10b981" stroke-width="1"/>
+                                
+                                <g fill="#d1fae5" stroke="#10b981" stroke-width="0.4">
+                                    <rect x="14" y="42" width="8" height="6" rx="0.8"/><rect x="27" y="42" width="8" height="6" rx="0.8"/><rect x="40" y="42" width="8" height="6" rx="0.8"/><rect x="53" y="42" width="8" height="6" rx="0.8"/><rect x="66" y="42" width="8" height="6" rx="0.8"/><rect x="79" y="42" width="8" height="6" rx="0.8"/><rect x="92" y="42" width="8" height="6" rx="0.8"/><rect x="105" y="42" width="8" height="6" rx="0.8"/>
+                                    <rect x="14" y="52" width="8" height="6" rx="0.8"/><rect x="27" y="52" width="8" height="6" rx="0.8"/><rect x="40" y="52" width="8" height="6" rx="0.8"/><rect x="53" y="52" width="8" height="6" rx="0.8"/><rect x="66" y="52" width="8" height="6" rx="0.8"/><rect x="79" y="52" width="8" height="6" rx="0.8"/><rect x="92" y="52" width="8" height="6" rx="0.8"/><rect x="105" y="52" width="8" height="6" rx="0.8"/>
+                                    <rect x="14" y="62" width="8" height="6" rx="0.8"/><rect x="27" y="62" width="8" height="6" rx="0.8"/><rect x="40" y="62" width="8" height="6" rx="0.8"/><rect x="53" y="62" width="8" height="6" rx="0.8"/><rect x="66" y="62" width="8" height="6" rx="0.8"/><rect x="79" y="62" width="8" height="6" rx="0.8"/><rect x="92" y="62" width="8" height="6" rx="0.8"/><rect x="105" y="62" width="8" height="6" rx="0.8"/>
+                                    <rect x="14" y="72" width="8" height="6" rx="0.8"/><rect x="27" y="72" width="8" height="6" rx="0.8"/><rect x="40" y="72" width="8" height="6" rx="0.8"/><rect x="53" y="72" width="8" height="6" rx="0.8"/><rect x="66" y="72" width="8" height="6" rx="0.8"/><rect x="79" y="72" width="8" height="6" rx="0.8"/><rect x="92" y="72" width="8" height="6" rx="0.8"/><rect x="105" y="72" width="8" height="6" rx="0.8"/>
+                                    <rect x="14" y="82" width="8" height="6" rx="0.8"/><rect x="27" y="82" width="8" height="6" rx="0.8"/><rect x="40" y="82" width="8" height="6" rx="0.8"/><rect x="53" y="82" width="8" height="6" rx="0.8"/><rect x="66" y="82" width="8" height="6" rx="0.8"/><rect x="79" y="82" width="8" height="6" rx="0.8"/><rect x="92" y="82" width="8" height="6" rx="0.8"/><rect x="105" y="82" width="8" height="6" rx="0.8"/>
+                                    <rect x="14" y="92" width="8" height="6" rx="0.8"/><rect x="27" y="92" width="8" height="6" rx="0.8"/><rect x="40" y="92" width="8" height="6" rx="0.8"/><rect x="53" y="92" width="8" height="6" rx="0.8"/><rect x="66" y="92" width="8" height="6" rx="0.8"/><rect x="79" y="92" width="8" height="6" rx="0.8"/><rect x="92" y="92" width="8" height="6" rx="0.8"/><rect x="105" y="92" width="8" height="6" rx="0.8"/>
+                                </g>
+                                
+                                <text x="67.5" y="112" font-size="5" fill="#10b981" font-weight="bold" text-anchor="middle">행렬 곱셈 등 단순 연산 수천 개 동시 처리</text>
+                                <text x="67.5" y="142" font-size="6" fill="#16a34a" text-anchor="middle" font-weight="bold">수천 개 미세 코어로 초고속 가속</text>
+                            </g>
+                        </g>
+
+                        <!-- Panel Right: Spaced Out Synergy Loop Flywheel -->
+                        <g transform="translate(340, 10)">
+                            <rect x="0" y="0" width="310" height="210" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <text x="155" y="16" font-size="9" font-weight="bold" fill="#ea580c" text-anchor="middle">🔄 딥러닝 인프라 시너지 플라이휠 (Synergy Loop)</text>
+                            
+                            <g transform="translate(100, 30)">
+                                <rect x="0" y="0" width="110" height="22" rx="4" fill="#fff" stroke="#3b82f6" stroke-width="1.2"/>
+                                <text x="55" y="14" font-size="7.5" fill="#1e3a8a" font-weight="bold" text-anchor="middle">📦 빅데이터 (ImageNet)</text>
+                            </g>
+                            
+                            <g transform="translate(15, 125)">
+                                <rect x="0" y="0" width="110" height="22" rx="4" fill="#fff" stroke="#10b981" stroke-width="1.2"/>
+                                <text x="55" y="14" font-size="7.5" fill="#065f46" font-weight="bold" text-anchor="middle">⚡ GPU 병렬 연산 (CUDA)</text>
+                            </g>
+                            
+                            <g transform="translate(185, 125)">
+                                <rect x="0" y="0" width="110" height="22" rx="4" fill="#fff" stroke="#8b5cf6" stroke-width="1.2"/>
+                                <text x="55" y="14" font-size="7.5" fill="#4c1d95" font-weight="bold" text-anchor="middle">🧠 심층 모델 (대형 매개변수)</text>
+                            </g>
+                            
+                            <path d="M 90,46 C 45,60 25,90 30,118" fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#infra-arrow-orange)"/>
+                            <path d="M 130,136 C 145,143 165,143 180,136" fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#infra-arrow-orange)"/>
+                            <path d="M 275,118 C 280,90 260,60 220,46" fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#infra-arrow-orange)"/>
+                            
+                            <text x="35" y="78" font-size="6" fill="#ca8a04" font-weight="bold">수천만 개 매개변수 훈련 요구</text>
+                            <text x="155" y="152" font-size="6" fill="#ca8a04" font-weight="bold" text-anchor="middle">대규모 대행렬 고속 연산 제공</text>
+                            <text x="270" y="78" font-size="6" fill="#ca8a04" font-weight="bold" text-anchor="end">표현력 극대화로 데이터 피팅</text>
+                            
+                            <circle cx="155" cy="92" r="18" fill="#ffedd5" stroke="#ea580c" stroke-width="1.2"/>
+                            <text x="155" y="89" font-size="7" fill="#c2410c" font-weight="bold" text-anchor="middle">AI 빅뱅</text>
+                            <text x="155" y="97" font-size="5" fill="#ea580c" font-weight="bold" text-anchor="middle">(부흥기 개막)</text>
+                        </g>
+
+                        <!-- Common Markers -->
+                        <defs>
+                            <marker id="infra-arrow-gray" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#64748b" />
+                            </marker>
+                            <marker id="infra-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 Z" fill="#f97316" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+</article>
 
             <article id="theory-ch4">
                 <h2>Chapter 4. 트랜스포머(Transformer)와 LLM의 시대 (2017 - 현재)</h2>
@@ -1243,6 +2071,7 @@
                     </div>
                 </div>
 
+                
                 <h3 style="margin-top:2rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-3. 스케일링 법칙(Scaling Law)과 창발적 능력(Emergent Ability)</h3>
                 <p>
                     OpenAI는 GPT-1(1.1억 개 파라미터), GPT-2(15억 개)를 거쳐 2020년 <strong>GPT-3(1,750억 개)</strong>를 발표하며 인공지능 학계를 송두리째 흔들었습니다.
@@ -1253,48 +2082,248 @@
                     특히 파라미터 수가 특정 임계점(보통 1,000억 개 내외)을 돌파하는 순간, 이전의 작은 모델에서는 전혀 불가능했던 <strong>산술 연산, 논리 추론, 프로그래밍 코드 작성</strong> 등의 기묘한 지능들이 갑작스럽게 발현되는 <strong>창발적 능력(Emergent Abilities)</strong>이 나타남이 밝혀졌습니다. 
                     이로써 AI는 복잡하고 어려운 특정 기능용 모델을 각각 설계하던 시대에서 벗어나, 거대하고 범용적인 LLM을 하나 만든 뒤 이를 튜닝(Fine-tuning / Alignment)하여 사용하는 거대 모델 독주 시대로 전환하게 되었습니다.
                 </p>
+                <p>
+                    더 자세히는, 2020년 OpenAI의 자레드 카플란(Jared Kaplan) 연구팀이 발표한 <strong>스케일링 법칙(Scaling Law)</strong>에 따르면, 모델 매개변수 수(\(N\)), 데이터셋 크기(\(D\)), 누적 학습 연산량(\(C\)) 중 오직 한두 가지에만 병목이 걸리지 않는다면 <strong>테스트 손실(Loss)은 스케일 크기에 대해 멱함수 법칙(Power Law)을 따르며 예측 가능하게 하강</strong>합니다. 
+                    즉, \(L(N) \approx (N_c/N)^{\alpha_N}\)과 같이 로그-로그 그래프 상에서 완벽한 직선 형태로 오차가 내려갑니다. 
+                    이는 "돈과 전기, 데이터를 대량으로 부어 넣기만 하면 모델 성능은 예측 가능한 범위 안에서 확실하게 수렴한다"는 거대 플랫폼 빅테크들의 확신을 주어 인프라 투자 전쟁을 촉발했습니다.
+                </p>
+                <p>
+                    동시에 발견된 <strong>창발적 능력(Emergent Ability)</strong>은 이러한 선형적 성능 증가 법칙 이면의 신비로운 전이 현상입니다. 
+                    MMLU나 GSM8K 같은 초등 수준 수학 문장제 추론, 혹은 고단계 상식 추론 평가는 모델 파라미터가 <strong>100억~1,000억 개 임계치</strong>를 넘어서기 전까지는 정답률이 무작위 추첨 수준(0~10%)에 고정되어 전혀 발전이 없는 것처럼 보입니다. 
+                    그러나 이 물리적인 임계 장벽을 돌파하는 순간, 마치 물이 100도씨에서 끓어 수증기로 상전이(Phase Transition)를 일으키듯 <strong>지능이 갑자기 폭발하며 정답률이 70~80% 이상으로 급상승</strong>합니다. 
+                    이로써 LLM은 단순한 문장 복사를 넘어 논리적 사고의 흐름을 전개하는 추론 엔진으로 변모하게 되었습니다.
+                </p>
 
-                <!-- AI History Timeline Summary -->
-                <h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-4. AI 역사 요약 타임라인</h3>
-                <div style="position:relative; margin-top:2rem; padding-left:1.5rem; border-left: 3px solid #e5e8eb;">
-                    <div style="margin-bottom:1.5rem; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1943</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">인공신경망의 조상 제안</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">맥컬록과 피츠(McCulloch-Pitts), 최초의 수학적 생물학적 뉴런 모델 제안</p>
-                    </div>
-                    <div style="margin-bottom:1.5rem; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1950 - 1956</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">AI의 태동기</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">튜링 테스트 제안, 다트머스 학술회의 개최 (Artificial Intelligence 탄생)</p>
-                    </div>
-                    <div style="margin-bottom:1.5rem; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#d97706; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#d97706; font-size:0.9rem;">1969</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">1차 암흑기 돌입</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">민스키 교수의 단층 퍼셉트론 XOR 한계 수학적 증명으로 학계 침체</p>
-                    </div>
-                    <div style="margin-bottom:1.5rem; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#3182f6; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem;">1986</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">다층 신경망과 오차역전파 부활</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">은닉층 추가 및 오차 역전파 학습법 도입 (기울기 소실로 다시 2차 침체)</p>
-                    </div>
-                    <div style="margin-bottom:1.5rem; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%; background:#5856d6; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#5856d6; font-size:0.9rem;">2012</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">AlexNet과 딥러닝 빅뱅</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">이미지넷 대회에서 압도적 우승, GPU 가속 학습 및 딥러닝 혁명 촉발</p>
-                    </div>
-                    <div style="margin-bottom:0; position:relative;">
-                        <div style="position:absolute; left:-29px; top:4px; width:12px; height:12px; border-radius:50%; background:#ea580c; border:2px solid #fff;"></div>
-                        <div style="font-weight:700; color:#ea580c; font-size:0.9rem;">2017 - 현재</div>
-                        <h4 style="margin:4px 0; font-size:1rem;">Transformer 및 LLM 대중화</h4>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">Google Self-Attention(Transformer) 발표, 스케일링 법칙 증명, 생성형 AI(ChatGPT) 대혁명 시대</p>
-                    </div>
+                <!-- SVG: Scaling Law Log-Log Chart & Emergent Ability Hockey Stick Curve -->
+                <div style="background:#fafafa; border:1px solid #e5e8eb; border-radius:12px; padding:1.5rem; margin:1.5rem 0; display:flex; justify-content:center; align-items:center; flex-direction:column; box-shadow:var(--shadow-card);">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">📈 스케일링 법칙의 예측 가능 오차 하강(Log-Log) vs 거대 모델의 창발적 지능 상전이 곡선 (KaTeX 연동)</div>
+                    <svg width="660" height="200" viewBox="0 0 660 200" style="overflow:visible;">
+                        <!-- Panel Left: Scaling Law Log-Log chart -->
+                        <g transform="translate(30, 20)">
+                            <rect x="0" y="0" width="270" height="160" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <foreignObject x="10" y="8" width="250" height="20">
+                                <div style="font-family: inherit; font-size: 8.5px; color: #1e3a8a; font-weight: bold; text-align: center;">📐 스케일링 법칙 (로그-로그 멱함수 오차선)</div>
+                            </foreignObject>
+                            
+                            <line x1="40" y1="130" x2="240" y2="130" stroke="#cbd5e1" stroke-width="1" />
+                            <line x1="40" y1="30" x2="40" y2="135" stroke="#cbd5e1" stroke-width="1" />
+                            
+                            <foreignObject x="25" y="132" width="220" height="20">
+                                <div style="font-family: inherit; font-size: 6px; color: #64748b; text-align: right;">Scale: 매개변수 / 데이터 / 컴퓨팅 연산량 (로그 스케일)</div>
+                            </foreignObject>
+                            <foreignObject x="0" y="35" width="38" height="90">
+                                <div style="font-family: inherit; font-size: 6px; color: #64748b; text-align: right; writing-mode: vertical-lr; transform: rotate(180deg);">테스트 오차 Loss (로그 스케일)</div>
+                            </foreignObject>
+                            
+                            <line x1="50" y1="40" x2="230" y2="120" stroke="#3b82f6" stroke-width="2.5" />
+                            <foreignObject x="130" y="52" width="110" height="20">
+                                <div style="font-family: inherit; font-size: 7px; color: #3b82f6; font-weight: bold;">\( L(N) \propto N^{-\alpha_N} \)</div>
+                            </foreignObject>
+                            
+                            <circle cx="70" cy="50" r="4.5" fill="#f87171" stroke="#b91c1c" stroke-width="0.8" />
+                            <foreignObject x="76" y="43" width="70" height="15">
+                                <div style="font-family: inherit; font-size: 5px; color: #b91c1c; font-weight: bold;">GPT-1 (1.1억)</div>
+                            </foreignObject>
+                            
+                            <circle cx="130" cy="76" r="4.5" fill="#f87171" stroke="#b91c1c" stroke-width="0.8" />
+                            <foreignObject x="136" y="69" width="70" height="15">
+                                <div style="font-family: inherit; font-size: 5px; color: #b91c1c; font-weight: bold;">GPT-2 (15억)</div>
+                            </foreignObject>
+                            
+                            <circle cx="190" cy="102" r="4.5" fill="#f87171" stroke="#b91c1c" stroke-width="0.8" />
+                            <foreignObject x="196" y="95" width="70" height="15">
+                                <div style="font-family: inherit; font-size: 5px; color: #b91c1c; font-weight: bold;">GPT-3 (1,750억)</div>
+                            </foreignObject>
+                            
+                            <foreignObject x="50" y="117" width="150" height="15">
+                                <div style="font-family: inherit; font-size: 5px; color: #94a3b8;">★ 규모가 커질수록 오차는 예측대로 완벽 직선 비례 하강</div>
+                            </foreignObject>
+                        </g>
+
+                        <!-- Panel Right -->
+                        <g transform="translate(360, 20)">
+                            <rect x="0" y="0" width="270" height="160" rx="8" fill="#fff" stroke="#e5e8eb" stroke-width="1" />
+                            <foreignObject x="10" y="8" width="250" height="20">
+                                <div style="font-family: inherit; font-size: 8.5px; color: #ea580c; font-weight: bold; text-align: center;">⚡ 창발적 능력 (임계점 상전이 그래프)</div>
+                            </foreignObject>
+                            
+                            <line x1="40" y1="130" x2="240" y2="130" stroke="#cbd5e1" stroke-width="1" />
+                            <line x1="40" y1="30" x2="40" y2="135" stroke="#cbd5e1" stroke-width="1" />
+                            
+                            <foreignObject x="25" y="132" width="220" height="20">
+                                <div style="font-family: inherit; font-size: 6px; color: #64748b; text-align: right;">Scale: 매개변수 수 / 연산 스케일 (FLOPs)</div>
+                            </foreignObject>
+                            <foreignObject x="0" y="35" width="38" height="90">
+                                <div style="font-family: inherit; font-size: 6px; color: #64748b; text-align: right; writing-mode: vertical-lr; transform: rotate(180deg);">추론 과제 정확도 Accuracy (%)</div>
+                            </foreignObject>
+                            
+                            <line x1="160" y1="130" x2="160" y2="40" stroke="#f97316" stroke-width="1" stroke-dasharray="2,2" />
+                            <foreignObject x="165" y="42" width="100" height="25">
+                                <div style="font-family: inherit; font-size: 5.5px; color: #ea580c; font-weight: bold;">임계 장벽 (Phase Threshold)</div>
+                                <div style="font-family: inherit; font-size: 5px; color: #ea580c;">(~1,000억 Parameter)</div>
+                            </foreignObject>
+                            
+                            <path d="M 45,123 L 155,123 Q 165,120 185,75 T 225,45" fill="none" stroke="#ea580c" stroke-width="2.5" />
+                            
+                            <rect x="45" y="112" width="105" height="15" fill="#f1f5f9" fill-opacity="0.5" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="1,1" />
+                            <foreignObject x="50" y="116" width="100" height="12">
+                                <div style="font-family: inherit; font-size: 4.5px; color: #94a3b8;">무작위 정답 수준 (10% 미만)</div>
+                            </foreignObject>
+                            
+                            <g transform="translate(195, 80)">
+                                <rect x="0" y="0" width="60" height="32" rx="2" fill="#fffef2" stroke="#eab308" stroke-width="0.5" />
+                                <text x="5" y="8" font-size="4" fill="#a16207" font-weight="bold">창발 지능 발현:</text>
+                                <text x="5" y="15" font-size="4.5" fill="#a16207">✓ GSM8K 수학추론</text>
+                                <text x="5" y="22" font-size="4.5" fill="#a16207">✓ 고단계 논리추론</text>
+                                <text x="5" y="29" font-size="4.5" fill="#a16207">✓ 다단계 지시 이행</text>
+                            </g>
+                        </g>
+                    </svg>
                 </div>
-            </article>
+<h3 style="margin-top:3rem; font-size:1.3rem; color:var(--text-primary); border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem;">4-4. AI 역사 요약 타임라인 (세부 사건 리스트)</h3>
+                <div style="position:relative; margin-top:2.5rem; padding-left:1.8rem; border-left: 2px solid #e2e8f0;">
+                    <!-- Era 1: 1943 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#d97706; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem; font-family:'Outfit', sans-serif;">1943</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">인공뉴런 수학 모델 최초 제안</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>McCulloch-Pitts 모델</strong>: 최초의 생물학적 뉴런 모사 논리 임계값 연산 제안</li>
+                            <li><strong>논리 연산 구현</strong>: 신경망 조합을 통한 기본 AND, OR 논리 회로 입증</li>
+                        </ul>
+                    </div>
+                    <!-- Era 2: 1950 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#d97706; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem; font-family:'Outfit', sans-serif;">1950</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">기계 지능의 개념적 정의 확립</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>튜링 테스트 제안</strong>: 앨런 튜링의 논문 "Computing Machinery and Intelligence" 발표</li>
+                            <li><strong>모방 게임 (Imitation Game)</strong>: 질문 응답을 통한 컴퓨터 지능 판별 기준 제시</li>
+                        </ul>
+                    </div>
+                    <!-- Era 3: 1956 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#d97706; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem; font-family:'Outfit', sans-serif;">1956</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">인공지능(AI) 학문의 공식 출범</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>다트머스 학술회의 개최</strong>: 존 매카시, 마빈 민스키, 허버트 사이먼 회합</li>
+                            <li><strong>'AI' 용어 창안</strong>: 'Artificial Intelligence(인공지능)' 정식 용어로 최초 승인</li>
+                        </ul>
+                    </div>
+                    <!-- Era 4: 1958 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#d97706; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#d97706; font-size:0.9rem; font-family:'Outfit', sans-serif;">1958</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">학습하는 단층 퍼셉트론 구현</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>퍼셉트론(Perceptron) 개발</strong>: 프랑크 로젠블랫의 아날로그 가중합 하드웨어 구축</li>
+                            <li><strong>자가 가중치 학습</strong>: 이미지 패턴 인식을 위한 가중치 업데이트 규칙 수립</li>
+                        </ul>
+                    </div>
+                    <!-- Era 5: 1969 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#e11d48; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#e11d48; font-size:0.9rem; font-family:'Outfit', sans-serif;">1969</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">1차 AI 겨울 (XOR 한계와 침체)</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>"퍼셉트론즈" 책 출간</strong>: 마빈 민스키 & 시모어 페퍼트 저서 발간</li>
+                            <li><strong>선형 불가능 한계 규명</strong>: 단층 모델은 비선형(XOR) 공간 분리 불가능함을 수학적으로 증명</li>
+                            <li><strong>연구 자금 동결</strong>: 미국 DARPA 등 주요 투자 기관 연구 지원 중단</li>
+                        </ul>
+                    </div>
+                    <!-- Era 6: 1986 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#3182f6; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem; font-family:'Outfit', sans-serif;">1986</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">다층 퍼셉트론과 오차역전파 도입</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>오차역전파(Backpropagation) 발표</strong>: 데이비드 루멜하트 & 제프리 힌튼 공식화</li>
+                            <li><strong>다층 퍼셉트론(MLP) 완성</strong>: 입력/출력층 사이에 은닉층 탑재하여 XOR 문제 완전 해결</li>
+                        </ul>
+                    </div>
+                    <!-- Era 7: 1989 - 1997 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#3182f6; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem; font-family:'Outfit', sans-serif;">1989 - 1997</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">공간 및 시간 데이터 가공망 태동</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>LeNet-5 (1989)</strong>: 얀 르쿤의 CNN 기반 필터 활용 손글씨 우편 번호 판독 성공</li>
+                            <li><strong>LSTM (1997)</strong>: 호프라이터 & 슈미트후버의 게이트 제어 기억 셀 도입으로 순방향 RNN 단점 극복</li>
+                        </ul>
+                    </div>
+                    <!-- Era 8: 1990s 중반 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#e11d48; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#e11d48; font-size:0.9rem; font-family:'Outfit', sans-serif;">1990s 중반</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">2차 AI 겨울 (기울기 소실 장벽)</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>기울기 소실(Vanishing Gradient) 직면</strong>: 활성화 함수(시그모이드) 미분 감소로 4층 이상 학습 실패</li>
+                            <li><strong>통계학 독주</strong>: 서포트 벡터 머신(SVM), 랜덤 포레스트 등이 수학적 안정성으로 학계 지배</li>
+                        </ul>
+                    </div>
+                    <!-- Era 9: 2006 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#3182f6; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem; font-family:'Outfit', sans-serif;">2006</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);>'딥러닝' 명칭 브랜딩 및 초기 돌파</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>심층 신뢰 신경망 (DBN)</strong>: 제프리 힌튼의 가중치 사전학습(Pre-training) 기법 발표</li>
+                            <li><strong>명칭 리뉴얼</strong>: 암학적 시그모이드 장벽을 부수고 연구 명칭을 'Deep Learning(딥러닝)'으로 개편</li>
+                        </ul>
+                    </div>
+                    <!-- Era 10: 2012 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#3182f6; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem; font-family:'Outfit', sans-serif;">2012</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">AlexNet과 GPU 가속 혁명</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>AlexNet 이미지넷 우승</strong>: ILSVRC 이미지 분류 대회에서 2위를 압도적인 격차로 격파</li>
+                            <li><strong>GPU 행렬 병렬화</strong>: NVIDIA CUDA 병렬 연산 인프라를 딥러닝 훈련 표준으로 정비</li>
+                        </ul>
+                    </div>
+                    <!-- Era 11: 2015 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#3182f6; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#3182f6; font-size:0.9rem; font-family:'Outfit', sans-serif;">2015</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">잔차 연결(ResNet)과 지각 능력 초월</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>ResNet 152층 돌파</strong>: 카이밍 헤 등의 잔차(Skip Connection) 구조 개발</li>
+                            <li><strong>인간 에러율 초월</strong>: 이미지 식별 에러율 3.6% 달성으로 인간 평균 지각률(5%) 추월</li>
+                        </ul>
+                    </div>
+                    <!-- Era 12: 2017 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#059669; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#059669; font-size:0.9rem; font-family:'Outfit', sans-serif;">2017</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">트랜스포머 패러다임 제시</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>어텐션 통일</strong>: 구글 브레인 연구진의 "Attention Is All You Need" 논문 발표</li>
+                            <li><strong>완전 병렬화</strong>: RNN의 시차 학습 보틀넥을 깨고 문장 전체를 한번에 병렬 처리</li>
+                        </ul>
+                    </div>
+                    <!-- Era 13: 2020 -->
+                    <div style="margin-bottom:1.5rem; position:relative;">
+                        <div style="position:absolute; left:-35px; top:4px; width:12px; height:12px; border-radius:50%; background:#059669; border:3px solid #fff; box-shadow: 0 0 0 1px #cbd5e1;"></div>
+                        <div style="font-weight:700; color:#059669; font-size:0.9rem; font-family:'Outfit', sans-serif;">2020</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">초거대 언어 모델과 스케일링 법칙</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>GPT-3 개발</strong>: OpenAI의 1,750억 개 가중치 초거대 텍스트 학습 모델 발표</li>
+                            <li><strong>스케일링 법칙(Scaling Law)</strong>: 가중치 규모, 연산 비용, 데이터 볼륨의 비례적 성장 공식화</li>
+                        </ul>
+                    </div>
+                    <!-- Era 14: 2022 - 현재 -->
+                    <div style="margin-bottom:0; position:relative;">
+                        <div style="position:absolute; left:-36px; top:3px; width:14px; height:14px; border-radius:50%; background:#059669; border:3px solid #fff; box-shadow: 0 0 2px 2px rgba(5, 150, 105, 0.4);"></div>
+                        <div style="font-weight:700; color:#059669; font-size:0.92rem; font-family:'Outfit', sans-serif;">2022 - 현재</div>
+                        <h4 style="margin:4px 0; font-size:1rem; color:var(--text-primary);">생성형 AI 빅뱅과 창발적 지능</h4>
+                        <ul style="margin: 4px 0 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                            <li><strong>ChatGPT 출시</strong>: 대중적인 인공지능 보급 신드롬 및 거대 인프라 경쟁 촉발</li>
+                            <li><strong>창발적 능력(Emergent Abilities)</strong>: 코딩, 논리추론 등 대형망 임계값 돌파 시 자동 획득되는 지능 발견</li>
+                        </ul>
+                    </div>
+                </div></article>
 
             <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border-light); color:var(--text-tertiary); text-align:center; font-size:0.9rem;">
                 <p>AI Theory Academy &copy; 2026</p>

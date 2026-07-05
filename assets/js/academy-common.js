@@ -1297,6 +1297,17 @@ const TheoryLectureView = {
             attentionWeights: {
                 "it": { "The": 0.02, "animal": 0.62, "didn't": 0.01, "cross": 0.05, "the": 0.03, "street": 0.15, "because": 0.04, "it": 0.05, "was": 0.01, "too": 0.01, "tired": 0.01 },
                 "tired": { "The": 0.01, "animal": 0.45, "didn't": 0.03, "cross": 0.02, "the": 0.01, "street": 0.02, "because": 0.08, "it": 0.05, "was": 0.12, "too": 0.05, "tired": 0.16 }
+            },
+            mlp: {
+                training: false,
+                epochs: 0,
+                loss: 0.25,
+                learningRate: 0.2,
+                lossHistory: [],
+                W1: [[0.5, -0.6], [0.3, 0.8]],
+                b1: [0.1, -0.1],
+                W2: [0.7, -0.5],
+                b2: 0.1
             }
         };
     },
@@ -1326,6 +1337,7 @@ const TheoryLectureView = {
 
         this.$nextTick(() => {
             this.initLossLandscape3D();
+            this.initMlp();
             if (window.renderMathInElement) {
                 window.renderMathInElement(this.$el, {
                     delimiters: [
@@ -1343,6 +1355,176 @@ const TheoryLectureView = {
         this.cleanupLossLandscape3D();
     },
     methods: {
+        initMlp() {
+            this.mlp.epochs = 0;
+            this.mlp.loss = 0.25;
+            this.mlp.lossHistory = [];
+            this.mlp.training = false;
+            
+            // Xavier-like initialization for MLP weights
+            this.mlp.W1 = [
+                [Math.random() * 2 - 1, Math.random() * 2 - 1],
+                [Math.random() * 2 - 1, Math.random() * 2 - 1]
+            ];
+            this.mlp.b1 = [Math.random() * 0.4 - 0.2, Math.random() * 0.4 - 0.2];
+            this.mlp.W2 = [Math.random() * 2 - 1, Math.random() * 2 - 1];
+            this.mlp.b2 = Math.random() * 0.4 - 0.2;
+            
+            this.drawMlpBoundary();
+        },
+        toggleMlpTraining() {
+            this.mlp.training = !this.mlp.training;
+            if (this.mlp.training) {
+                this.runMlpTrainingLoop();
+            }
+        },
+        runMlpTrainingLoop() {
+            if (!this.mlp.training) return;
+
+            const epochsPerFrame = 40;
+            const xorInputs = [[0,0], [0,1], [1,0], [1,1]];
+            const xorTargets = [0, 1, 1, 0];
+            const lr = parseFloat(this.mlp.learningRate) || 0.2;
+
+            let totalLoss = 0;
+
+            for (let epoch = 0; epoch < epochsPerFrame; epoch++) {
+                totalLoss = 0;
+                for (let i = 0; i < 4; i++) {
+                    const x = xorInputs[i];
+                    const t = xorTargets[i];
+
+                    // 1. Forward Pass
+                    const net_h1 = x[0]*this.mlp.W1[0][0] + x[1]*this.mlp.W1[0][1] + this.mlp.b1[0];
+                    const h1 = 1 / (1 + Math.exp(-net_h1));
+
+                    const net_h2 = x[0]*this.mlp.W1[1][0] + x[1]*this.mlp.W1[1][1] + this.mlp.b1[1];
+                    const h2 = 1 / (1 + Math.exp(-net_h2));
+
+                    const net_y = h1*this.mlp.W2[0] + h2*this.mlp.W2[1] + this.mlp.b2;
+                    const y = 1 / (1 + Math.exp(-net_y));
+
+                    const error = y - t;
+                    totalLoss += 0.5 * error * error;
+
+                    // 2. Backward Pass
+                    const dy = error * y * (1 - y);
+
+                    const dh1 = dy * this.mlp.W2[0] * h1 * (1 - h1);
+                    const dh2 = dy * this.mlp.W2[1] * h2 * (1 - h2);
+
+                    // Gradients
+                    const dW2_0 = dy * h1;
+                    const dW2_1 = dy * h2;
+                    const db2 = dy;
+
+                    const dW1_00 = dh1 * x[0];
+                    const dW1_01 = dh1 * x[1];
+                    const db1_0 = dh1;
+
+                    const dW1_10 = dh2 * x[0];
+                    const dW1_11 = dh2 * x[1];
+                    const db1_1 = dh2;
+
+                    // 3. Update
+                    this.mlp.W2[0] -= lr * dW2_0;
+                    this.mlp.W2[1] -= lr * dW2_1;
+                    this.mlp.b2 -= lr * db2;
+
+                    this.mlp.W1[0][0] -= lr * dW1_00;
+                    this.mlp.W1[0][1] -= lr * dW1_01;
+                    this.mlp.b1[0] -= lr * db1_0;
+
+                    this.mlp.W1[1][0] -= lr * dW1_10;
+                    this.mlp.W1[1][1] -= lr * dW1_11;
+                    this.mlp.b1[1] -= lr * db1_1;
+                }
+                this.mlp.epochs++;
+            }
+
+            this.mlp.loss = totalLoss / 4;
+
+            if (this.mlp.epochs % 40 === 0 || this.mlp.lossHistory.length === 0) {
+                this.mlp.lossHistory.push(this.mlp.loss);
+                if (this.mlp.lossHistory.length > 50) {
+                    this.mlp.lossHistory.shift();
+                }
+            }
+
+            this.drawMlpBoundary();
+
+            requestAnimationFrame(() => this.runMlpTrainingLoop());
+        },
+        drawMlpBoundary() {
+            const canvas = document.getElementById('mlp-boundary-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const imgData = ctx.createImageData(w, h);
+            for (let cy = 0; cy < h; cy++) {
+                for (let cx = 0; cx < w; cx++) {
+                    const x1 = cx / w;
+                    const x2 = 1 - (cy / h);
+
+                    const h1 = 1 / (1 + Math.exp(-(x1*this.mlp.W1[0][0] + x2*this.mlp.W1[0][1] + this.mlp.b1[0])));
+                    const h2 = 1 / (1 + Math.exp(-(x1*this.mlp.W1[1][0] + x2*this.mlp.W1[1][1] + this.mlp.b1[1])));
+                    const y = 1 / (1 + Math.exp(-(h1*this.mlp.W2[0] + h2*this.mlp.W2[1] + this.mlp.b2)));
+
+                    const rVal = Math.round(239 * y + 37 * (1 - y));
+                    const gVal = Math.round(68 * y + 99 * (1 - y));
+                    const bVal = Math.round(68 * y + 235 * (1 - y));
+
+                    const index = (cy * w + cx) * 4;
+                    imgData.data[index] = rVal;
+                    imgData.data[index+1] = gVal;
+                    imgData.data[index+2] = bVal;
+                    imgData.data[index+3] = 230;
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+
+            const points = [
+                {x: 0, y: 0, target: 0},
+                {x: 0, y: 1, target: 1},
+                {x: 1, y: 0, target: 1},
+                {x: 1, y: 1, target: 0}
+            ];
+
+            points.forEach(p => {
+                const px = p.x * (w - 20) + 10;
+                const py = (1 - p.y) * (h - 20) + 10;
+
+                ctx.beginPath();
+                ctx.arc(px, py, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = p.target === 1 ? '#ef4444' : '#2563eb';
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.font = 'bold 8px sans-serif';
+                ctx.fillStyle = '#1e293b';
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 4;
+                ctx.fillText(`(${p.x},${p.y})`, px + 8, py + 3);
+                ctx.shadowBlur = 0;
+            });
+        },
+        getMlpLossPath() {
+            if (this.mlp.lossHistory.length < 2) return '';
+            const w = 160;
+            const h = 80;
+            const maxVal = Math.max(...this.mlp.lossHistory, 0.25);
+            const minVal = 0;
+            const points = this.mlp.lossHistory.map((val, idx) => {
+                const x = (idx / (this.mlp.lossHistory.length - 1)) * w;
+                const y = h - ((val - minVal) / (maxVal - minVal)) * (h - 10) - 5;
+                return `${x},${y}`;
+            });
+            return `M ${points.join(' L ')}`;
+        },
         scrollTo(id) {
             const el = document.getElementById(id);
             if(el) el.scrollIntoView({ behavior: 'smooth' });
